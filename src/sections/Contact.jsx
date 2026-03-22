@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import { Mail, MessageSquare, Send, CheckCircle, AlertCircle, Twitter, Linkedin, Youtube, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
@@ -59,8 +60,18 @@ export default function Contact() {
     };
 
     try {
-      await new Promise((res) => setTimeout(res, 1500));
-      console.info('Contact form submitted:', { name: payload.name, email: payload.email });
+      await emailjs.send(
+        'service_ekw4cap',
+        'template_4uzattm',
+        {
+          from_name: payload.name,
+          from_email: payload.email,
+          message: payload.subject
+            ? `Subject: ${payload.subject}\n\n${payload.message}`
+            : payload.message,
+        },
+        'y3nN9GFJrxt2IChbr'
+      );
       setStatus('success');
       setForm(INITIAL_FORM);
     } catch {

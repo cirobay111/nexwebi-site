@@ -72,11 +72,12 @@ export default function Contact() {
             ? `Subject: ${payload.subject}\n\n${payload.message}`
             : payload.message,
         },
-        { publicKey: 'y3nN9GFJrxt2IChbr' }
+        { publicKey: 'y3nN9GFJrxt2IChbr', blockHeadless: false }
       );
       setStatus('success');
       setForm(INITIAL_FORM);
-    } catch {
+    } catch (err) {
+      console.error('EmailJS error:', JSON.stringify(err));
       setStatus('error');
     }
   };

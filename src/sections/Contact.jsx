@@ -64,7 +64,7 @@ export default function Contact() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service_id: 'service_6oall2e',
-          template_id: 'template_4uzattm',
+          template_id: 'template_nt2g0eb',
           user_id: 'y3nN9GFJrxt2IChbr',
           template_params: {
             from_name: payload.name,

@@ -81,8 +81,7 @@ export default function Contact() {
       setStatus('success');
       setForm(INITIAL_FORM);
     } catch (err) {
-      console.error('EmailJS error:', JSON.stringify(err));
-      setStatus('error');
+      setStatus(err?.message || 'error');
     }
   };
 
@@ -299,10 +298,10 @@ export default function Contact() {
                   </div>
 
                   {/* Error banner */}
-                  {status === 'error' && (
+                  {status !== 'idle' && status !== 'loading' && status !== 'success' && (
                     <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400 flex items-center gap-2" role="alert">
                       <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                      Something went wrong. Please try again or email us directly at nexwebi4@gmail.com
+                      Error: {status}
                     </div>
                   )}
 

@@ -72,7 +72,7 @@ export default function Contact() {
             ? `Subject: ${payload.subject}\n\n${payload.message}`
             : payload.message,
         },
-        'y3nN9GFJrxt2IChbr'
+        { publicKey: 'y3nN9GFJrxt2IChbr' }
       );
       setStatus('success');
       setForm(INITIAL_FORM);

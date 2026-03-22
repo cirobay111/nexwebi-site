@@ -61,7 +61,7 @@ export default function Contact() {
 
     try {
       await emailjs.send(
-        'service_i0k21j8',
+        'service_6oall2e',
         'template_4uzattm',
         {
           from_name: payload.name,

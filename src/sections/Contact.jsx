@@ -216,7 +216,7 @@ export default function Contact() {
                         value={form.name}
                         onChange={handleChange}
                         className={inputClass('name')}
-                        placeholder="John Smith"
+                        placeholder="Your full name"
                         aria-required="true"
                         aria-invalid={!!errors.name}
                         aria-describedby={errors.name ? 'name-error' : undefined}
@@ -241,7 +241,7 @@ export default function Contact() {
                         value={form.email}
                         onChange={handleChange}
                         className={inputClass('email')}
-                        placeholder="john@company.com"
+                        placeholder="your@email.com"
                         aria-required="true"
                         aria-invalid={!!errors.email}
                         aria-describedby={errors.email ? 'email-error' : undefined}

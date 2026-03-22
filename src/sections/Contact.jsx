@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import emailjs from '@emailjs/browser';
 import { motion } from 'framer-motion';
 import { Mail, MessageSquare, Send, CheckCircle, AlertCircle, Twitter, Linkedin, Youtube, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
@@ -60,20 +59,25 @@ export default function Contact() {
     };
 
     try {
-      await emailjs.send(
-        'service_6oall2e',
-        'template_4uzattm',
-        {
-          from_name: payload.name,
-          name: payload.name,
-          from_email: payload.email,
-          email: payload.email,
-          message: payload.subject
-            ? `Subject: ${payload.subject}\n\n${payload.message}`
-            : payload.message,
-        },
-        { publicKey: 'y3nN9GFJrxt2IChbr', blockHeadless: false }
-      );
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: 'service_6oall2e',
+          template_id: 'template_4uzattm',
+          user_id: 'y3nN9GFJrxt2IChbr',
+          template_params: {
+            from_name: payload.name,
+            name: payload.name,
+            from_email: payload.email,
+            email: payload.email,
+            message: payload.subject
+              ? `Subject: ${payload.subject}\n\n${payload.message}`
+              : payload.message,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
       setStatus('success');
       setForm(INITIAL_FORM);
     } catch (err) {

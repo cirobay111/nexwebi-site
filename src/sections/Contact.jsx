@@ -65,7 +65,9 @@ export default function Contact() {
         'template_4uzattm',
         {
           from_name: payload.name,
+          name: payload.name,
           from_email: payload.email,
+          email: payload.email,
           message: payload.subject
             ? `Subject: ${payload.subject}\n\n${payload.message}`
             : payload.message,

@@ -1,4 +1,5 @@
 import './index.css';
+import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ImpactBar from './components/ImpactBar';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -11,8 +12,15 @@ import Pricing from './sections/Pricing';
 import CTA from './sections/CTA';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
+import { useLanguage } from './i18n/index.jsx';
 
 export default function App() {
+  const { lang } = useLanguage();
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   return (
     <div className="min-h-screen bg-[#020817] text-slate-200">
       {/* Skip to main content — accessibility */}

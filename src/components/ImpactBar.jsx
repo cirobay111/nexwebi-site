@@ -1,16 +1,12 @@
 import { motion } from 'framer-motion';
-
-const stats = [
-  { value: '$2M+', label: 'Revenue generated for clients' },
-  { value: '50+', label: 'Projects shipped' },
-  { value: '7', label: 'Countries served' },
-  { value: '< 14 days', label: 'Average delivery time' },
-];
+import { useLanguage } from '../i18n/index.jsx';
 
 export default function ImpactBar() {
+  const { t } = useLanguage();
+  const stats = t.impactBar;
+
   return (
     <div className="relative border-y border-white/6 overflow-hidden bg-[#020817]">
-      {/* Top/bottom cyan line */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{ background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.2), transparent)' }}

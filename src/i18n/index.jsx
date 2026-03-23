@@ -118,6 +118,31 @@ export const translations = {
         },
       ],
     },
+    impactBar: [
+      { value: '$2M+', label: 'Revenue generated for clients' },
+      { value: '50+', label: 'Projects shipped' },
+      { value: '7', label: 'Countries served' },
+      { value: '< 14 days', label: 'Average delivery time' },
+    ],
+    portfolio: {
+      eyebrow: 'Our Work',
+      title: 'Real Projects,',
+      highlight: 'Real Results',
+      subtitle: 'Every project we ship is production-ready, fully custom, and built to perform.',
+      screenshots: 'Screenshots',
+      projects: [
+        {
+          subtitle: 'Real Estate Platform',
+          description: 'A luxury real estate platform for Marrakech — featuring property listings with interactive map, advanced filters, bilingual support (FR/AR), and an admin panel for managing properties.',
+          result: 'Bilingual · Interactive Map · Admin Panel',
+        },
+        {
+          subtitle: 'Car Rental Platform',
+          description: 'A premium car rental platform for Marrakech — featuring a curated fleet of luxury vehicles, real-time availability, instant booking, and 24/7 support.',
+          result: 'Instant Booking · Fleet Management · 24/7 Support',
+        },
+      ],
+    },
     testimonials: {
       eyebrow: 'Client Stories',
       title: 'What Our',
@@ -329,14 +354,30 @@ export const translations = {
         },
       ],
     },
+    impactBar: [
+      { value: '$2M+', label: 'Revenus générés pour les clients' },
+      { value: '50+', label: 'Projets livrés' },
+      { value: '7', label: 'Pays desservis' },
+      { value: '< 14 jours', label: 'Délai de livraison moyen' },
+    ],
     portfolio: {
       eyebrow: 'Nos Réalisations',
       title: 'Des Projets Qui',
       highlight: 'Parlent d\'Eux-Mêmes',
       subtitle: 'Une sélection de produits réels que nous avons conçus, développés et lancés pour des clients dans le monde entier.',
-      all: 'Tous',
-      viewProject: 'Voir le Projet',
-      noImages: 'Bientôt Disponible',
+      screenshots: 'Captures',
+      projects: [
+        {
+          subtitle: 'Plateforme Immobilière',
+          description: 'Une plateforme immobilière de luxe pour Marrakech — avec des annonces interactives, filtres avancés, support bilingue (FR/AR) et un panneau d\'administration.',
+          result: 'Bilingue · Carte Interactive · Panneau Admin',
+        },
+        {
+          subtitle: 'Location de Voitures',
+          description: 'Une plateforme premium de location de voitures à Marrakech — avec une flotte de véhicules de luxe, disponibilité en temps réel, réservation instantanée et support 24h/24.',
+          result: 'Réservation Instantanée · Gestion de Flotte · Support 24/7',
+        },
+      ],
     },
     whyUs: {
       eyebrow: 'Pourquoi NexWebi',

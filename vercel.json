@@ -1,5 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/((?!google|sitemap\\.xml|robots\\.txt|favicon).*)", "destination": "/index.html" }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

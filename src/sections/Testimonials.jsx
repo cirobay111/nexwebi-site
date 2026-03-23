@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../i18n/index.jsx';
 
 const testimonials = [
   {
@@ -75,6 +76,8 @@ const StarRating = ({ rating }) => (
 );
 
 export default function Testimonials() {
+  const { t } = useLanguage();
+  const tm = t.testimonials;
   const featured = testimonials.find((t) => t.featured);
   const rest = testimonials.filter((t) => !t.featured);
 
@@ -90,10 +93,10 @@ export default function Testimonials() {
 
       <div className="relative max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="Client Stories"
-          title="What Our"
-          highlight="Clients Say"
-          subtitle="Real feedback from businesses that trusted us to build their digital products."
+          eyebrow={tm.eyebrow}
+          title={tm.title}
+          highlight={tm.highlight}
+          subtitle={tm.subtitle}
         />
 
         {/* Trust summary bar */}
@@ -104,7 +107,7 @@ export default function Testimonials() {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
         >
-          {trustStats.map(({ value, label }) => (
+          {tm.trustStats.map(({ value, label }) => (
             <div
               key={label}
               className="glass-card rounded-xl px-4 py-4 text-center hover:border-cyan-400/20 transition-all duration-300"
@@ -149,7 +152,7 @@ export default function Testimonials() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold mt-6 mb-4 w-fit"
               style={{ backgroundColor: `${featured.accent}15`, color: featured.accent, border: `1px solid ${featured.accent}25` }}
             >
-              ✓ Launched 40% under budget
+              {tm.badge}
             </div>
 
             <div className="flex items-center gap-4 pt-5 border-t border-white/8">

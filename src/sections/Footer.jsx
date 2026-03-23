@@ -1,27 +1,11 @@
 import { motion } from 'framer-motion';
 import { Zap, Twitter, Linkedin, Youtube, ArrowUpRight } from 'lucide-react';
 import InstagramIcon from '../components/InstagramIcon';
+import { useLanguage } from '../i18n/index.jsx';
 
-const footerLinks = {
-  Services: [
-    { label: 'Web Development', href: '#services' },
-    { label: 'Automation', href: '#services' },
-    { label: 'SaaS Platforms', href: '#services' },
-    { label: 'E-commerce', href: '#services' },
-    { label: 'AI Integration', href: '#services' },
-  ],
-  Company: [
-    { label: 'Portfolio', href: '#portfolio' },
-    { label: 'Why NexWebi', href: '#why-us' },
-    { label: 'Testimonials', href: '#testimonials' },
-    { label: 'Pricing', href: '#pricing' },
-  ],
-  Legal: [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Cookie Policy', href: '#' },
-  ],
-};
+const serviceHrefs = ['#services', '#services', '#services', '#services', '#services'];
+const companyHrefs = ['#portfolio', '#why-us', '#testimonials', '#pricing'];
+const legalHrefs = ['#', '#', '#'];
 
 const socials = [
   { icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/nexwebi/' },
@@ -31,6 +15,15 @@ const socials = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
+  const f = t.footer;
+
+  const footerLinks = {
+    [f.services]: f.serviceLinks.map((label, i) => ({ label, href: serviceHrefs[i] })),
+    [f.company]: f.companyLinks.map((label, i) => ({ label, href: companyHrefs[i] })),
+    [f.legal]: f.legalLinks.map((label, i) => ({ label, href: legalHrefs[i] })),
+  };
+
   const handleNavClick = (e, href) => {
     if (href.startsWith('#')) {
       e.preventDefault();
@@ -82,8 +75,7 @@ export default function Footer() {
               </a>
 
               <p className="text-sm text-slate-400 leading-relaxed max-w-xs mb-6">
-                Building next-generation digital products — from modern websites to intelligent
-                automation systems and scalable SaaS platforms.
+                {f.description}
               </p>
 
               {/* Social links */}
@@ -138,21 +130,21 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-slate-600">
-            &copy; {new Date().getFullYear()} NexWebi. All rights reserved.
+            &copy; {new Date().getFullYear()} NexWebi. {f.rights}
           </p>
           <div className="flex items-center gap-4">
             <a href="#" className="text-xs text-slate-600 hover:text-slate-400 transition-colors duration-200">
-              Privacy Policy
+              {f.privacyPolicy}
             </a>
             <span className="text-slate-700" aria-hidden="true">·</span>
             <a href="#" className="text-xs text-slate-600 hover:text-slate-400 transition-colors duration-200">
-              Terms of Service
+              {f.termsOfService}
             </a>
             <span className="text-slate-700" aria-hidden="true">·</span>
             <span className="text-xs text-slate-600">
-              Built with{' '}
+              {f.builtBy}{' '}
               <span className="text-cyan-400/60" aria-label="love">♥</span>
-              {' '}by NexWebi
+              {' '}{f.byNexWebi}
             </span>
           </div>
         </div>

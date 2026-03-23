@@ -8,45 +8,10 @@ import {
   HeartHandshake,
 } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../i18n/index.jsx';
 
-const advantages = [
-  {
-    icon: Rocket,
-    title: 'Fast Delivery',
-    description: 'Agile sprints with transparent milestones. We deliver MVPs in weeks, not months — no delays, no excuses.',
-    accent: '#22d3ee',
-  },
-  {
-    icon: Layers,
-    title: 'Modern Tech Stack',
-    description: 'React, Next.js, Node.js, Python, PostgreSQL, AWS — battle-tested technologies for production-grade software.',
-    accent: '#818cf8',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Scalable Architecture',
-    description: 'Systems designed to handle 10x growth without rewrites. Microservices, CDN, and cloud-native from the start.',
-    accent: '#34d399',
-  },
-  {
-    icon: Workflow,
-    title: 'Automation Expertise',
-    description: 'Deep knowledge of workflow automation, API orchestration, and intelligent business process management.',
-    accent: '#f59e0b',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Security First',
-    description: 'OWASP compliance, secure coding practices, and data protection built in from day one — not bolted on after.',
-    accent: '#fb7185',
-  },
-  {
-    icon: HeartHandshake,
-    title: 'Long-Term Partnership',
-    description: 'We don\'t disappear after launch. Dedicated support, proactive monitoring, and ongoing improvements.',
-    accent: '#a78bfa',
-  },
-];
+const advantageIcons = [Rocket, Layers, TrendingUp, Workflow, ShieldCheck, HeartHandshake];
+const advantageAccents = ['#22d3ee', '#818cf8', '#34d399', '#f59e0b', '#fb7185', '#a78bfa'];
 
 const techStack = [
   'React', 'Next.js', 'TypeScript', 'Node.js', 'Python',
@@ -55,6 +20,14 @@ const techStack = [
 ];
 
 export default function WhyUs() {
+  const { t } = useLanguage();
+  const w = t.whyUs;
+  const advantages = w.items.map((item, i) => ({
+    ...item,
+    icon: advantageIcons[i],
+    accent: advantageAccents[i],
+  }));
+
   return (
     <section
       id="why-us"
@@ -69,10 +42,10 @@ export default function WhyUs() {
 
       <div className="relative max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="Why NexWebi"
-          title="Built Different,"
-          highlight="Built Better"
-          subtitle="We don't just build websites — we engineer digital experiences that perform, scale, and convert."
+          eyebrow={w.eyebrow}
+          title={w.title}
+          highlight={w.highlight}
+          subtitle={w.subtitle}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
@@ -111,7 +84,7 @@ export default function WhyUs() {
           className="text-center"
         >
           <p className="text-xs uppercase tracking-widest text-slate-600 mb-6">
-            Technologies We Master
+            {w.techLabel}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2.5">
             {techStack.map((tech, i) => (

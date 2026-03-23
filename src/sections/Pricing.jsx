@@ -1,7 +1,12 @@
 import { motion } from 'framer-motion';
 import { Check, Zap, ShieldCheck } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../i18n/index.jsx';
 
+const planPrices = ['399', '999', '2,500'];
+const planPriceNotes = [null, null, '+ custom'];
+const planRecommended = [false, true, false];
+const planAccents = ['#64748b', '#22d3ee', '#818cf8'];
 const plans = [
   {
     name: 'Starter',
@@ -69,6 +74,16 @@ const plans = [
 ];
 
 export default function Pricing() {
+  const { t } = useLanguage();
+  const p = t.pricing;
+  const localPlans = p.plans.map((plan, i) => ({
+    ...plan,
+    price: planPrices[i],
+    priceNote: planPriceNotes[i],
+    recommended: planRecommended[i],
+    accent: planAccents[i],
+  }));
+
   const scrollToContact = () => {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -86,10 +101,10 @@ export default function Pricing() {
 
       <div className="relative max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="Transparent Pricing"
-          title="Affordable Plans,"
-          highlight="Real Value"
-          subtitle="No hidden fees, no surprises. Competitive rates built for startups, small businesses, and scaling companies across the USA."
+          eyebrow={p.eyebrow}
+          title={p.title}
+          highlight={p.highlight}
+          subtitle={p.subtitle}
         />
 
         {/* Guarantee bar */}
@@ -100,12 +115,7 @@ export default function Pricing() {
           transition={{ duration: 0.5 }}
           className="flex flex-wrap items-center justify-center gap-6 mb-12"
         >
-          {[
-            { icon: '🔒', text: 'Satisfaction Guaranteed' },
-            { icon: '📋', text: 'Source Code Ownership' },
-            { icon: '🤝', text: 'NDA Available' },
-            { icon: '📞', text: 'Free Discovery Call' },
-          ].map(({ icon, text }) => (
+          {p.guarantees.map(({ icon, text }) => (
             <div key={text} className="flex items-center gap-2 text-sm text-slate-400">
               <span>{icon}</span>
               <span>{text}</span>
@@ -114,7 +124,7 @@ export default function Pricing() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-          {plans.map(({ name, price, priceNote, period, tagline, recommended, accent, features, cta }, i) => (
+          {localPlans.map(({ name, price, priceNote, period, tagline, recommended, accent, features, cta }, i) => (
             <motion.div
               key={name}
               initial={{ opacity: 0, y: 32 }}
@@ -137,7 +147,7 @@ export default function Pricing() {
                   style={{ backgroundColor: '#22d3ee', color: '#020817' }}
                 >
                   <Zap className="w-3 h-3" aria-hidden="true" />
-                  Most Popular
+                  {p.mostPopular}
                 </div>
               )}
 
@@ -187,7 +197,7 @@ export default function Pricing() {
                     >
                       <Check className="w-3 h-3" style={{ color: accent }} />
                     </div>
-                    <span className={`text-sm ${feat.startsWith('Free') ? 'text-cyan-400 font-medium' : 'text-slate-300'}`}>
+                    <span className={`text-sm ${(feat.startsWith('Free') || feat.startsWith('Appel')) ? 'text-cyan-400 font-medium' : 'text-slate-300'}`}>
                       {feat}
                     </span>
                   </li>
@@ -228,17 +238,17 @@ export default function Pricing() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-green-400/20 text-green-400 text-xs">
             <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
-            All plans include source code ownership · NDA available · Dedicated project manager
+            {p.footerNote}
           </div>
           <p className="text-sm text-slate-500">
-            Need something custom?{' '}
+            {p.needCustom}{' '}
             <button
               onClick={scrollToContact}
               className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 transition-colors"
             >
-              Let&apos;s talk
+              {p.letsTalk}
             </button>{' '}
-            — we build to any scope and budget.
+            {p.anyBudget}
           </p>
         </motion.div>
       </div>

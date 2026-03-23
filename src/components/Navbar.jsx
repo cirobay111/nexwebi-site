@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Zap } from 'lucide-react';
+import { useLanguage } from '../i18n/index.jsx';
 
-const navLinks = [
-  { label: 'Services', href: '#services' },
-  { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Why Us', href: '#why-us' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Contact', href: '#contact' },
-];
+const navHrefs = ['#services', '#portfolio', '#why-us', '#pricing', '#contact'];
 
 export default function Navbar() {
+  const { t, lang, setLang } = useLanguage();
+  const navLabels = [t.nav.services, t.nav.portfolio, t.nav.whyUs, t.nav.pricing, t.nav.contact];
+  const navLinks = navHrefs.map((href, i) => ({ label: navLabels[i], href }));
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -102,15 +101,22 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* CTA */}
+          {/* CTA + Lang toggle */}
           <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={() => setLang(lang === 'en' ? 'fr' : 'en')}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold border border-white/15 text-slate-400 hover:border-cyan-400/40 hover:text-cyan-400 transition-all duration-200 tracking-widest"
+              aria-label="Switch language"
+            >
+              {lang === 'en' ? 'FR' : 'EN'}
+            </button>
             <a
               href="#contact"
               onClick={(e) => handleNavClick(e, '#contact')}
               className="px-5 py-2 rounded-lg text-sm font-semibold bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 hover:bg-cyan-400 hover:text-navy-950 hover:border-cyan-400 transition-all duration-200"
               style={{ '--tw-text-opacity': 1 }}
             >
-              Get Started
+              {t.nav.getStarted}
             </a>
           </div>
 
@@ -118,7 +124,7 @@ export default function Navbar() {
           <button
             className="md:hidden p-2 text-slate-400 hover:text-cyan-400 transition-colors"
             onClick={() => setMobileOpen((v) => !v)}
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-label={mobileOpen ? t.nav.closeMenu : t.nav.openMenu}
             aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -151,14 +157,20 @@ export default function Navbar() {
                   </a>
                 </li>
               ))}
-              <li className="pt-3">
+              <li className="pt-3 flex flex-col gap-2">
                 <a
                   href="#contact"
                   onClick={(e) => handleNavClick(e, '#contact')}
                   className="block w-full text-center px-5 py-2.5 rounded-lg text-sm font-semibold bg-cyan-400 text-[#020817]"
                 >
-                  Get Started
+                  {t.nav.getStarted}
                 </a>
+                <button
+                  onClick={() => { setLang(lang === 'en' ? 'fr' : 'en'); setMobileOpen(false); }}
+                  className="w-full text-center px-5 py-2 rounded-lg text-sm font-bold border border-white/15 text-slate-400 hover:text-cyan-400 transition-all"
+                >
+                  {lang === 'en' ? '🇫🇷 Français' : '🇬🇧 English'}
+                </button>
               </li>
             </ul>
           </motion.div>

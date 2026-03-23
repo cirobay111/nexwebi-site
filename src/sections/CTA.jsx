@@ -1,7 +1,11 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Clock } from 'lucide-react';
+import { useLanguage } from '../i18n/index.jsx';
 
 export default function CTA() {
+  const { t } = useLanguage();
+  const c = t.cta;
+
   const scrollToContact = () => {
     document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -52,21 +56,19 @@ export default function CTA() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-cyan-400/20 text-cyan-400 text-xs font-medium tracking-widest uppercase mb-6">
               <Sparkles className="w-3 h-3" aria-hidden="true" />
-              Let&apos;s Build Together
+              {c.badge}
             </div>
 
             <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
-              <span className="text-white">Ready to Build Your</span>
+              <span className="text-white">{c.headline1}</span>
               <br />
-              <span className="gradient-text glow-text">Next Digital Product?</span>
+              <span className="gradient-text glow-text">{c.headline2}</span>
             </h2>
 
             <p className="text-slate-400 text-lg leading-relaxed mb-4 max-w-2xl mx-auto">
-              Whether you have a fully scoped project or just a spark of an idea — we&apos;ll
-              turn it into a product your users love.
+              {c.sub}
             </p>
 
-            {/* Urgency indicator */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -76,7 +78,7 @@ export default function CTA() {
               style={{ backgroundColor: 'rgba(251,113,133,0.1)', color: '#fb7185', border: '1px solid rgba(251,113,133,0.2)' }}
             >
               <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-              Currently accepting new projects — limited spots available
+              {c.urgency}
             </motion.div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -89,7 +91,7 @@ export default function CTA() {
                   boxShadow: '0 0 28px rgba(34,211,238,0.45)',
                 }}
               >
-                Start Your Project
+                {c.cta1}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </button>
 
@@ -97,13 +99,11 @@ export default function CTA() {
                 onClick={scrollToPricing}
                 className="px-9 py-4 rounded-xl font-bold text-sm glass border border-white/15 text-slate-300 hover:border-cyan-400/30 hover:text-cyan-400 transition-all duration-200"
               >
-                View Pricing
+                {c.cta2}
               </button>
             </div>
 
-            <p className="mt-6 text-xs text-slate-600">
-              No commitment required for the first call · Free consultation · Response within 24h
-            </p>
+            <p className="mt-6 text-xs text-slate-600">{c.footnote}</p>
           </div>
         </motion.div>
       </div>

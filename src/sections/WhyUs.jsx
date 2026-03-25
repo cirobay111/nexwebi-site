@@ -85,8 +85,8 @@ export default function WhyUs() {
 
           {/* Row 1 — scrolls left */}
           <div className="relative overflow-hidden mb-3">
-            <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
-            <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
+            <div className="absolute left-0 top-0 bottom-0 w-32 sm:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817 65%, transparent 100%)' }} />
+            <div className="absolute right-0 top-0 bottom-0 w-32 sm:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817 65%, transparent 100%)' }} />
             <div className="marquee-track">
               {[...techStack1, ...techStack1].map((tech, i) => (
                 <span
@@ -101,8 +101,8 @@ export default function WhyUs() {
 
           {/* Row 2 — scrolls right */}
           <div className="relative overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
-            <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
+            <div className="absolute left-0 top-0 bottom-0 w-32 sm:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817 65%, transparent 100%)' }} />
+            <div className="absolute right-0 top-0 bottom-0 w-32 sm:w-48 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817 65%, transparent 100%)' }} />
             <div className="marquee-track-reverse">
               {[...techStack2, ...techStack2].map((tech, i) => (
                 <span

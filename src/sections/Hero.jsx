@@ -120,7 +120,7 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
           custom={4}
-          className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
+          className="mt-8 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
         >
           {h.stats.map(({ value, label }) => (
             <div

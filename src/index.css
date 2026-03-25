@@ -78,8 +78,8 @@
   }
 
   .section-padding {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
@@ -107,7 +107,6 @@
     display: flex;
     width: max-content;
     animation: marquee-reverse 35s linear infinite;
-    animation-delay: -5s;
   }
 
   .marquee-track:hover,

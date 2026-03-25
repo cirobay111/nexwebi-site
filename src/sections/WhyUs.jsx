@@ -13,11 +13,8 @@ import { useLanguage } from '../i18n/index.jsx';
 const advantageIcons = [Rocket, Layers, TrendingUp, Workflow, ShieldCheck, HeartHandshake];
 const advantageAccents = ['#22d3ee', '#818cf8', '#34d399', '#f59e0b', '#fb7185', '#a78bfa'];
 
-const techStack = [
-  'React', 'Next.js', 'TypeScript', 'Node.js', 'Python',
-  'PostgreSQL', 'Redis', 'Docker', 'AWS', 'Tailwind CSS',
-  'OpenAI', 'Stripe', 'Framer Motion', 'GraphQL', 'Vercel',
-];
+const techStack1 = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'PostgreSQL', 'Redis', 'Docker'];
+const techStack2 = ['AWS', 'Tailwind CSS', 'OpenAI', 'Stripe', 'Framer Motion', 'GraphQL', 'Vercel', 'MongoDB'];
 
 export default function WhyUs() {
   const { t } = useLanguage();
@@ -75,31 +72,43 @@ export default function WhyUs() {
           ))}
         </div>
 
-        {/* Tech stack */}
+        {/* Tech stack marquee */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center"
         >
-          <p className="text-xs uppercase tracking-widest text-slate-600 mb-6">
+          <p className="text-xs uppercase tracking-widest text-slate-600 mb-6 text-center">
             {w.techLabel}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-2.5">
-            {techStack.map((tech, i) => (
-              <motion.span
-                key={tech}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.04 }}
-                whileHover={{ scale: 1.08, transition: { duration: 0.15 } }}
-                className="px-4 py-2 rounded-full text-xs font-medium text-slate-400 border border-white/8 bg-white/3 hover:border-cyan-400/35 hover:text-cyan-400 hover:bg-cyan-400/8 transition-all duration-200 cursor-default"
-              >
-                {tech}
-              </motion.span>
-            ))}
+
+          {/* Row 1 — scrolls left */}
+          <div className="overflow-hidden mb-3 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="marquee-track">
+              {[...techStack1, ...techStack1].map((tech, i) => (
+                <span
+                  key={i}
+                  className="mx-2 px-4 py-2 rounded-full text-xs font-medium text-slate-400 border border-white/8 bg-white/3 hover:border-cyan-400/35 hover:text-cyan-400 hover:bg-cyan-400/8 transition-all duration-200 cursor-default whitespace-nowrap"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 2 — scrolls right */}
+          <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div className="marquee-track-reverse">
+              {[...techStack2, ...techStack2].map((tech, i) => (
+                <span
+                  key={i}
+                  className="mx-2 px-4 py-2 rounded-full text-xs font-medium text-slate-400 border border-white/8 bg-white/3 hover:border-cyan-400/35 hover:text-cyan-400 hover:bg-cyan-400/8 transition-all duration-200 cursor-default whitespace-nowrap"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>

@@ -107,6 +107,7 @@
     display: flex;
     width: max-content;
     animation: marquee-reverse 35s linear infinite;
+    animation-delay: -5s;
   }
 
   .marquee-track:hover,
@@ -116,8 +117,8 @@
 
   .marquee-fade {
     overflow: hidden;
-    -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
   }
 
   @keyframes marquee {

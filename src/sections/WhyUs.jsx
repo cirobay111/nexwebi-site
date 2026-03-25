@@ -84,7 +84,7 @@ export default function WhyUs() {
           </p>
 
           {/* Row 1 — scrolls left */}
-          <div className="overflow-hidden mb-3 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          <div className="marquee-fade mb-3">
             <div className="marquee-track">
               {[...techStack1, ...techStack1].map((tech, i) => (
                 <span
@@ -98,7 +98,7 @@ export default function WhyUs() {
           </div>
 
           {/* Row 2 — scrolls right */}
-          <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+          <div className="marquee-fade">
             <div className="marquee-track-reverse">
               {[...techStack2, ...techStack2].map((tech, i) => (
                 <span

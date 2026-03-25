@@ -183,7 +183,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-3"
           >
-            <div className="glass-card rounded-2xl p-8">
+            <div className="glass-card rounded-2xl p-5 sm:p-8">
               {status === 'success' ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center">

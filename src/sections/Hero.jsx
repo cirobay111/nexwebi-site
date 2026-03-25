@@ -52,7 +52,7 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
           custom={1}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-none mb-6"
+          className="text-[2.25rem] sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] mb-6"
         >
           <span className="text-white">{h.headline1}</span>
           <br />
@@ -66,7 +66,7 @@ export default function Hero() {
           initial="hidden"
           animate="visible"
           custom={2}
-          className="max-w-2xl mx-auto text-lg text-slate-400 leading-relaxed mb-10"
+          className="max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed mb-10"
         >
           {h.sub}
         </motion.p>

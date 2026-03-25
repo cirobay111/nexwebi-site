@@ -16,13 +16,13 @@ export default function SectionHeader({ eyebrow, title, highlight, subtitle, id 
       )}
       <h2
         id={id}
-        className="text-4xl lg:text-5xl font-black tracking-tight text-white mb-4"
+        className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-white mb-4"
       >
         {title}{' '}
         {highlight && <span className="gradient-text">{highlight}</span>}
       </h2>
       {subtitle && (
-        <p className="max-w-2xl mx-auto text-slate-400 text-lg leading-relaxed">{subtitle}</p>
+        <p className="max-w-2xl mx-auto text-slate-400 text-base sm:text-lg leading-relaxed">{subtitle}</p>
       )}
     </motion.div>
   );

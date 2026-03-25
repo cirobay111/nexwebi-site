@@ -32,7 +32,7 @@ export default function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
-          className="glass-card rounded-3xl px-8 py-16 md:px-16 relative overflow-hidden"
+          className="glass-card rounded-3xl px-5 py-10 sm:px-8 sm:py-12 md:px-16 md:py-16 relative overflow-hidden"
           style={{ borderColor: 'rgba(34,211,238,0.22)', boxShadow: '0 0 80px rgba(34,211,238,0.07)' }}
         >
           {/* Corner glows */}
@@ -59,13 +59,13 @@ export default function CTA() {
               {c.badge}
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
               <span className="text-white">{c.headline1}</span>
               <br />
               <span className="gradient-text glow-text">{c.headline2}</span>
             </h2>
 
-            <p className="text-slate-400 text-lg leading-relaxed mb-4 max-w-2xl mx-auto">
+            <p className="text-slate-400 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto">
               {c.sub}
             </p>
 

@@ -132,7 +132,7 @@ export default function Pricing() {
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.5, delay: i * 0.12, ease: [0.25, 0.1, 0.25, 1] }}
               whileHover={{ y: recommended ? -4 : -6 }}
-              className={`relative rounded-2xl p-8 flex flex-col ${
+              className={`relative rounded-2xl p-5 sm:p-8 flex flex-col ${
                 recommended
                   ? 'glass border-2 border-cyan-400/50'
                   : 'glass-card'

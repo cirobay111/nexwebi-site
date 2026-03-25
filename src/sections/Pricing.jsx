@@ -3,8 +3,8 @@ import { Check, Zap, ShieldCheck } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../i18n/index.jsx';
 
-const planPrices = ['399', '999', '2,500'];
-const planPriceNotes = [null, null, '+ custom'];
+const planPrices = ['199', '499', '999'];
+const planPriceNotes = [null, null, '+'];
 const planRecommended = [false, true, false];
 const planAccents = ['#64748b', '#22d3ee', '#818cf8'];
 const plans = [

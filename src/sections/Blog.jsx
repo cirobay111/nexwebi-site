@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
+import ArticleModal from '../components/ArticleModal';
 import { useLanguage } from '../i18n/index.jsx';
 
 const categoryColors = {
-  Strategy:   { bg: '#22d3ee18', text: '#22d3ee', border: '#22d3ee30' },
-  Business:   { bg: '#f59e0b18', text: '#f59e0b', border: '#f59e0b30' },
-  Technical:  { bg: '#818cf818', text: '#818cf8', border: '#818cf830' },
-  Stratégie:  { bg: '#22d3ee18', text: '#22d3ee', border: '#22d3ee30' },
-  Technique:  { bg: '#818cf818', text: '#818cf8', border: '#818cf830' },
+  Strategy:  { bg: '#22d3ee18', text: '#22d3ee', border: '#22d3ee30' },
+  Business:  { bg: '#f59e0b18', text: '#f59e0b', border: '#f59e0b30' },
+  Technical: { bg: '#818cf818', text: '#818cf8', border: '#818cf830' },
+  Stratégie: { bg: '#22d3ee18', text: '#22d3ee', border: '#22d3ee30' },
+  Technique: { bg: '#818cf818', text: '#818cf8', border: '#818cf830' },
 };
 
 const defaultColor = { bg: '#64748b18', text: '#94a3b8', border: '#64748b30' };
@@ -25,6 +27,7 @@ const cardVariants = {
 export default function Blog() {
   const { t } = useLanguage();
   const b = t.blog;
+  const [activeArticle, setActiveArticle] = useState(null);
 
   return (
     <section
@@ -58,7 +61,12 @@ export default function Blog() {
                 viewport={{ once: true, margin: '-60px' }}
                 custom={i}
                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                className="group glass-card rounded-2xl p-7 flex flex-col cursor-default overflow-hidden relative"
+                className="group glass-card rounded-2xl p-7 flex flex-col overflow-hidden relative cursor-pointer"
+                onClick={() => setActiveArticle(article)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && setActiveArticle(article)}
+                aria-label={`Read article: ${article.title}`}
               >
                 {/* Top border accent */}
                 <div
@@ -105,6 +113,14 @@ export default function Blog() {
           })}
         </div>
       </div>
+
+      {activeArticle && (
+        <ArticleModal
+          article={activeArticle}
+          minRead={b.minRead}
+          onClose={() => setActiveArticle(null)}
+        />
+      )}
     </section>
   );
 }

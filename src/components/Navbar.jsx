@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Zap } from 'lucide-react';
 import { useLanguage } from '../i18n/index.jsx';
 
-const navHrefs = ['#services', '#portfolio', '#why-us', '#pricing', '#contact'];
+const navHrefs = ['#services', '#portfolio', '#why-us', '#blog', '#pricing', '#contact'];
 
 export default function Navbar() {
   const { t, lang, setLang } = useLanguage();
-  const navLabels = [t.nav.services, t.nav.portfolio, t.nav.whyUs, t.nav.pricing, t.nav.contact];
+  const navLabels = [t.nav.services, t.nav.portfolio, t.nav.whyUs, t.nav.blog, t.nav.pricing, t.nav.contact];
   const navLinks = navHrefs.map((href, i) => ({ label: navLabels[i], href }));
 
   const [scrolled, setScrolled] = useState(false);

@@ -9,6 +9,7 @@ import Portfolio from './sections/Portfolio';
 import WhyUs from './sections/WhyUs';
 import Testimonials from './sections/Testimonials';
 import Pricing from './sections/Pricing';
+import Blog from './sections/Blog';
 import CTA from './sections/CTA';
 import Contact from './sections/Contact';
 import Footer from './sections/Footer';
@@ -40,6 +41,7 @@ export default function App() {
         <Portfolio />
         <WhyUs />
         <Testimonials />
+        <Blog />
         <Pricing />
         <CTA />
         <Contact />

@@ -66,25 +66,13 @@ export default function Contact() {
     };
 
     try {
-      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service_id: 'service_6oall2e',
-          template_id: 'template_nt2g0eb',
-          user_id: 'y3nN9GFJrxt2IChbr',
-          template_params: {
-            from_name: payload.name,
-            name: payload.name,
-            from_email: payload.email,
-            email: payload.email,
-            message: payload.subject
-              ? `Subject: ${payload.subject}\n\n${payload.message}`
-              : payload.message,
-          },
-        }),
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send');
       setStatus('success');
       setLastSubmit(Date.now());
       setForm(INITIAL_FORM);

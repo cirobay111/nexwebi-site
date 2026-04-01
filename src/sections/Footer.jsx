@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Twitter, Linkedin, Youtube, ArrowUpRight } from 'lucide-react';
+import { Linkedin, Youtube, ArrowUpRight } from 'lucide-react';
 import InstagramIcon from '../components/InstagramIcon';
 import LegalModal from '../components/LegalModal';
 import { useLanguage } from '../i18n/index.jsx';
@@ -10,7 +10,6 @@ const companyHrefs = ['#portfolio', '#why-us', '#blog', '#pricing'];
 
 const socials = [
   { icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/nexwebi/' },
-  { icon: Twitter, label: 'Twitter / X', href: '#' },
   { icon: Linkedin, label: 'LinkedIn', href: '#' },
   { icon: Youtube, label: 'YouTube', href: '#' },
 ];

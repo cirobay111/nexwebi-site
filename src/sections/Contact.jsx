@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, Send, CheckCircle, AlertCircle, Twitter, Linkedin, Youtube, Clock } from 'lucide-react';
+import { Mail, MessageSquare, Send, CheckCircle, AlertCircle, Linkedin, Youtube, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import InstagramIcon from '../components/InstagramIcon';
 
@@ -15,7 +15,6 @@ function validateEmail(email) {
 
 const SOCIAL_LINKS = [
   { icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/nexwebi/' },
-  { icon: Twitter, label: 'Twitter / X', href: '#' },
   { icon: Linkedin, label: 'LinkedIn', href: '#' },
   { icon: Youtube, label: 'YouTube', href: '#' },
 ];

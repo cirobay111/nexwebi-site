@@ -27,6 +27,7 @@ export default function Contact() {
   const [form, setForm] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState(INITIAL_ERRORS);
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [lastSubmit, setLastSubmit] = useState(0);
 
   const validate = useCallback(() => {
     const errs = { name: '', email: '', message: '' };
@@ -48,6 +49,12 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+
+    const now = Date.now();
+    if (now - lastSubmit < 60_000) {
+      setErrors((prev) => ({ ...prev, message: 'Please wait 1 minute before submitting again.' }));
+      return;
+    }
 
     setStatus('loading');
 
@@ -79,6 +86,7 @@ export default function Contact() {
       });
       if (!res.ok) throw new Error(await res.text());
       setStatus('success');
+      setLastSubmit(Date.now());
       setForm(INITIAL_FORM);
     } catch (err) {
       setStatus(err?.message || 'error');

@@ -105,7 +105,7 @@ export default function Footer() {
                 key={group}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: '0px' }}
                 transition={{ duration: 0.5, delay: (i + 1) * 0.1 }}
               >
                 <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 mb-5">
@@ -132,26 +132,26 @@ export default function Footer() {
           </div>
 
           {/* Bottom bar */}
-          <div className="border-t border-white/6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="border-t border-white/6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-slate-600">
               &copy; {new Date().getFullYear()} NexWebi. {f.rights}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1">
               <button
                 onClick={() => setLegalModal('privacy')}
-                className="text-xs text-slate-600 hover:text-slate-400 transition-colors duration-200"
+                className="text-xs text-slate-600 hover:text-slate-400 transition-colors duration-200 whitespace-nowrap"
               >
                 {f.privacyPolicy}
               </button>
               <span className="text-slate-700" aria-hidden="true">·</span>
               <button
                 onClick={() => setLegalModal('terms')}
-                className="text-xs text-slate-600 hover:text-slate-400 transition-colors duration-200"
+                className="text-xs text-slate-600 hover:text-slate-400 transition-colors duration-200 whitespace-nowrap"
               >
                 {f.termsOfService}
               </button>
               <span className="text-slate-700" aria-hidden="true">·</span>
-              <span className="text-xs text-slate-600">
+              <span className="text-xs text-slate-600 whitespace-nowrap">
                 {f.builtBy}{' '}
                 <span className="text-cyan-400/60" aria-label="love">♥</span>
                 {' '}{f.byNexWebi}

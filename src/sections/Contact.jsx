@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import LegalModal from '../components/LegalModal';
 import { motion } from 'framer-motion';
 import { Mail, MessageSquare, Send, CheckCircle, AlertCircle, Linkedin, Youtube, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
@@ -27,6 +28,7 @@ export default function Contact() {
   const [errors, setErrors] = useState(INITIAL_ERRORS);
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
   const [lastSubmit, setLastSubmit] = useState(0);
+  const [legalModal, setLegalModal] = useState(null);
 
   const validate = useCallback(() => {
     const errs = { name: '', email: '', message: '' };
@@ -326,7 +328,7 @@ export default function Contact() {
 
                   <p className="mt-4 text-center text-xs text-slate-600">
                     By submitting, you agree to our{' '}
-                    <a href="#" className="text-slate-400 hover:text-cyan-400 transition-colors">Privacy Policy</a>.
+                    <button onClick={() => setLegalModal('privacy')} className="text-slate-400 hover:text-cyan-400 transition-colors underline">Privacy Policy</button>.
                     We never share your data.
                   </p>
                 </form>
@@ -335,6 +337,7 @@ export default function Contact() {
           </motion.div>
         </div>
       </div>
+      {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
     </section>
   );
 }

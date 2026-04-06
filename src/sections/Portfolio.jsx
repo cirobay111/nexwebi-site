@@ -63,7 +63,7 @@ export default function Portfolio() {
           subtitle={p.subtitle}
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {projects.map((project, i) => (
             <motion.article
               key={project.title}

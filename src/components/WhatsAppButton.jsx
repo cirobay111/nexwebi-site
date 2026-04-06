@@ -18,8 +18,8 @@ export default function WhatsAppButton() {
       whileTap={{ scale: 0.95 }}
       className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
       style={{
-        backgroundColor: '#25D366',
-        boxShadow: '0 0 0 0 rgba(37,211,102,0.5)',
+        backgroundColor: '#128C7E',
+        boxShadow: '0 0 0 0 rgba(18,140,126,0.4)',
         animation: 'whatsapp-pulse 2.5s ease-in-out infinite',
       }}
     >
@@ -37,9 +37,9 @@ export default function WhatsAppButton() {
 
       <style>{`
         @keyframes whatsapp-pulse {
-          0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); }
-          70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
-          100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+          0% { box-shadow: 0 0 0 0 rgba(18,140,126,0.4); }
+          70% { box-shadow: 0 0 0 12px rgba(18,140,126,0); }
+          100% { box-shadow: 0 0 0 0 rgba(18,140,126,0); }
         }
       `}</style>
     </motion.a>

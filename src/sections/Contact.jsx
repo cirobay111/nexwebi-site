@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
 import LegalModal from '../components/LegalModal';
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, Send, CheckCircle, AlertCircle, Linkedin, Youtube, Clock } from 'lucide-react';
+import { Mail, Send, CheckCircle, AlertCircle, Linkedin, Youtube, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import InstagramIcon from '../components/InstagramIcon';
+import { useLanguage } from '../i18n/index.jsx';
 
 /* --- Input sanitization (XSS prevention, client-side) --- */
 function sanitize(str) {
@@ -24,6 +25,8 @@ const INITIAL_FORM = { name: '', email: '', subject: '', message: '' };
 const INITIAL_ERRORS = { name: '', email: '', message: '' };
 
 export default function Contact() {
+  const { t } = useLanguage();
+  const c = t.contact;
   const [form, setForm] = useState(INITIAL_FORM);
   const [errors, setErrors] = useState(INITIAL_ERRORS);
   const [status, setStatus] = useState('idle'); // idle | loading | success | error
@@ -99,10 +102,10 @@ export default function Contact() {
 
       <div className="relative max-w-7xl mx-auto">
         <SectionHeader
-          eyebrow="Get In Touch"
-          title="Let's Start"
-          highlight="Something Great"
-          subtitle="Have a project in mind? We'd love to hear about it. Send us a message and we'll get back to you within 24 hours."
+          eyebrow={c.eyebrow}
+          title={c.title}
+          highlight={c.highlight}
+          subtitle={c.subtitle}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
@@ -119,8 +122,8 @@ export default function Contact() {
               <div className="glass-card rounded-xl p-4 flex items-center gap-3 border-green-400/15">
                 <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-green-400 font-semibold">We're Available Now</p>
-                  <p className="text-xs text-slate-500 mt-0.5">Average response time: under 2 hours</p>
+                  <p className="text-xs text-green-400 font-semibold">{c.available}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{c.responseTime}</p>
                 </div>
               </div>
 
@@ -130,7 +133,7 @@ export default function Contact() {
                   <div className="w-9 h-9 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
                     <Mail className="w-4 h-4 text-cyan-400" aria-hidden="true" />
                   </div>
-                  <span className="text-xs uppercase tracking-widest text-slate-500 font-medium">Email</span>
+                  <span className="text-xs uppercase tracking-widest text-slate-500 font-medium">{c.email}</span>
                 </div>
                 <a
                   href="mailto:nexwebi4@gmail.com"
@@ -146,15 +149,15 @@ export default function Contact() {
                   <div className="w-9 h-9 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
                     <Clock className="w-4 h-4 text-cyan-400" aria-hidden="true" />
                   </div>
-                  <span className="text-xs uppercase tracking-widest text-slate-500 font-medium">Hours</span>
+                  <span className="text-xs uppercase tracking-widest text-slate-500 font-medium">{c.hours}</span>
                 </div>
-                <p className="text-sm text-slate-300 font-medium">Mon–Fri · 9AM–6PM</p>
-                <p className="text-xs text-slate-500 mt-1">GMT+1 · Emergency support 24/7</p>
+                <p className="text-sm text-slate-300 font-medium">{c.hoursValue}</p>
+                <p className="text-xs text-slate-500 mt-1">{c.hoursNote}</p>
               </div>
 
               {/* Social links */}
               <div className="glass-card rounded-2xl p-6">
-                <p className="text-xs uppercase tracking-widest text-slate-500 font-medium mb-4">Follow Us</p>
+                <p className="text-xs uppercase tracking-widest text-slate-500 font-medium mb-4">{c.followUs}</p>
                 <div className="flex gap-3">
                   {SOCIAL_LINKS.map(({ icon: Icon, label, href }) => (
                     <a
@@ -186,15 +189,15 @@ export default function Contact() {
                   <div className="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center">
                     <CheckCircle className="w-8 h-8 text-cyan-400" aria-label="Success" />
                   </div>
-                  <h3 className="text-xl font-bold text-white">Message Sent!</h3>
+                  <h3 className="text-xl font-bold text-white">{c.successTitle}</h3>
                   <p className="text-slate-400 text-sm max-w-xs">
-                    We&apos;ve received your message and will get back to you within 24 hours.
+                    {c.successMsg}
                   </p>
                   <button
                     onClick={() => setStatus('idle')}
                     className="mt-2 px-6 py-2.5 rounded-lg text-sm font-medium bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/20 transition-all duration-200"
                   >
-                    Send Another
+                    {c.send}
                   </button>
                 </div>
               ) : (
@@ -203,7 +206,7 @@ export default function Contact() {
                     {/* Name */}
                     <div>
                       <label htmlFor="contact-name" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                        Full Name <span className="text-red-400" aria-hidden="true">*</span>
+                        {c.nameLabel} <span className="text-red-400" aria-hidden="true">*</span>
                       </label>
                       <input
                         id="contact-name"
@@ -213,7 +216,7 @@ export default function Contact() {
                         value={form.name}
                         onChange={handleChange}
                         className={inputClass('name')}
-                        placeholder="Your full name"
+                        placeholder={c.namePlaceholder}
                         aria-required="true"
                         aria-invalid={!!errors.name}
                         aria-describedby={errors.name ? 'name-error' : undefined}
@@ -228,7 +231,7 @@ export default function Contact() {
                     {/* Email */}
                     <div>
                       <label htmlFor="contact-email" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                        Email <span className="text-red-400" aria-hidden="true">*</span>
+                        {c.emailLabel} <span className="text-red-400" aria-hidden="true">*</span>
                       </label>
                       <input
                         id="contact-email"
@@ -238,7 +241,7 @@ export default function Contact() {
                         value={form.email}
                         onChange={handleChange}
                         className={inputClass('email')}
-                        placeholder="your@email.com"
+                        placeholder={c.emailPlaceholder}
                         aria-required="true"
                         aria-invalid={!!errors.email}
                         aria-describedby={errors.email ? 'email-error' : undefined}
@@ -254,7 +257,7 @@ export default function Contact() {
                   {/* Subject */}
                   <div className="mb-4">
                     <label htmlFor="contact-subject" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                      Subject
+                      {c.subjectLabel}
                     </label>
                     <input
                       id="contact-subject"
@@ -263,14 +266,14 @@ export default function Contact() {
                       value={form.subject}
                       onChange={handleChange}
                       className={inputClass('subject')}
-                      placeholder="I'd like to build a SaaS platform..."
+                      placeholder={c.subjectPlaceholder}
                     />
                   </div>
 
                   {/* Message */}
                   <div className="mb-6">
                     <label htmlFor="contact-message" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                      Message <span className="text-red-400" aria-hidden="true">*</span>
+                      {c.messageLabel} <span className="text-red-400" aria-hidden="true">*</span>
                     </label>
                     <textarea
                       id="contact-message"
@@ -279,7 +282,7 @@ export default function Contact() {
                       value={form.message}
                       onChange={handleChange}
                       className={`${inputClass('message')} resize-none`}
-                      placeholder="Tell us about your project — goals, timeline, budget..."
+                      placeholder={c.messagePlaceholder}
                       aria-required="true"
                       aria-invalid={!!errors.message}
                       aria-describedby={errors.message ? 'message-error' : undefined}
@@ -316,20 +319,20 @@ export default function Contact() {
                     {status === 'loading' ? (
                       <>
                         <span className="w-4 h-4 rounded-full border-2 border-navy-950/30 border-t-navy-950 animate-spin" aria-hidden="true" />
-                        Sending...
+                        {c.sending}
                       </>
                     ) : (
                       <>
                         <Send className="w-4 h-4" aria-hidden="true" />
-                        Send Message
+                        {c.send}
                       </>
                     )}
                   </button>
 
                   <p className="mt-4 text-center text-xs text-slate-600">
-                    By submitting, you agree to our{' '}
-                    <button onClick={() => setLegalModal('privacy')} className="text-slate-400 hover:text-cyan-400 transition-colors underline">Privacy Policy</button>.
-                    We never share your data.
+                    {c.privacy}{' '}
+                    <button onClick={() => setLegalModal('privacy')} className="text-slate-400 hover:text-cyan-400 transition-colors underline">{c.privacyLink}</button>.{' '}
+                    {c.privacyNote}
                   </p>
                 </form>
               )}

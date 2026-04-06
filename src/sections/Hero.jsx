@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, ChevronDown, Star } from 'lucide-react';
+import { ArrowRight, Calendar, Star } from 'lucide-react';
 import ParticleField from '../components/ParticleField';
 import { useLanguage } from '../i18n/index.jsx';
 
@@ -134,22 +134,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        onClick={() => scrollToSection('#services')}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-slate-500 hover:text-cyan-400 transition-colors duration-200"
-        aria-label="Scroll to services"
-      >
-        <span className="text-xs tracking-widest uppercase">{h.scroll}</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <ChevronDown className="w-4 h-4" />
-        </motion.div>
-      </motion.button>
     </section>
   );
 }

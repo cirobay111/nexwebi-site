@@ -69,7 +69,7 @@ export default function WhyUs() {
           subtitle={w.subtitle}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 sm:mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 sm:mb-14">
           {advantages.map(({ icon: Icon, title, description, accent }, i) => (
             <motion.div
               key={title}
@@ -112,7 +112,7 @@ export default function WhyUs() {
             <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
             <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
             <div className="marquee-track">
-              {[...techStack1, ...techStack1].map(({ icon: Icon, name, color }, i) => (
+              {[...techStack1, ...techStack1, ...techStack1].map(({ icon: Icon, name, color }, i) => (
                 <div
                   key={i}
                   className="mx-2 flex flex-col items-center gap-2 px-5 py-4 rounded-2xl bg-white/3 border border-white/8 hover:border-white/20 hover:bg-white/6 transition-all duration-200 cursor-default w-24 flex-shrink-0"
@@ -129,7 +129,7 @@ export default function WhyUs() {
             <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
             <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
             <div className="marquee-track-reverse">
-              {[...techStack2, ...techStack2].map(({ icon: Icon, name, color }, i) => (
+              {[...techStack2, ...techStack2, ...techStack2].map(({ icon: Icon, name, color }, i) => (
                 <div
                   key={i}
                   className="mx-2 flex flex-col items-center gap-2 px-5 py-4 rounded-2xl bg-white/3 border border-white/8 hover:border-white/20 hover:bg-white/6 transition-all duration-200 cursor-default w-24 flex-shrink-0"

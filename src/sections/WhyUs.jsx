@@ -7,14 +7,38 @@ import {
   ShieldCheck,
   HeartHandshake,
 } from 'lucide-react';
+import {
+  SiReact, SiNextdotjs, SiTypescript, SiNodedotjs, SiPython,
+  SiPostgresql, SiRedis, SiDocker, SiTailwindcss,
+  SiOpenai, SiStripe, SiFramer, SiGraphql, SiVercel, SiMongodb,
+} from 'react-icons/si';
+import { FaAws } from 'react-icons/fa';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../i18n/index.jsx';
 
 const advantageIcons = [Rocket, Layers, TrendingUp, Workflow, ShieldCheck, HeartHandshake];
 const advantageAccents = ['#22d3ee', '#818cf8', '#34d399', '#f59e0b', '#fb7185', '#a78bfa'];
 
-const techStack1 = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'PostgreSQL', 'Redis', 'Docker'];
-const techStack2 = ['AWS', 'Tailwind CSS', 'OpenAI', 'Stripe', 'Framer Motion', 'GraphQL', 'Vercel', 'MongoDB'];
+const techStack1 = [
+  { icon: SiReact,            name: 'React',         color: '#61DAFB' },
+  { icon: SiNextdotjs,        name: 'Next.js',       color: '#ffffff' },
+  { icon: SiTypescript,       name: 'TypeScript',    color: '#3178C6' },
+  { icon: SiNodedotjs,        name: 'Node.js',       color: '#339933' },
+  { icon: SiPython,           name: 'Python',        color: '#3776AB' },
+  { icon: SiPostgresql,       name: 'PostgreSQL',    color: '#4169E1' },
+  { icon: SiRedis,            name: 'Redis',         color: '#DC382D' },
+  { icon: SiDocker,           name: 'Docker',        color: '#2496ED' },
+];
+const techStack2 = [
+  { icon: FaAws,               name: 'AWS',           color: '#FF9900' },
+  { icon: SiTailwindcss,       name: 'Tailwind CSS',  color: '#06B6D4' },
+  { icon: SiOpenai,            name: 'OpenAI',        color: '#ffffff' },
+  { icon: SiStripe,            name: 'Stripe',        color: '#635BFF' },
+  { icon: SiFramer,            name: 'Framer Motion', color: '#0055FF' },
+  { icon: SiGraphql,           name: 'GraphQL',       color: '#E10098' },
+  { icon: SiVercel,            name: 'Vercel',        color: '#ffffff' },
+  { icon: SiMongodb,           name: 'MongoDB',       color: '#47A248' },
+];
 
 export default function WhyUs() {
   const { t } = useLanguage();
@@ -84,33 +108,35 @@ export default function WhyUs() {
           </p>
 
           {/* Row 1 — scrolls left */}
-          <div className="relative overflow-hidden mb-3">
-            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-40 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
-            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-40 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
+          <div className="relative overflow-hidden mb-4">
+            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
+            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
             <div className="marquee-track">
-              {[...techStack1, ...techStack1].map((tech, i) => (
-                <span
+              {[...techStack1, ...techStack1].map(({ icon: Icon, name, color }, i) => (
+                <div
                   key={i}
-                  className="mx-2 px-4 py-2 rounded-full text-xs font-medium text-slate-400 border border-white/8 bg-white/3 hover:border-cyan-400/35 hover:text-cyan-400 hover:bg-cyan-400/8 transition-all duration-200 cursor-default whitespace-nowrap"
+                  className="mx-2 flex flex-col items-center gap-2 px-5 py-4 rounded-2xl bg-white/3 border border-white/8 hover:border-white/20 hover:bg-white/6 transition-all duration-200 cursor-default w-24 flex-shrink-0"
                 >
-                  {tech}
-                </span>
+                  <Icon style={{ color }} className="w-7 h-7" aria-hidden="true" />
+                  <span className="text-xs text-slate-400 font-medium text-center leading-tight">{name}</span>
+                </div>
               ))}
             </div>
           </div>
 
           {/* Row 2 — scrolls right */}
           <div className="relative overflow-hidden">
-            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-40 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
-            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-40 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
+            <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #020817, transparent)' }} />
+            <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-32 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #020817, transparent)' }} />
             <div className="marquee-track-reverse">
-              {[...techStack2, ...techStack2].map((tech, i) => (
-                <span
+              {[...techStack2, ...techStack2].map(({ icon: Icon, name, color }, i) => (
+                <div
                   key={i}
-                  className="mx-2 px-4 py-2 rounded-full text-xs font-medium text-slate-400 border border-white/8 bg-white/3 hover:border-cyan-400/35 hover:text-cyan-400 hover:bg-cyan-400/8 transition-all duration-200 cursor-default whitespace-nowrap"
+                  className="mx-2 flex flex-col items-center gap-2 px-5 py-4 rounded-2xl bg-white/3 border border-white/8 hover:border-white/20 hover:bg-white/6 transition-all duration-200 cursor-default w-24 flex-shrink-0"
                 >
-                  {tech}
-                </span>
+                  <Icon style={{ color }} className="w-7 h-7" aria-hidden="true" />
+                  <span className="text-xs text-slate-400 font-medium text-center leading-tight">{name}</span>
+                </div>
               ))}
             </div>
           </div>

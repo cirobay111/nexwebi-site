@@ -69,7 +69,7 @@ export default function WhyUs() {
           subtitle={w.subtitle}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 sm:mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 sm:mb-10">
           {advantages.map(({ icon: Icon, title, description, accent }, i) => (
             <motion.div
               key={title}

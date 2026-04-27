@@ -106,7 +106,7 @@ export default function Pricing() {
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
   };
   return (
-    <section id="pricing" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
+    <section id="pricing" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', top: '10%', right: '20%', width: 500, height: 400, background: 'radial-gradient(ellipse, rgba(129,140,248,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%' }} />
         <div style={{ position: 'absolute', bottom: '10%', left: '20%', width: 450, height: 350, background: 'radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%' }} />

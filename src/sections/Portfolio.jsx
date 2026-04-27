@@ -139,7 +139,7 @@ export default function Portfolio() {
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
   };
   return (
-    <section id="portfolio" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
+    <section id="portfolio" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: '20%', right: '5%', width: 500, height: 400, background: 'radial-gradient(ellipse, rgba(129,140,248,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={p.eyebrow} title={p.title} highlight={p.highlight} subtitle={p.sub} />

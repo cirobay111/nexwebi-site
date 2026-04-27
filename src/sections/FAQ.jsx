@@ -49,7 +49,7 @@ export default function FAQ() {
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
   };
   return (
-    <section id="faq" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px' }}>
+    <section id="faq" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px' }}>
       <div style={{ position: 'absolute', bottom: '10%', right: '25%', width: 400, height: 300, background: 'radial-gradient(ellipse, rgba(129,140,248,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={f.eyebrow} title={f.title} highlight={f.highlight} subtitle={f.sub} />

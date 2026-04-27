@@ -52,10 +52,10 @@ export default function WhyUs() {
   const { t } = useLanguage();
   const w = t.whyUs;
   return (
-    <section id="why-us" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
+    <section id="why-us" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px clamp(48px,5vw,72px)', overflow: 'hidden' }}>
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={w.eyebrow} title={w.title} highlight={w.highlight} subtitle={w.sub} />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14, marginBottom: 72 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, marginBottom: 56, maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
           {items.map((item, i) => <WhyCard key={item.title} {...item} delay={i * 0.06} />)}
         </div>
 

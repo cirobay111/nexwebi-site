@@ -43,7 +43,7 @@ export default function Blog() {
   const b = t.blog;
   const [activeArticle, setActiveArticle] = useState(null);
   return (
-    <section id="blog" style={{ padding: 'clamp(80px,10vw,140px) 24px' }}>
+    <section id="blog" style={{ padding: 'clamp(64px,7vw,96px) 24px' }}>
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={b.eyebrow} title={b.title} highlight={b.highlight} subtitle={b.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>

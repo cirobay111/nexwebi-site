@@ -57,7 +57,7 @@ export default function Services() {
   const { t } = useLanguage();
   const s = t.services;
   return (
-    <section id="services" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px' }}>
+    <section id="services" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px' }}>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} aria-hidden="true">
         <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 400, background: 'radial-gradient(ellipse, rgba(34,211,238,0.035) 0%, transparent 70%)', filter: 'blur(40px)', borderRadius: '50%' }} />
       </div>

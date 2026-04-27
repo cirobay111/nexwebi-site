@@ -38,7 +38,7 @@ export default function Contact() {
   const labelStyle = { display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 };
 
   return (
-    <section id="contact" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px' }}>
+    <section id="contact" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px' }}>
       <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: 700, height: 350, background: 'radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={c.eyebrow} title={c.title} highlight={c.highlight} subtitle={c.sub} />

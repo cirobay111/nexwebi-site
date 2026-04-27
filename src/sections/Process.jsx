@@ -52,11 +52,11 @@ export default function Process() {
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
   };
   return (
-    <section id="process" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
+    <section id="process" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 700, height: 400, background: 'radial-gradient(ellipse, rgba(34,211,238,0.025) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={p.eyebrow} title={p.title} highlight={p.highlight} subtitle={p.sub} />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
           {steps.map((s, i) => <ProcessCard key={s.title} {...s} delay={i * 0.08} />)}
         </div>
         <div style={{ textAlign: 'center', marginTop: 52 }}>

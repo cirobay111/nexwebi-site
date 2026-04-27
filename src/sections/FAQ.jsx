@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../context/LanguageContext';
 
 const faqs = [
   { q: 'How long does it take to build a website?', a: 'It depends on the scope. A landing page or simple brochure site: 3–7 days. A full web app or SaaS platform: 3–8 weeks. We give you a precise timeline after the discovery call with weekly milestones.' },
@@ -33,13 +34,16 @@ function FAQItem({ q, a, last }) {
         }}>+</div>
       </button>
       <div style={{ overflow: 'hidden', maxHeight: open ? 300 : 0, opacity: open ? 1 : 0, transition: 'max-height 0.3s cubic-bezier(0.25,0.1,0.25,1), opacity 0.25s ease' }}>
-        <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.75, paddingBottom: 20, margin: 0 }}>{a}</p>
+        <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.75, paddingBottom: 20, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{a}</p>
       </div>
     </div>
   );
 }
 
 export default function FAQ() {
+  const { t } = useLanguage();
+  const f = t.faq;
+
   const scrollToContact = () => {
     const el = document.getElementById('contact');
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
@@ -47,13 +51,13 @@ export default function FAQ() {
   return (
     <section id="faq" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px' }}>
       <div style={{ position: 'absolute', bottom: '10%', right: '25%', width: 400, height: 300, background: 'radial-gradient(ellipse, rgba(129,140,248,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <SectionHeader eyebrow="FAQ" title="Common" highlight="Questions" subtitle="Everything you need to know before starting a project with us." />
+      <div style={{ maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
+        <SectionHeader eyebrow={f.eyebrow} title={f.title} highlight={f.highlight} subtitle={f.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: 24, alignItems: 'start' }} className="nw-contact-grid">
           <div style={{ position: 'sticky', top: 96 }}>
             <div style={{ padding: '32px 28px', borderRadius: 22, background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#f8fafc', marginBottom: 12, letterSpacing: '-0.03em' }}>Still have questions?</h3>
-              <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginBottom: 24 }}>Can't find what you're looking for? Send us a message and we'll get back to you within a few hours.</p>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#f8fafc', marginBottom: 12, letterSpacing: '-0.03em' }}>{f.stillQ}</h3>
+              <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginBottom: 24 }}>{f.stillA}</p>
               <button onClick={scrollToContact} style={{
                 width: '100%', padding: '13px', borderRadius: 14,
                 background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.25)',
@@ -61,13 +65,13 @@ export default function FAQ() {
               }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.15)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.08)'; }}>
-                Ask Us Directly
+                {f.cta}
               </button>
               <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-                <p style={{ fontSize: 10.5, color: '#334155', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12 }}>Average Response Time</p>
+                <p style={{ fontSize: 10.5, color: '#334155', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12 }}>{f.responseLabel}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22d3ee', animation: 'heroPulse 2s infinite', boxShadow: '0 0 6px #22d3ee' }} />
-                  <span style={{ fontSize: 14, color: '#e2e8f0', fontWeight: 500 }}>Under 2 hours</span>
+                  <span style={{ fontSize: 14, color: '#e2e8f0', fontWeight: 500 }}>{f.responseValue}</span>
                 </div>
               </div>
             </div>

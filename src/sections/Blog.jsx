@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import ArticleModal from '../components/ArticleModal';
+import { useLanguage } from '../context/LanguageContext';
 
 const articles = [
   { cat: 'Strategy', time: '4 min read', title: 'Why Your Website Is Costing You Customers', excerpt: 'Most business websites lose 70% of visitors in under 3 seconds. We break down the 5 most common mistakes and how to fix each one fast.' },
@@ -10,7 +11,7 @@ const articles = [
 
 const catColors = { Strategy: '#22d3ee', Business: '#818cf8', Technical: '#34d399' };
 
-function BlogCard({ cat, time, title, excerpt, onRead }) {
+function BlogCard({ cat, time, title, excerpt, onRead, readLabel }) {
   const [hovered, setHovered] = useState(false);
   const color = catColors[cat] || '#22d3ee';
   return (
@@ -29,22 +30,24 @@ function BlogCard({ cat, time, title, excerpt, onRead }) {
         <span style={{ fontSize: 11.5, color: '#334155' }}>{time}</span>
       </div>
       <h3 style={{ fontSize: 16.5, fontWeight: 700, color: hovered ? '#a5f3fc' : '#f1f5f9', marginBottom: 12, letterSpacing: '-0.02em', lineHeight: 1.35, transition: 'color 0.2s' }}>{title}</h3>
-      <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.7, margin: 0 }}>{excerpt}</p>
+      <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.7, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{excerpt}</p>
       <div style={{ marginTop: 18, fontSize: 12.5, fontWeight: 600, color, opacity: hovered ? 1 : 0, transform: hovered ? 'translateY(0)' : 'translateY(4px)', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 4 }}>
-        Read Article <span style={{ transform: hovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s', display: 'inline-block' }}>→</span>
+        {readLabel} <span style={{ transform: hovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s', display: 'inline-block' }}>→</span>
       </div>
     </div>
   );
 }
 
 export default function Blog() {
+  const { t } = useLanguage();
+  const b = t.blog;
   const [activeArticle, setActiveArticle] = useState(null);
   return (
     <section id="blog" style={{ padding: 'clamp(80px,10vw,140px) 24px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <SectionHeader eyebrow="Insights & Expertise" title="We Know" highlight="What Works" subtitle="Practical knowledge from building real products — no fluff, no filler." />
+      <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
+        <SectionHeader eyebrow={b.eyebrow} title={b.title} highlight={b.highlight} subtitle={b.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-          {articles.map(a => <BlogCard key={a.title} {...a} onRead={setActiveArticle} />)}
+          {articles.map(a => <BlogCard key={a.title} {...a} onRead={setActiveArticle} readLabel={b.readArticle} />)}
         </div>
       </div>
       {activeArticle && <ArticleModal article={activeArticle} onClose={() => setActiveArticle(null)} />}

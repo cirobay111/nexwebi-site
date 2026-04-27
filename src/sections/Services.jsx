@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../context/LanguageContext';
 
 const services = [
   { title: 'Web Design & Development', description: 'Pixel-perfect, responsive websites engineered for performance. From landing pages to complex web apps — built with modern stacks.', tag: 'Most Requested', color: '#22d3ee', icon: '◈' },
@@ -43,7 +44,7 @@ function ServiceCard({ title, description, tag, color, icon, delay }) {
         transform: hovered ? 'scale(1.1)' : 'scale(1)', transition: 'transform 0.25s ease',
       }}>{icon}</div>
       <h3 style={{ fontSize: 17, fontWeight: 700, color: hovered ? '#a5f3fc' : '#f1f5f9', marginBottom: 10, letterSpacing: '-0.02em', lineHeight: 1.3, transition: 'color 0.2s' }}>{title}</h3>
-      <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, margin: 0 }}>{description}</p>
+      <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{description}</p>
       <div style={{ marginTop: 20, fontSize: 12.5, fontWeight: 600, color, display: 'flex', alignItems: 'center', gap: 4, opacity: hovered ? 1 : 0, transform: hovered ? 'translateY(0)' : 'translateY(4px)', transition: 'all 0.2s ease' }}>
         <span>Learn more</span>
         <span style={{ transform: hovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s', display: 'inline-block' }}>→</span>
@@ -53,15 +54,17 @@ function ServiceCard({ title, description, tag, color, icon, delay }) {
 }
 
 export default function Services() {
+  const { t } = useLanguage();
+  const s = t.services;
   return (
     <section id="services" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px' }}>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }} aria-hidden="true">
         <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 400, background: 'radial-gradient(ellipse, rgba(34,211,238,0.035) 0%, transparent 70%)', filter: 'blur(40px)', borderRadius: '50%' }} />
       </div>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <SectionHeader eyebrow="What We Build" title="Services That" highlight="Drive Results" subtitle="From idea to production — we deliver end-to-end digital solutions that combine cutting-edge technology with exceptional user experience." />
+      <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
+        <SectionHeader eyebrow={s.eyebrow} title={s.title} highlight={s.highlight} subtitle={s.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
-          {services.map((s, i) => <ServiceCard key={s.title} {...s} delay={i * 0.07} />)}
+          {services.map((svc, i) => <ServiceCard key={svc.title} {...svc} delay={i * 0.07} />)}
         </div>
       </div>
     </section>

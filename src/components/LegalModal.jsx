@@ -61,7 +61,7 @@ export default function LegalModal({ type, onClose }) {
               ].map(([title, text]) => (
                 <div key={title}>
                   <h3 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', marginBottom: 8 }}>{title}</h3>
-                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.75, margin: 0 }}>{text}</p>
+                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.75, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{text}</p>
                 </div>
               ))}
             </div>
@@ -77,12 +77,12 @@ export default function LegalModal({ type, onClose }) {
               ].map(([title, text]) => (
                 <div key={title}>
                   <h3 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', marginBottom: 8 }}>{title}</h3>
-                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.75, margin: 0 }}>{text}</p>
+                  <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.75, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{text}</p>
                 </div>
               ))}
             </div>
           )}
-          <p style={{ marginTop: 32, fontSize: 12, color: '#334155', textAlign: 'center' }}>Last updated: April 2026 · nexwebi4@gmail.com</p>
+          <p style={{ marginTop: 32, marginBottom: 0, marginLeft: 0, marginRight: 0, fontSize: 12, color: '#334155', textAlign: 'center' }}>Last updated: April 2026 · nexwebi4@gmail.com</p>
         </div>
       </div>
     </div>

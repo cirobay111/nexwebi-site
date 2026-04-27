@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../context/LanguageContext';
 
 const items = [
   { title: 'Fast Delivery', desc: 'Agile sprints with transparent milestones. We deliver MVPs in weeks, not months — no delays, no excuses.', color: '#22d3ee', icon: '🚀' },
@@ -41,31 +42,33 @@ function WhyCard({ title, desc, color, icon, delay }) {
       }}>{icon}</div>
       <div>
         <h3 style={{ fontSize: 15, fontWeight: 700, color: '#f1f5f9', marginBottom: 6, letterSpacing: '-0.02em' }}>{title}</h3>
-        <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.65, margin: 0 }}>{desc}</p>
+        <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.65, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{desc}</p>
       </div>
     </div>
   );
 }
 
 export default function WhyUs() {
+  const { t } = useLanguage();
+  const w = t.whyUs;
   return (
     <section id="why-us" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <SectionHeader eyebrow="Why NexWebi" title="Built Different," highlight="Built Better" subtitle="We don't just build websites — we engineer digital experiences that perform, scale, and convert." />
+      <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
+        <SectionHeader eyebrow={w.eyebrow} title={w.title} highlight={w.highlight} subtitle={w.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14, marginBottom: 72 }}>
           {items.map((item, i) => <WhyCard key={item.title} {...item} delay={i * 0.06} />)}
         </div>
 
         {/* Tech marquee */}
         <div>
-          <p style={{ textAlign: 'center', fontSize: 10.5, letterSpacing: '0.15em', color: '#334155', textTransform: 'uppercase', marginBottom: 24, fontWeight: 600 }}>Technologies We Master</p>
+          <p style={{ textAlign: 'center', fontSize: 10.5, letterSpacing: '0.15em', color: '#334155', textTransform: 'uppercase', marginBottom: 24, fontWeight: 600 }}>{w.techLabel}</p>
           <div style={{ position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 120, background: 'linear-gradient(to right, #020817, transparent)', zIndex: 2, pointerEvents: 'none' }} />
             <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 120, background: 'linear-gradient(to left, #020817, transparent)', zIndex: 2, pointerEvents: 'none' }} />
             <div style={{ display: 'flex', animation: 'marqueeLeft 28s linear infinite', width: 'max-content' }}>
               {[...techs, ...techs, ...techs].map((tech, i) => (
                 <div key={i} style={{
-                  flexShrink: 0, margin: '0 6px', padding: '10px 20px', borderRadius: 12,
+                  flexShrink: 0, marginTop: 0, marginBottom: 0, marginLeft: 6, marginRight: 6, padding: '10px 20px', borderRadius: 12,
                   background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
                   fontSize: 12.5, color: '#475569', fontWeight: 500, whiteSpace: 'nowrap',
                 }}>{tech}</div>

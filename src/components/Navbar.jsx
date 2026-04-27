@@ -1,15 +1,10 @@
 import { useState, useEffect } from 'react';
-
-const navLinks = [
-  { label: 'Services', href: 'services' },
-  { label: 'Portfolio', href: 'portfolio' },
-  { label: 'Why Us', href: 'why-us' },
-  { label: 'Insights', href: 'blog' },
-  { label: 'Pricing', href: 'pricing' },
-  { label: 'Contact', href: 'contact' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Navbar() {
+  const { lang, t, toggleLang } = useLanguage();
+  const navLinks = t.nav.links;
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -28,7 +23,7 @@ export default function Navbar() {
     );
     ids.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
     return () => observer.disconnect();
-  }, []);
+  }, [navLinks]);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -44,7 +39,7 @@ export default function Navbar() {
       transition: 'padding 0.4s cubic-bezier(0.25,0.1,0.25,1)',
     }}>
       <div style={{
-        width: '100%', maxWidth: 900,
+        width: '100%', maxWidth: 960,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 8px 0 16px', height: 56,
         background: scrolled ? 'rgba(2,8,23,0.85)' : 'rgba(15,23,42,0.5)',
@@ -55,7 +50,7 @@ export default function Navbar() {
         transition: 'all 0.4s cubic-bezier(0.25,0.1,0.25,1)',
       }}>
         {/* Logo */}
-        <button onClick={() => scrollTo('hero')} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '8px 8px' }}>
+        <button onClick={() => scrollTo('hero')} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '8px 8px', flexShrink: 0 }}>
           <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
               <path d="M3 10 L10 3 L17 10 L10 17 Z" stroke="#22d3ee" strokeWidth="1.5" fill="rgba(34,211,238,0.15)"/>
@@ -69,7 +64,7 @@ export default function Navbar() {
         </button>
 
         {/* Desktop nav */}
-        <ul className="nw-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 2, listStyle: 'none', margin: 0, padding: 0 }}>
+        <ul className="nw-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 2, listStyle: 'none', marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, padding: 0 }}>
           {navLinks.map(({ label, href }) => {
             const isActive = activeSection === href;
             return (
@@ -90,8 +85,25 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* Desktop CTA */}
+        {/* Desktop right: lang toggle + CTA */}
         <div className="nw-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Language toggle */}
+          <button onClick={toggleLang} title="Switch language" style={{
+            padding: '6px 12px', borderRadius: 100,
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: '#64748b', cursor: 'pointer',
+            fontSize: 11.5, fontWeight: 700, fontFamily: 'inherit',
+            letterSpacing: '0.08em', transition: 'all 0.2s ease',
+            display: 'flex', alignItems: 'center', gap: 5,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.3)'; e.currentTarget.style.background = 'rgba(34,211,238,0.06)'; }}
+          onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}>
+            <span style={{ fontSize: 13 }}>{lang === 'en' ? '🇬🇧' : '🇫🇷'}</span>
+            <span>{lang === 'en' ? 'EN' : 'FR'}</span>
+          </button>
+
+          {/* CTA */}
           <button onClick={() => scrollTo('contact')} style={{
             padding: '8px 20px', borderRadius: 100,
             background: '#22d3ee', color: '#020817',
@@ -103,18 +115,29 @@ export default function Navbar() {
           }}
           onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; e.currentTarget.style.boxShadow = '0 0 30px rgba(34,211,238,0.5)'; }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 20px rgba(34,211,238,0.35)'; }}>
-            Get Started
+            {t.nav.cta}
           </button>
         </div>
 
-        {/* Mobile hamburger */}
-        <button onClick={() => setMobileOpen(v => !v)} className="nw-mobile-nav" style={{
-          background: 'none', border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#94a3b8',
-          fontSize: 18, lineHeight: 1, fontFamily: 'inherit',
-        }}>
-          {mobileOpen ? '✕' : '☰'}
-        </button>
+        {/* Mobile right: lang toggle + hamburger */}
+        <div className="nw-mobile-nav" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button onClick={toggleLang} style={{
+            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 8, padding: '5px 9px', cursor: 'pointer',
+            fontSize: 11, fontWeight: 700, color: '#64748b', fontFamily: 'inherit',
+            display: 'flex', alignItems: 'center', gap: 4,
+          }}>
+            <span>{lang === 'en' ? '🇬🇧' : '🇫🇷'}</span>
+            <span>{lang === 'en' ? 'EN' : 'FR'}</span>
+          </button>
+          <button onClick={() => setMobileOpen(v => !v)} style={{
+            background: 'none', border: '1px solid rgba(255,255,255,0.1)',
+            borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#94a3b8',
+            fontSize: 18, lineHeight: 1, fontFamily: 'inherit',
+          }}>
+            {mobileOpen ? '✕' : '☰'}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -142,7 +165,7 @@ export default function Navbar() {
             background: '#22d3ee', color: '#020817', border: 'none',
             cursor: 'pointer', fontSize: 15, fontWeight: 600, fontFamily: 'inherit',
           }}>
-            Get Started
+            {t.nav.cta}
           </button>
         </div>
       )}

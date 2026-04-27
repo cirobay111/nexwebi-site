@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../context/LanguageContext';
 
 const projects = [
   {
@@ -130,6 +131,9 @@ function ProjectCard({ project, reverse, delay }) {
 }
 
 export default function Portfolio() {
+  const { t } = useLanguage();
+  const p = t.portfolio;
+
   const scrollToContact = () => {
     const el = document.getElementById('contact');
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
@@ -137,13 +141,13 @@ export default function Portfolio() {
   return (
     <section id="portfolio" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: '20%', right: '5%', width: 500, height: 400, background: 'radial-gradient(ellipse, rgba(129,140,248,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <SectionHeader eyebrow="Our Work" title="Real Projects," highlight="Real Results" subtitle="Every project we ship is production-ready, fully custom, and built to perform." />
+      <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
+        <SectionHeader eyebrow={p.eyebrow} title={p.title} highlight={p.highlight} subtitle={p.sub} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {projects.map((p, i) => <ProjectCard key={p.title} project={p} reverse={i % 2 !== 0} delay={i * 0.1} />)}
+          {projects.map((proj, i) => <ProjectCard key={proj.title} project={proj} reverse={i % 2 !== 0} delay={i * 0.1} />)}
         </div>
         <div style={{ textAlign: 'center', marginTop: 56 }}>
-          <p style={{ fontSize: 15, color: '#475569', marginBottom: 20 }}>Want to see your project here?</p>
+          <p style={{ fontSize: 15, color: '#475569', marginBottom: 20 }}>{p.prompt}</p>
           <button onClick={scrollToContact} style={{
             padding: '13px 28px', borderRadius: 100,
             background: 'rgba(34,211,238,0.07)', border: '1px solid rgba(34,211,238,0.25)',
@@ -152,7 +156,7 @@ export default function Portfolio() {
           }}
           onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.13)'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.45)'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.07)'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'; }}>
-            Start Your Project →
+            {p.cta}
           </button>
         </div>
       </div>

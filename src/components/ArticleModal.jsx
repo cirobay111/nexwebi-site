@@ -102,7 +102,7 @@ export default function ArticleModal({ article, onClose }) {
             {body.map((block, i) => (
               block.type === 'h3'
                 ? <h3 key={i} style={{ fontSize: 17, fontWeight: 700, color: '#e2e8f0', letterSpacing: '-0.02em', marginTop: 8 }}>{block.text}</h3>
-                : <p key={i} style={{ fontSize: 15, color: '#64748b', lineHeight: 1.8, margin: 0 }}>{block.text}</p>
+                : <p key={i} style={{ fontSize: 15, color: '#64748b', lineHeight: 1.8, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{block.text}</p>
             ))}
           </div>
           <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', justifyContent: 'center' }}>

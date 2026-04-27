@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
+import { useLanguage } from '../context/LanguageContext';
 
 const plans = [
   {
@@ -53,16 +54,16 @@ function PlanCard({ plan, delay, onCta }) {
       )}
       <div style={{ marginBottom: 24 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: accent, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{name}</span>
-        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, margin: '12px 0 8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, marginTop: 12, marginBottom: 8, marginLeft: 0, marginRight: 0, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 13, color: '#475569', marginBottom: 6 }}>$</span>
           <span style={{ fontSize: 52, fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.04em', lineHeight: 1 }}>{price}</span>
           {priceNote && <span style={{ fontSize: 15, fontWeight: 700, color: accent, marginBottom: 6 }}>{priceNote}</span>}
           <span style={{ fontSize: 13, color: '#475569', marginBottom: 6 }}>/ {period}</span>
         </div>
-        <p style={{ fontSize: 13.5, color: '#64748b', margin: 0, lineHeight: 1.5 }}>{tagline}</p>
+        <p style={{ fontSize: 13.5, color: '#64748b', marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, lineHeight: 1.5 }}>{tagline}</p>
       </div>
       <div style={{ height: 1, background: `linear-gradient(90deg, ${accent}20, transparent)`, marginBottom: 24 }} />
-      <ul style={{ flex: 1, listStyle: 'none', padding: 0, margin: '0 0 28px', display: 'flex', flexDirection: 'column', gap: 11 }}>
+      <ul style={{ flex: 1, listStyle: 'none', padding: 0, marginTop: 0, marginLeft: 0, marginRight: 0, marginBottom: 28, display: 'flex', flexDirection: 'column', gap: 11 }}>
         {features.map(feat => (
           <li key={feat} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
             <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: '50%', marginTop: 1, background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -97,6 +98,9 @@ function PlanCard({ plan, delay, onCta }) {
 }
 
 export default function Pricing() {
+  const { t } = useLanguage();
+  const p = t.pricing;
+
   const scrollToContact = () => {
     const el = document.getElementById('contact');
     if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
@@ -107,10 +111,10 @@ export default function Pricing() {
         <div style={{ position: 'absolute', top: '10%', right: '20%', width: 500, height: 400, background: 'radial-gradient(ellipse, rgba(129,140,248,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%' }} />
         <div style={{ position: 'absolute', bottom: '10%', left: '20%', width: 450, height: 350, background: 'radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%' }} />
       </div>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <SectionHeader eyebrow="Transparent Pricing" title="Simple Plans," highlight="Serious Results" subtitle="No hidden fees. No surprises. Every plan delivers real business value — not just a pretty website." />
+      <div style={{ maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
+        <SectionHeader eyebrow={p.eyebrow} title={p.title} highlight={p.highlight} subtitle={p.sub} />
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 24, marginBottom: 52 }}>
-          {['🔒 Satisfaction Guaranteed','📋 Source Code Ownership','🤝 NDA Available','📞 Free Discovery Call'].map(g => (
+          {p.guarantees.map(g => (
             <div key={g} style={{ fontSize: 13, color: '#64748b' }}>{g}</div>
           ))}
         </div>
@@ -119,14 +123,14 @@ export default function Pricing() {
         </div>
         <div style={{ textAlign: 'center', marginTop: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 100, background: 'rgba(52,211,153,0.07)', border: '1px solid rgba(52,211,153,0.18)', fontSize: 12.5, color: '#34d399' }}>
-            ✓ All plans include source code ownership · NDA available · Dedicated project manager
+            {p.badge}
           </div>
-          <p style={{ fontSize: 14, color: '#475569', margin: 0 }}>
-            Need something custom?{' '}
+          <p style={{ fontSize: 14, color: '#475569', marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>
+            {p.customNote}{' '}
             <button onClick={scrollToContact} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#22d3ee', fontSize: 14, fontFamily: 'inherit', textDecoration: 'underline', textUnderlineOffset: 3, padding: 0 }}>
-              Let's talk
+              {p.customLink}
             </button>
-            {' '}— we build to any scope and budget.
+            {' '}{p.customEnd}
           </p>
         </div>
       </div>

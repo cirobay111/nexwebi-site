@@ -1,12 +1,53 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const LANG_LABELS = { en: { flag: '🇬🇧', code: 'EN' }, fr: { flag: '🇫🇷', code: 'FR' }, ar: { flag: '🇸🇦', code: 'AR' } };
+const LANG_OPTIONS = [
+  { code: 'en', label: 'EN' },
+  { code: 'fr', label: 'FR' },
+  { code: 'ar', label: 'AR' },
+];
+
+function LangSwitch({ lang, setLang, compact }) {
+  return (
+    <div role="group" aria-label="Language" style={{
+      display: 'inline-flex', alignItems: 'center',
+      padding: 3, borderRadius: 100,
+      background: 'rgba(255,255,255,0.04)',
+      border: '1px solid rgba(255,255,255,0.08)',
+      gap: 2,
+    }}>
+      {LANG_OPTIONS.map(opt => {
+        const active = lang === opt.code;
+        return (
+          <button
+            key={opt.code}
+            onClick={() => setLang(opt.code)}
+            aria-pressed={active}
+            style={{
+              padding: compact ? '3px 8px' : '4px 10px',
+              borderRadius: 100,
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              fontSize: compact ? 10.5 : 11,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              minWidth: compact ? 26 : 30,
+              background: active ? 'rgba(34,211,238,0.14)' : 'transparent',
+              color: active ? '#22d3ee' : '#64748b',
+              transition: 'color 0.15s ease, background 0.15s ease',
+            }}>
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export default function Navbar() {
-  const { lang, t, cycleLang } = useLanguage();
+  const { lang, t, setLang } = useLanguage();
   const navLinks = t.nav.links;
-  const langInfo = LANG_LABELS[lang] || LANG_LABELS.en;
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -93,21 +134,7 @@ export default function Navbar() {
 
         {/* Desktop right: lang toggle + CTA */}
         <div className="nw-desktop-nav" style={{ alignItems: 'center', gap: 8 }}>
-          {/* Language toggle */}
-          <button onClick={cycleLang} title={t.nav.langTitle} style={{
-            padding: '6px 12px', borderRadius: 100,
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            color: '#64748b', cursor: 'pointer',
-            fontSize: 11.5, fontWeight: 700, fontFamily: 'inherit',
-            letterSpacing: '0.08em', transition: 'all 0.2s ease',
-            display: 'flex', alignItems: 'center', gap: 5,
-          }}
-          onMouseEnter={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.3)'; e.currentTarget.style.background = 'rgba(34,211,238,0.06)'; }}
-          onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}>
-            <span style={{ fontSize: 13 }}>{langInfo.flag}</span>
-            <span>{langInfo.code}</span>
-          </button>
+          <LangSwitch lang={lang} setLang={setLang} />
 
           {/* CTA */}
           <button onClick={() => scrollTo('contact')} style={{
@@ -127,15 +154,7 @@ export default function Navbar() {
 
         {/* Mobile right: lang toggle + hamburger */}
         <div className="nw-mobile-nav" style={{ alignItems: 'center', gap: 8 }}>
-          <button onClick={cycleLang} title={t.nav.langTitle} style={{
-            background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
-            borderRadius: 8, padding: '5px 9px', cursor: 'pointer',
-            fontSize: 11, fontWeight: 700, color: '#64748b', fontFamily: 'inherit',
-            display: 'flex', alignItems: 'center', gap: 4,
-          }}>
-            <span>{langInfo.flag}</span>
-            <span>{langInfo.code}</span>
-          </button>
+          <LangSwitch lang={lang} setLang={setLang} compact />
           <button onClick={() => setMobileOpen(v => !v)} style={{
             background: 'none', border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 8, padding: '6px 10px', cursor: 'pointer', color: '#94a3b8',

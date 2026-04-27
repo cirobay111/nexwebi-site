@@ -10,7 +10,7 @@ const visualMeta = [
   { avatar: 'AD', accent: '#fb7185' },
 ];
 
-const statValues = ['5.0', '50+', '98%', '0'];
+const statValues = ['5.0', '12+', '100%', '0'];
 
 function TestimonialCard({ t }) {
   const [hovered, setHovered] = useState(false);

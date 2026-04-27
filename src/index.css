@@ -161,6 +161,24 @@
   100% { left: 200%; }
 }
 
+/* NexWebi responsive utility classes */
+.nw-desktop-nav { display: flex; }
+.nw-mobile-nav { display: none; }
+
+@media (max-width: 768px) {
+  .nw-desktop-nav { display: none !important; }
+  .nw-mobile-nav { display: flex !important; }
+  .nw-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .nw-testimonials-grid { grid-template-columns: 1fr !important; }
+  .nw-contact-grid { grid-template-columns: 1fr !important; }
+  .nw-footer-grid { grid-template-columns: 1fr 1fr !important; }
+  .nw-project-card { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .nw-footer-grid { grid-template-columns: 1fr !important; }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #020817; }

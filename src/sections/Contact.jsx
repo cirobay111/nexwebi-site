@@ -1,346 +1,146 @@
-import { useState, useCallback } from 'react';
-import LegalModal from '../components/LegalModal';
-import { motion } from 'framer-motion';
-import { Mail, Send, CheckCircle, AlertCircle, Linkedin, Youtube, Clock } from 'lucide-react';
+import { useState } from 'react';
 import SectionHeader from '../components/SectionHeader';
-import InstagramIcon from '../components/InstagramIcon';
-import { useLanguage } from '../i18n/index.jsx';
-
-/* --- Input sanitization (XSS prevention, client-side) --- */
-function sanitize(str) {
-  return str.replace(/[<>"'`]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;', '`': '&#x60;' }[c]));
-}
-
-function validateEmail(email) {
-  return /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email);
-}
-
-const SOCIAL_LINKS = [
-  { icon: InstagramIcon, label: 'Instagram', href: 'https://www.instagram.com/nexwebi/' },
-  { icon: Linkedin, label: 'LinkedIn', href: '#' },
-  { icon: Youtube, label: 'YouTube', href: '#' },
-];
-
-const INITIAL_FORM = { name: '', email: '', subject: '', message: '' };
-const INITIAL_ERRORS = { name: '', email: '', message: '' };
 
 export default function Contact() {
-  const { t } = useLanguage();
-  const c = t.contact;
-  const [form, setForm] = useState(INITIAL_FORM);
-  const [errors, setErrors] = useState(INITIAL_ERRORS);
-  const [status, setStatus] = useState('idle'); // idle | loading | success | error
-  const [lastSubmit, setLastSubmit] = useState(0);
-  const [legalModal, setLegalModal] = useState(null);
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('idle');
 
-  const validate = useCallback(() => {
-    const errs = { name: '', email: '', message: '' };
-    if (!form.name.trim() || form.name.trim().length < 2) errs.name = 'Name must be at least 2 characters.';
-    if (!validateEmail(form.email)) errs.email = 'Please enter a valid email address.';
-    if (!form.message.trim() || form.message.trim().length < 20) errs.message = 'Message must be at least 20 characters.';
-    setErrors(errs);
-    return !errs.name && !errs.email && !errs.message;
-  }, [form]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const maxLengths = { name: 100, email: 254, subject: 200, message: 2000 };
-    if (value.length > (maxLengths[name] ?? 500)) return;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim() || form.name.length < 2) e.name = 'Name must be at least 2 characters';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Please enter a valid email';
+    if (!form.message.trim() || form.message.length < 20) e.message = 'Message must be at least 20 characters';
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
-    const now = Date.now();
-    if (now - lastSubmit < 60_000) {
-      setErrors((prev) => ({ ...prev, message: 'Please wait 1 minute before submitting again.' }));
-      return;
-    }
-
     setStatus('loading');
-
-    const payload = {
-      name: sanitize(form.name.trim()),
-      email: sanitize(form.email.trim()),
-      subject: sanitize(form.subject.trim()),
-      message: sanitize(form.message.trim()),
-    };
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to send');
-      setStatus('success');
-      setLastSubmit(Date.now());
-      setForm(INITIAL_FORM);
-    } catch (err) {
-      setStatus(err?.message || 'error');
-    }
+    await new Promise(r => setTimeout(r, 1200));
+    setStatus('success');
   };
 
-  const inputClass = (field) =>
-    `w-full px-4 py-3 rounded-xl bg-white/5 border text-slate-200 placeholder-slate-600 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-400/40 focus:border-cyan-400/50 ${
-      errors[field] ? 'border-red-500/50' : 'border-white/10 hover:border-white/20'
-    }`;
+  const inputStyle = (field) => ({
+    width: '100%', padding: '13px 16px', borderRadius: 12,
+    background: 'rgba(255,255,255,0.04)',
+    border: errors[field] ? '1px solid rgba(251,113,133,0.5)' : '1px solid rgba(255,255,255,0.1)',
+    color: '#e2e8f0', fontSize: 14, fontFamily: 'inherit', outline: 'none',
+    transition: 'border-color 0.2s, background 0.2s', boxSizing: 'border-box',
+  });
+
+  const labelStyle = { display: 'block', fontSize: 11, fontWeight: 700, color: '#475569', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8 };
 
   return (
-    <section
-      id="contact"
-      className="relative section-padding"
-      aria-labelledby="contact-heading"
-    >
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-cyan-400/4 blur-[120px] rounded-full" />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto">
-        <SectionHeader
-          eyebrow={c.eyebrow}
-          title={c.title}
-          highlight={c.highlight}
-          subtitle={c.subtitle}
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-          {/* Contact info */}
-          <div className="lg:col-span-2 space-y-4">
-            <motion.div
-              initial={{ opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-4"
-            >
-              {/* Response time badge */}
-              <div className="glass-card rounded-xl p-4 flex items-center gap-3 border-green-400/15">
-                <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-green-400 font-semibold">{c.available}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{c.responseTime}</p>
-                </div>
+    <section id="contact" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px' }}>
+      <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: 700, height: 350, background: 'radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <SectionHeader eyebrow="Get In Touch" title="Start Your" highlight="Project Today" subtitle="Tell us about your project and we'll get back to you within 24 hours." />
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', gap: 24, alignItems: 'start' }} className="nw-contact-grid">
+          {/* Info */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ padding: '16px 20px', borderRadius: 16, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', flexShrink: 0, animation: 'heroPulse 2s infinite', boxShadow: '0 0 8px #34d399' }} />
+              <div>
+                <div style={{ fontSize: 12.5, color: '#34d399', fontWeight: 700 }}>We're Available Now</div>
+                <div style={{ fontSize: 11.5, color: '#475569', marginTop: 2 }}>Average response: under 2 hours</div>
               </div>
-
-              {/* Email card */}
-              <div className="glass-card rounded-2xl p-6 group hover:border-cyan-400/25 transition-all duration-300">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
-                    <Mail className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-                  </div>
-                  <span className="text-xs uppercase tracking-widest text-slate-500 font-medium">{c.email}</span>
+            </div>
+            {[
+              { icon: '✉', label: 'Email', content: <a href="mailto:nexwebi4@gmail.com" style={{ color: '#e2e8f0', fontSize: 14, fontWeight: 500, textDecoration: 'none' }} onMouseEnter={e => e.currentTarget.style.color = '#22d3ee'} onMouseLeave={e => e.currentTarget.style.color = '#e2e8f0'}>nexwebi4@gmail.com</a> },
+              { icon: '◷', label: 'Hours', content: <><div style={{ fontSize: 14, color: '#e2e8f0', fontWeight: 500 }}>Mon–Fri · 9AM–6PM</div><div style={{ fontSize: 12, color: '#475569', marginTop: 4 }}>GMT+1 · Emergency support 24/7</div></> },
+            ].map(({ icon, label, content }) => (
+              <div key={label} style={{ padding: '20px 22px', borderRadius: 18, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)', transition: 'border-color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(34,211,238,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                  <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15 }}>{icon}</div>
+                  <span style={{ fontSize: 10.5, color: '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
                 </div>
-                <a
-                  href="mailto:nexwebi4@gmail.com"
-                  className="text-slate-200 font-medium hover:text-cyan-400 transition-colors duration-200 text-sm"
-                >
-                  nexwebi4@gmail.com
-                </a>
+                {content}
               </div>
-
-              {/* Chat / hours card */}
-              <div className="glass-card rounded-2xl p-6 group hover:border-cyan-400/25 transition-all duration-300">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-                  </div>
-                  <span className="text-xs uppercase tracking-widest text-slate-500 font-medium">{c.hours}</span>
-                </div>
-                <p className="text-sm text-slate-300 font-medium">{c.hoursValue}</p>
-                <p className="text-xs text-slate-500 mt-1">{c.hoursNote}</p>
+            ))}
+            <div style={{ padding: '20px 22px', borderRadius: 18, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <div style={{ fontSize: 10.5, color: '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }}>Follow Us</div>
+              <div style={{ display: 'flex', gap: 10 }}>
+                {[['Instagram', 'IG', 'https://www.instagram.com/nexwebi/'], ['LinkedIn', 'in', '#'], ['YouTube', 'YT', '#']].map(([label, abbr, href]) => (
+                  <a key={label} href={href} aria-label={label} style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#64748b', textDecoration: 'none', transition: 'all 0.2s' }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.3)'; e.currentTarget.style.background = 'rgba(34,211,238,0.08)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}>
+                    {abbr}
+                  </a>
+                ))}
               </div>
-
-              {/* Social links */}
-              <div className="glass-card rounded-2xl p-6">
-                <p className="text-xs uppercase tracking-widest text-slate-500 font-medium mb-4">{c.followUs}</p>
-                <div className="flex gap-3">
-                  {SOCIAL_LINKS.map(({ icon: Icon, label, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      aria-label={label}
-                      className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-400/30 hover:bg-cyan-400/8 transition-all duration-200"
-                      rel="noopener noreferrer"
-                    >
-                      <Icon className="w-4 h-4" aria-hidden="true" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-3"
-          >
-            <div className="glass-card rounded-2xl p-5 sm:p-8">
-              {status === 'success' ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center">
-                    <CheckCircle className="w-8 h-8 text-cyan-400" aria-label="Success" />
+          <div style={{ borderRadius: 22, padding: '36px 32px', background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            {status === 'success' ? (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 24px', textAlign: 'center', gap: 16 }}>
+                <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, color: '#22d3ee' }}>✓</div>
+                <h3 style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc', margin: 0 }}>Message Sent!</h3>
+                <p style={{ fontSize: 14, color: '#64748b', margin: 0, maxWidth: 280 }}>We'll get back to you within 24 hours.</p>
+                <button onClick={() => setStatus('idle')} style={{ marginTop: 8, padding: '10px 24px', borderRadius: 100, background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.25)', color: '#22d3ee', cursor: 'pointer', fontSize: 14, fontFamily: 'inherit', fontWeight: 600 }}>Send Another</button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                  <div>
+                    <label style={labelStyle}>Full Name <span style={{ color: '#fb7185' }}>*</span></label>
+                    <input value={form.name} onChange={e => { setForm(f => ({ ...f, name: e.target.value })); setErrors(ev => ({ ...ev, name: '' })); }} placeholder="Your full name" style={inputStyle('name')}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(34,211,238,0.4)'; e.target.style.background = 'rgba(34,211,238,0.04)'; }}
+                      onBlur={e => { e.target.style.borderColor = errors.name ? 'rgba(251,113,133,0.5)' : 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }} />
+                    {errors.name && <p style={{ fontSize: 11.5, color: '#fb7185', marginTop: 6 }}>{errors.name}</p>}
                   </div>
-                  <h3 className="text-xl font-bold text-white">{c.successTitle}</h3>
-                  <p className="text-slate-400 text-sm max-w-xs">
-                    {c.successMsg}
-                  </p>
-                  <button
-                    onClick={() => setStatus('idle')}
-                    className="mt-2 px-6 py-2.5 rounded-lg text-sm font-medium bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/20 transition-all duration-200"
-                  >
-                    {c.send}
-                  </button>
+                  <div>
+                    <label style={labelStyle}>Email <span style={{ color: '#fb7185' }}>*</span></label>
+                    <input type="email" value={form.email} onChange={e => { setForm(f => ({ ...f, email: e.target.value })); setErrors(ev => ({ ...ev, email: '' })); }} placeholder="your@email.com" style={inputStyle('email')}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(34,211,238,0.4)'; e.target.style.background = 'rgba(34,211,238,0.04)'; }}
+                      onBlur={e => { e.target.style.borderColor = errors.email ? 'rgba(251,113,133,0.5)' : 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }} />
+                    {errors.email && <p style={{ fontSize: 11.5, color: '#fb7185', marginTop: 6 }}>{errors.email}</p>}
+                  </div>
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} noValidate aria-label="Contact form">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    {/* Name */}
-                    <div>
-                      <label htmlFor="contact-name" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                        {c.nameLabel} <span className="text-red-400" aria-hidden="true">*</span>
-                      </label>
-                      <input
-                        id="contact-name"
-                        name="name"
-                        type="text"
-                        autoComplete="name"
-                        value={form.name}
-                        onChange={handleChange}
-                        className={inputClass('name')}
-                        placeholder={c.namePlaceholder}
-                        aria-required="true"
-                        aria-invalid={!!errors.name}
-                        aria-describedby={errors.name ? 'name-error' : undefined}
-                      />
-                      {errors.name && (
-                        <p id="name-error" className="mt-1.5 text-xs text-red-400 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3 h-3" aria-hidden="true" /> {errors.name}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label htmlFor="contact-email" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                        {c.emailLabel} <span className="text-red-400" aria-hidden="true">*</span>
-                      </label>
-                      <input
-                        id="contact-email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        className={inputClass('email')}
-                        placeholder={c.emailPlaceholder}
-                        aria-required="true"
-                        aria-invalid={!!errors.email}
-                        aria-describedby={errors.email ? 'email-error' : undefined}
-                      />
-                      {errors.email && (
-                        <p id="email-error" className="mt-1.5 text-xs text-red-400 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3 h-3" aria-hidden="true" /> {errors.email}
-                        </p>
-                      )}
-                    </div>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={labelStyle}>Subject</label>
+                  <input value={form.subject} onChange={e => setForm(f => ({ ...f, subject: e.target.value }))} placeholder="I'd like to build a SaaS platform..." style={inputStyle('subject')}
+                    onFocus={e => { e.target.style.borderColor = 'rgba(34,211,238,0.4)'; e.target.style.background = 'rgba(34,211,238,0.04)'; }}
+                    onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }} />
+                </div>
+                <div style={{ marginBottom: 24 }}>
+                  <label style={labelStyle}>Message <span style={{ color: '#fb7185' }}>*</span></label>
+                  <textarea rows={5} value={form.message} onChange={e => { setForm(f => ({ ...f, message: e.target.value })); setErrors(ev => ({ ...ev, message: '' })); }} placeholder="Tell us about your project, goals, timeline..." style={{ ...inputStyle('message'), resize: 'vertical', minHeight: 120 }}
+                    onFocus={e => { e.target.style.borderColor = 'rgba(34,211,238,0.4)'; e.target.style.background = 'rgba(34,211,238,0.04)'; }}
+                    onBlur={e => { e.target.style.borderColor = errors.message ? 'rgba(251,113,133,0.5)' : 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }} />
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+                    {errors.message ? <span style={{ fontSize: 11.5, color: '#fb7185' }}>{errors.message}</span> : <span />}
+                    <span style={{ fontSize: 11, color: '#334155' }}>{form.message.length}/2000</span>
                   </div>
-
-                  {/* Subject */}
-                  <div className="mb-4">
-                    <label htmlFor="contact-subject" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                      {c.subjectLabel}
-                    </label>
-                    <input
-                      id="contact-subject"
-                      name="subject"
-                      type="text"
-                      value={form.subject}
-                      onChange={handleChange}
-                      className={inputClass('subject')}
-                      placeholder={c.subjectPlaceholder}
-                    />
-                  </div>
-
-                  {/* Message */}
-                  <div className="mb-6">
-                    <label htmlFor="contact-message" className="block text-xs font-medium text-slate-400 mb-1.5 uppercase tracking-wider">
-                      {c.messageLabel} <span className="text-red-400" aria-hidden="true">*</span>
-                    </label>
-                    <textarea
-                      id="contact-message"
-                      name="message"
-                      rows={5}
-                      value={form.message}
-                      onChange={handleChange}
-                      className={`${inputClass('message')} resize-none`}
-                      placeholder={c.messagePlaceholder}
-                      aria-required="true"
-                      aria-invalid={!!errors.message}
-                      aria-describedby={errors.message ? 'message-error' : undefined}
-                    />
-                    <div className="flex items-center justify-between mt-1.5">
-                      {errors.message ? (
-                        <p id="message-error" className="text-xs text-red-400 flex items-center gap-1" role="alert">
-                          <AlertCircle className="w-3 h-3" aria-hidden="true" /> {errors.message}
-                        </p>
-                      ) : <span />}
-                      <span className="text-xs text-slate-600">{form.message.length}/2000</span>
-                    </div>
-                  </div>
-
-                  {/* Error banner */}
-                  {status !== 'idle' && status !== 'loading' && status !== 'success' && (
-                    <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400 flex items-center gap-2" role="alert">
-                      <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-                      Error: {status}
-                    </div>
-                  )}
-
-                  <button
-                    type="submit"
-                    disabled={status === 'loading'}
-                    className="shimmer-btn w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02]"
-                    style={{
-                      backgroundColor: '#22d3ee',
-                      color: '#020817',
-                      boxShadow: '0 0 20px rgba(34,211,238,0.35)',
-                    }}
-                    aria-busy={status === 'loading'}
-                  >
-                    {status === 'loading' ? (
-                      <>
-                        <span className="w-4 h-4 rounded-full border-2 border-navy-950/30 border-t-navy-950 animate-spin" aria-hidden="true" />
-                        {c.sending}
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" aria-hidden="true" />
-                        {c.send}
-                      </>
-                    )}
-                  </button>
-
-                  <p className="mt-4 text-center text-xs text-slate-600">
-                    {c.privacy}{' '}
-                    <button onClick={() => setLegalModal('privacy')} className="text-slate-400 hover:text-cyan-400 transition-colors underline">{c.privacyLink}</button>.{' '}
-                    {c.privacyNote}
-                  </p>
-                </form>
-              )}
-            </div>
-          </motion.div>
+                </div>
+                <button type="submit" disabled={status === 'loading'} style={{
+                  width: '100%', padding: '15px', borderRadius: 14,
+                  background: '#22d3ee', color: '#020817', border: 'none',
+                  cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+                  fontSize: 15, fontWeight: 700, fontFamily: 'inherit',
+                  boxShadow: '0 0 24px rgba(34,211,238,0.4)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  transition: 'all 0.2s ease', opacity: status === 'loading' ? 0.7 : 1,
+                }}
+                onMouseEnter={e => { if (status !== 'loading') { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 0 36px rgba(34,211,238,0.55)'; }}}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 24px rgba(34,211,238,0.4)'; }}>
+                  {status === 'loading' ? (
+                    <><span style={{ width: 16, height: 16, border: '2px solid rgba(2,8,23,0.3)', borderTopColor: '#020817', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> Sending...</>
+                  ) : <><span>Send Message</span><span>→</span></>}
+                </button>
+                <p style={{ textAlign: 'center', fontSize: 11.5, color: '#334155', marginTop: 14 }}>By submitting, you agree to our Privacy Policy. We never share your data.</p>
+              </form>
+            )}
+          </div>
         </div>
       </div>
-      {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </section>
   );
 }

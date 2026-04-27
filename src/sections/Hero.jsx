@@ -1,139 +1,138 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Calendar, Star } from 'lucide-react';
-import ParticleField from '../components/ParticleField';
-import { useLanguage } from '../i18n/index.jsx';
+import { useState, useEffect } from 'react';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: i * 0.15, ease: [0.25, 0.1, 0.25, 1] },
-  }),
-};
+const stats = [
+  { value: '50+', label: 'Projects Delivered' },
+  { value: '98%', label: 'Client Satisfaction' },
+  { value: '5×', label: 'Faster Delivery' },
+  { value: '24/7', label: 'Support' },
+];
 
 export default function Hero() {
-  const { t } = useLanguage();
-  const h = t.hero;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setTimeout(() => setMounted(true), 80); }, []);
 
-  const scrollToSection = (href) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  const anim = (delay) => ({
+    opacity: mounted ? 1 : 0,
+    transform: mounted ? 'translateY(0)' : 'translateY(28px)',
+    transition: `opacity 0.8s cubic-bezier(0.25,0.1,0.25,1) ${delay}s, transform 0.8s cubic-bezier(0.25,0.1,0.25,1) ${delay}s`,
+  });
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
   };
 
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden cyber-grid"
-      aria-label="Hero section"
-    >
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-cyan-400/5 blur-[140px]" />
-        <div className="absolute top-1/3 left-1/4 w-[350px] h-[350px] rounded-full bg-cyan-400/4 blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-blue-500/5 blur-[100px]" />
-        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#020817] to-transparent" />
+    <section id="hero" style={{
+      position: 'relative', minHeight: '100vh',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden', padding: '120px 24px 80px',
+    }}>
+      {/* Background */}
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'linear-gradient(rgba(34,211,238,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.022) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+        }} />
+        <div style={{ position: 'absolute', top: '15%', left: '50%', transform: 'translateX(-50%)', width: 800, height: 500, borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(34,211,238,0.07) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+        <div style={{ position: 'absolute', top: '30%', left: '15%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(129,140,248,0.06) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <div style={{ position: 'absolute', top: '40%', right: '10%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 180, background: 'linear-gradient(to top, #020817, transparent)' }} />
+        {[...Array(18)].map((_, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `${10 + (i * 73 + 17) % 80}%`,
+            top: `${5 + (i * 47 + 23) % 85}%`,
+            width: i % 3 === 0 ? 2.5 : 1.5,
+            height: i % 3 === 0 ? 2.5 : 1.5,
+            borderRadius: '50%',
+            background: i % 4 === 0 ? '#818cf8' : '#22d3ee',
+            opacity: 0.25 + (i % 4) * 0.1,
+            animation: `floatParticle ${5 + (i % 4) * 2}s ease-in-out infinite`,
+            animationDelay: `${(i * 0.4) % 4}s`,
+          }} />
+        ))}
       </div>
 
-      <ParticleField />
+      <div style={{ position: 'relative', zIndex: 10, maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+        {/* Badge */}
+        <div style={{ ...anim(0), display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 16px 6px 8px', borderRadius: 100, background: 'rgba(34,211,238,0.07)', border: '1px solid rgba(34,211,238,0.18)', marginBottom: 36 }}>
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22d3ee', boxShadow: '0 0 8px #22d3ee', animation: 'heroPulse 2s infinite', display: 'inline-block', flexShrink: 0 }} />
+          <span style={{ fontSize: 11.5, fontWeight: 600, color: '#22d3ee', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Next Generation Web Agency</span>
+        </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-cyan-400/20 text-cyan-400 text-xs font-medium tracking-widest uppercase mb-8"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          {h.badge}
-        </motion.div>
+        {/* Headline */}
+        <h1 style={{ ...anim(0.1), margin: '0 0 24px', lineHeight: 1.03, letterSpacing: '-0.04em' }}>
+          <span style={{ display: 'block', fontSize: 'clamp(52px, 9vw, 96px)', fontWeight: 800, color: '#f8fafc' }}>We Build</span>
+          <span style={{ display: 'block', fontSize: 'clamp(52px, 9vw, 96px)', fontWeight: 800, background: 'linear-gradient(135deg, #22d3ee 0%, #67e8f9 45%, #a5f3fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 40px rgba(34,211,238,0.3))' }}>Digital Products</span>
+          <span style={{ display: 'block', fontSize: 'clamp(52px, 9vw, 96px)', fontWeight: 800, color: '#f8fafc' }}>That Scale</span>
+        </h1>
 
-        <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={1}
-          className="text-[2.25rem] sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.05] mb-6"
-        >
-          <span className="text-white">{h.headline1}</span>
-          <br />
-          <span className="gradient-text glow-text">{h.headline2}</span>
-          <br />
-          <span className="text-white">{h.headline3}</span>
-        </motion.h1>
+        {/* Sub */}
+        <p style={{ ...anim(0.2), maxWidth: 580, margin: '0 auto 44px', fontSize: 'clamp(16px, 2vw, 19px)', color: '#64748b', lineHeight: 1.7, fontWeight: 400, letterSpacing: '-0.01em' }}>
+          NexWebi crafts modern websites, intelligent automation systems, and scalable SaaS platforms — engineered for performance, built for growth.
+        </p>
 
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={2}
-          className="max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed mb-10"
-        >
-          {h.sub}
-        </motion.p>
-
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={3}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <button
-            onClick={() => scrollToSection('#contact')}
-            className="shimmer-btn group relative flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm bg-cyan-400 overflow-hidden hover:shadow-lg hover:scale-105 transition-all duration-300"
-            style={{ color: '#020817', boxShadow: '0 0 24px rgba(34,211,238,0.45)' }}
-          >
-            <span className="relative z-10">{h.cta1}</span>
-            <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+        {/* CTAs */}
+        <div style={{ ...anim(0.3), display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 48 }}>
+          <button onClick={() => scrollTo('contact')} style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '14px 32px', borderRadius: 100,
+            background: '#22d3ee', color: '#020817',
+            border: 'none', cursor: 'pointer', fontSize: 15, fontWeight: 700, fontFamily: 'inherit',
+            boxShadow: '0 0 32px rgba(34,211,238,0.45), 0 4px 16px rgba(0,0,0,0.3)',
+            transition: 'all 0.25s cubic-bezier(0.25,0.1,0.25,1)',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04) translateY(-2px)'; e.currentTarget.style.boxShadow = '0 0 50px rgba(34,211,238,0.6), 0 8px 24px rgba(0,0,0,0.4)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1) translateY(0)'; e.currentTarget.style.boxShadow = '0 0 32px rgba(34,211,238,0.45), 0 4px 16px rgba(0,0,0,0.3)'; }}>
+            Start Your Project <span style={{ fontSize: 16 }}>→</span>
           </button>
-
-          <button
-            onClick={() => scrollToSection('#portfolio')}
-            className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm glass border border-cyan-400/30 text-cyan-400 hover:border-cyan-400/60 hover:bg-cyan-400/10 transition-all duration-200"
-          >
-            <Calendar className="w-4 h-4" />
-            {h.cta2}
+          <button onClick={() => scrollTo('portfolio')} style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '13px 28px', borderRadius: 100,
+            background: 'rgba(34,211,238,0.06)', border: '1px solid rgba(34,211,238,0.25)',
+            color: '#22d3ee', cursor: 'pointer', fontSize: 15, fontWeight: 500, fontFamily: 'inherit',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.12)'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.45)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.06)'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'; }}>
+            View Our Work
           </button>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={3.5}
-          className="mt-10 flex items-center justify-center gap-2 text-xs text-slate-500"
-        >
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" aria-hidden="true" />
-            ))}
-          </div>
-          <span>{h.rating}</span>
-          <span className="text-slate-700" aria-hidden="true">·</span>
-          <span>{h.trusted}</span>
-          <span className="text-slate-700" aria-hidden="true">·</span>
-          <span>{h.worldwide}</span>
-        </motion.div>
+        {/* Trust bar */}
+        <div style={{ ...anim(0.35), display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 52, fontSize: 12.5, color: '#475569' }}>
+          <span style={{ color: '#f59e0b', letterSpacing: 1 }}>★★★★★</span>
+          <span>5.0 rating</span>
+          <span style={{ color: '#1e293b' }}>·</span>
+          <span>Trusted by 50+ businesses</span>
+          <span style={{ color: '#1e293b' }}>·</span>
+          <span>USA &amp; worldwide</span>
+        </div>
 
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={4}
-          className="mt-8 sm:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
-        >
-          {h.stats.map(({ value, label }) => (
-            <div
-              key={label}
-              className="glass-card rounded-2xl px-4 py-5 text-center hover:border-cyan-400/20 transition-all duration-300"
-            >
-              <div className="text-3xl font-black gradient-text mb-1">{value}</div>
-              <div className="text-xs text-slate-500 uppercase tracking-wider">{label}</div>
+        {/* Stats */}
+        <div style={{ ...anim(0.4), display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, maxWidth: 680, margin: '0 auto' }} className="nw-stats-grid">
+          {stats.map(({ value, label }) => (
+            <div key={label} style={{
+              padding: '20px 16px', borderRadius: 18,
+              background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.07)', textAlign: 'center',
+              transition: 'all 0.25s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(34,211,238,0.2)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+              <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.04em', background: 'linear-gradient(135deg,#22d3ee,#67e8f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: 4 }}>{value}</div>
+              <div style={{ fontSize: 10.5, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 500 }}>{label}</div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
 
+      <style>{`
+        @keyframes floatParticle { 0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; } 50% { transform: translateY(-18px) scale(1.2); opacity: 0.6; } }
+        @keyframes heroPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.85); } }
+      `}</style>
     </section>
   );
 }

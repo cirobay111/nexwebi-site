@@ -1,111 +1,45 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Clock } from 'lucide-react';
-import { useLanguage } from '../i18n/index.jsx';
-
 export default function CTA() {
-  const { t } = useLanguage();
-  const c = t.cta;
-
-  const scrollToContact = () => {
-    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
   };
-
-  const scrollToPricing = () => {
-    document.querySelector('#pricing')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section
-      className="relative section-padding overflow-hidden"
-      aria-label="Call to action"
-    >
-      {/* Background */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/0 via-cyan-400/4 to-navy-900/0" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-cyan-400/6 blur-[140px] rounded-full" />
-        <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-purple-500/4 blur-[100px] rounded-full" />
-      </div>
-
-      <div className="relative max-w-4xl mx-auto text-center px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="glass-card rounded-3xl px-5 py-10 sm:px-8 sm:py-12 md:px-16 md:py-16 relative overflow-hidden"
-          style={{ borderColor: 'rgba(34,211,238,0.22)', boxShadow: '0 0 80px rgba(34,211,238,0.07)' }}
-        >
-          {/* Corner glows */}
-          <div className="absolute top-0 left-0 w-48 h-48 bg-cyan-400/6 blur-[80px] rounded-full -translate-x-1/2 -translate-y-1/2" aria-hidden="true" />
-          <div className="absolute bottom-0 right-0 w-48 h-48 bg-purple-500/6 blur-[80px] rounded-full translate-x-1/2 translate-y-1/2" aria-hidden="true" />
-
-          {/* Top border */}
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.6), transparent)' }} aria-hidden="true" />
-
-          {/* Subtle grid inside card */}
-          <div
-            className="absolute inset-0 rounded-3xl opacity-30"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(34,211,238,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.03) 1px, transparent 1px)',
-              backgroundSize: '40px 40px',
-            }}
-            aria-hidden="true"
-          />
-
-          <div className="relative">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-cyan-400/20 text-cyan-400 text-xs font-medium tracking-widest uppercase mb-6">
-              <Sparkles className="w-3 h-3" aria-hidden="true" />
-              {c.badge}
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4">
-              <span className="text-white">{c.headline1}</span>
-              <br />
-              <span className="gradient-text glow-text">{c.headline2}</span>
-            </h2>
-
-            <p className="text-slate-400 text-base sm:text-lg leading-relaxed mb-4 max-w-2xl mx-auto">
-              {c.sub}
-            </p>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium mb-10"
-              style={{ backgroundColor: 'rgba(251,113,133,0.1)', color: '#fb7185', border: '1px solid rgba(251,113,133,0.2)' }}
-            >
-              <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-              {c.urgency}
-            </motion.div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
-                onClick={scrollToContact}
-                className="shimmer-btn group flex items-center gap-2 px-9 py-4 rounded-xl font-bold text-sm transition-all duration-200 hover:opacity-90 hover:scale-105"
-                style={{
-                  backgroundColor: '#22d3ee',
-                  color: '#020817',
-                  boxShadow: '0 0 28px rgba(34,211,238,0.45)',
-                }}
-              >
-                {c.cta1}
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-              </button>
-
-              <button
-                onClick={scrollToPricing}
-                className="px-9 py-4 rounded-xl font-bold text-sm glass border border-white/15 text-slate-300 hover:border-cyan-400/30 hover:text-cyan-400 transition-all duration-200"
-              >
-                {c.cta2}
-              </button>
-            </div>
-
-            <p className="mt-6 text-xs text-slate-600">{c.footnote}</p>
+    <section id="cta" style={{ padding: 'clamp(60px,8vw,100px) 24px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ position: 'relative', borderRadius: 28, padding: 'clamp(48px,6vw,80px) 40px', overflow: 'hidden', background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(20px)', border: '1px solid rgba(34,211,238,0.15)', boxShadow: '0 0 80px rgba(34,211,238,0.07)' }}>
+          <div style={{ position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)', width: 600, height: 300, background: 'radial-gradient(ellipse, rgba(34,211,238,0.08) 0%, transparent 70%)', filter: 'blur(40px)', borderRadius: '50%', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.5), transparent)' }} />
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 14px', borderRadius: 100, background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.18)', fontSize: 11, color: '#22d3ee', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 28 }}>
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22d3ee', animation: 'heroPulse 2s infinite', display: 'inline-block' }} /> Let's Build Together
           </div>
-        </motion.div>
+          <h2 style={{ fontSize: 'clamp(32px,5vw,56px)', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1.08, margin: '0 0 20px', color: '#f8fafc' }}>
+            Ready to Build Your<br />
+            <span style={{ background: 'linear-gradient(135deg,#22d3ee,#a5f3fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Next Digital Product?</span>
+          </h2>
+          <p style={{ fontSize: 16, color: '#64748b', lineHeight: 1.7, margin: '0 auto 12px', maxWidth: 500 }}>Whether you have a fully scoped project or just a spark of an idea — we'll turn it into a product your users love.</p>
+          <p style={{ fontSize: 12.5, color: '#f59e0b', margin: '0 0 36px', fontWeight: 600 }}>⚡ Currently accepting new projects — limited spots available</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 12, marginBottom: 24 }}>
+            <button onClick={() => scrollTo('contact')} style={{
+              padding: '14px 32px', borderRadius: 100, background: '#22d3ee', color: '#020817',
+              border: 'none', cursor: 'pointer', fontSize: 15, fontWeight: 700, fontFamily: 'inherit',
+              boxShadow: '0 0 32px rgba(34,211,238,0.45)', transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; e.currentTarget.style.boxShadow = '0 0 50px rgba(34,211,238,0.6)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 32px rgba(34,211,238,0.45)'; }}>
+              Start Your Project →
+            </button>
+            <button onClick={() => scrollTo('pricing')} style={{
+              padding: '13px 28px', borderRadius: 100, background: 'transparent',
+              border: '1px solid rgba(255,255,255,0.12)', color: '#94a3b8',
+              cursor: 'pointer', fontSize: 15, fontWeight: 500, fontFamily: 'inherit', transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'; e.currentTarget.style.color = '#22d3ee'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = '#94a3b8'; }}>
+              View Pricing
+            </button>
+          </div>
+          <p style={{ fontSize: 12, color: '#334155', margin: 0 }}>No commitment required · Free consultation · Response within 24h</p>
+        </div>
       </div>
     </section>
   );

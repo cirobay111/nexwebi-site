@@ -1,126 +1,53 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Clock } from 'lucide-react';
 import SectionHeader from '../components/SectionHeader';
 import ArticleModal from '../components/ArticleModal';
-import { useLanguage } from '../i18n/index.jsx';
 
-const categoryColors = {
-  Strategy:  { bg: '#22d3ee18', text: '#22d3ee', border: '#22d3ee30' },
-  Business:  { bg: '#f59e0b18', text: '#f59e0b', border: '#f59e0b30' },
-  Technical: { bg: '#818cf818', text: '#818cf8', border: '#818cf830' },
-  Stratégie: { bg: '#22d3ee18', text: '#22d3ee', border: '#22d3ee30' },
-  Technique: { bg: '#818cf818', text: '#818cf8', border: '#818cf830' },
-};
+const articles = [
+  { cat: 'Strategy', time: '4 min read', title: 'Why Your Website Is Costing You Customers', excerpt: 'Most business websites lose 70% of visitors in under 3 seconds. We break down the 5 most common mistakes and how to fix each one fast.' },
+  { cat: 'Business', time: '5 min read', title: 'The Real Cost of a Cheap Website', excerpt: 'A $300 template site feels like a win until it ranks on page 6, converts at 0.3%, and breaks every time you need to update it.' },
+  { cat: 'Technical', time: '6 min read', title: "How We Cut a Client's Load Time by 80%", excerpt: 'A Marrakech car rental platform was loading in 11 seconds. We rebuilt the image pipeline, added a CDN. Result: 1.9s load, 3x more bookings.' },
+];
 
-const defaultColor = { bg: '#64748b18', text: '#94a3b8', border: '#64748b30' };
+const catColors = { Strategy: '#22d3ee', Business: '#818cf8', Technical: '#34d399' };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 32 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.12, ease: [0.25, 0.1, 0.25, 1] },
-  }),
-};
+function BlogCard({ cat, time, title, excerpt, onRead }) {
+  const [hovered, setHovered] = useState(false);
+  const color = catColors[cat] || '#22d3ee';
+  return (
+    <div onClick={() => onRead && onRead({ cat, time, title })} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{
+      position: 'relative', borderRadius: 20, padding: '28px 26px', cursor: 'pointer',
+      background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)',
+      border: hovered ? '1px solid rgba(34,211,238,0.18)' : '1px solid rgba(255,255,255,0.07)',
+      boxShadow: hovered ? '0 16px 50px rgba(0,0,0,0.25)' : '0 4px 20px rgba(0,0,0,0.1)',
+      transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
+      transition: 'all 0.25s cubic-bezier(0.25,0.1,0.25,1)',
+      overflow: 'hidden',
+    }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: hovered ? `linear-gradient(90deg, transparent, ${color}60, transparent)` : 'transparent', transition: 'background 0.3s' }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+        <span style={{ padding: '3px 10px', borderRadius: 100, background: `${color}12`, color, border: `1px solid ${color}25`, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.06em' }}>{cat}</span>
+        <span style={{ fontSize: 11.5, color: '#334155' }}>{time}</span>
+      </div>
+      <h3 style={{ fontSize: 16.5, fontWeight: 700, color: hovered ? '#a5f3fc' : '#f1f5f9', marginBottom: 12, letterSpacing: '-0.02em', lineHeight: 1.35, transition: 'color 0.2s' }}>{title}</h3>
+      <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.7, margin: 0 }}>{excerpt}</p>
+      <div style={{ marginTop: 18, fontSize: 12.5, fontWeight: 600, color, opacity: hovered ? 1 : 0, transform: hovered ? 'translateY(0)' : 'translateY(4px)', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 4 }}>
+        Read Article <span style={{ transform: hovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s', display: 'inline-block' }}>→</span>
+      </div>
+    </div>
+  );
+}
 
 export default function Blog() {
-  const { t } = useLanguage();
-  const b = t.blog;
   const [activeArticle, setActiveArticle] = useState(null);
-
   return (
-    <section
-      id="blog"
-      className="relative section-padding"
-      aria-labelledby="blog-heading"
-    >
-      {/* Glow */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-indigo-500/4 blur-[100px] rounded-full" />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto">
-        <SectionHeader
-          eyebrow={b.eyebrow}
-          title={b.title}
-          highlight={b.highlight}
-          subtitle={b.subtitle}
-          id="blog-heading"
-        />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {b.articles.map((article, i) => {
-            const color = categoryColors[article.category] || defaultColor;
-            return (
-              <motion.article
-                key={i}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
-                custom={i}
-                whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                className="group glass-card rounded-2xl p-7 flex flex-col overflow-hidden relative cursor-pointer"
-                onClick={() => setActiveArticle(article)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => e.key === 'Enter' && setActiveArticle(article)}
-                aria-label={`Read article: ${article.title}`}
-              >
-                {/* Top border accent */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(90deg, transparent, ${color.text}70, transparent)` }}
-                  aria-hidden="true"
-                />
-
-                {/* Category + read time */}
-                <div className="flex items-center justify-between mb-5">
-                  <span
-                    className="px-2.5 py-1 rounded-full text-xs font-semibold"
-                    style={{ backgroundColor: color.bg, color: color.text, border: `1px solid ${color.border}` }}
-                  >
-                    {article.category}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-slate-500">
-                    <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                    {article.readTime} {b.minRead}
-                  </span>
-                </div>
-
-                <h3 className="text-lg font-bold text-white mb-3 leading-snug group-hover:text-cyan-300 transition-colors duration-200">
-                  {article.title}
-                </h3>
-
-                <p className="text-sm text-slate-400 leading-relaxed flex-1">
-                  {article.excerpt}
-                </p>
-
-                {/* CTA */}
-                <div
-                  className="mt-6 flex items-center gap-1.5 text-xs font-semibold opacity-60 group-hover:opacity-100 transition-all duration-200"
-                  style={{ color: color.text }}
-                >
-                  <span>{b.readMore}</span>
-                  <ArrowRight
-                    className="w-3.5 h-3.5 translate-x-0 group-hover:translate-x-1 transition-transform duration-200"
-                    aria-hidden="true"
-                  />
-                </div>
-              </motion.article>
-            );
-          })}
+    <section id="blog" style={{ padding: 'clamp(80px,10vw,140px) 24px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <SectionHeader eyebrow="Insights & Expertise" title="We Know" highlight="What Works" subtitle="Practical knowledge from building real products — no fluff, no filler." />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+          {articles.map(a => <BlogCard key={a.title} {...a} onRead={setActiveArticle} />)}
         </div>
       </div>
-
-      {activeArticle && (
-        <ArticleModal
-          article={activeArticle}
-          minRead={b.minRead}
-          onClose={() => setActiveArticle(null)}
-        />
-      )}
+      {activeArticle && <ArticleModal article={activeArticle} onClose={() => setActiveArticle(null)} />}
     </section>
   );
 }

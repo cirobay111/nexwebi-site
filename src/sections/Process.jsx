@@ -1,149 +1,74 @@
-import { motion } from 'framer-motion';
-import { MessageSquare, PenTool, Code2, TestTube2, Rocket, HeartHandshake } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 
 const steps = [
-  {
-    number: '01',
-    icon: MessageSquare,
-    title: 'Discovery Call',
-    description:
-      'We start by understanding your goals, audience, and technical requirements. Free 30-minute consultation to scope your project.',
-    accent: '#22d3ee',
-  },
-  {
-    number: '02',
-    icon: PenTool,
-    title: 'Design & Architecture',
-    description:
-      'Our designers craft pixel-perfect wireframes and UI prototypes. Our architects design a scalable, secure system blueprint.',
-    accent: '#818cf8',
-  },
-  {
-    number: '03',
-    icon: Code2,
-    title: 'Development Sprints',
-    description:
-      'Agile 1-week sprints with daily updates. You see progress in real time and can give feedback at every milestone.',
-    accent: '#34d399',
-  },
-  {
-    number: '04',
-    icon: TestTube2,
-    title: 'QA & Security Testing',
-    description:
-      'Automated tests, cross-browser checks, performance audits, and OWASP security review before anything ships.',
-    accent: '#f59e0b',
-  },
-  {
-    number: '05',
-    icon: Rocket,
-    title: 'Launch & Deploy',
-    description:
-      'CI/CD pipeline, production deployment, DNS setup, SSL certificates, and monitoring dashboards — all handled.',
-    accent: '#fb7185',
-  },
-  {
-    number: '06',
-    icon: HeartHandshake,
-    title: 'Support & Growth',
-    description:
-      'Post-launch support, analytics review, and iterative improvements. We build long-term partnerships, not one-off projects.',
-    accent: '#a78bfa',
-  },
+  { num: '01', title: 'Discovery Call', desc: 'We start by understanding your goals, audience, and technical requirements. Free 30-minute consultation to scope your project.', accent: '#22d3ee', icon: '◎' },
+  { num: '02', title: 'Design & Architecture', desc: 'Our designers craft pixel-perfect wireframes and UI prototypes. Our architects design a scalable, secure system blueprint.', accent: '#818cf8', icon: '◫' },
+  { num: '03', title: 'Development Sprints', desc: 'Agile 1-week sprints with daily updates. You see progress in real time and can give feedback at every milestone.', accent: '#34d399', icon: '⟳' },
+  { num: '04', title: 'QA & Security Testing', desc: 'Automated tests, cross-browser checks, performance audits, and OWASP security review before anything ships.', accent: '#f59e0b', icon: '◈' },
+  { num: '05', title: 'Launch & Deploy', desc: 'CI/CD pipeline, production deployment, DNS setup, SSL certificates, and monitoring dashboards — all handled.', accent: '#fb7185', icon: '↑' },
+  { num: '06', title: 'Support & Growth', desc: "Post-launch support, analytics review, and iterative improvements. We build long-term partnerships, not one-off projects.", accent: '#a78bfa', icon: '♦' },
 ];
 
-export default function Process() {
+function ProcessCard({ num, title, desc, accent, icon, delay }) {
+  const [hovered, setHovered] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.15 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section
-      id="process"
-      className="relative section-padding overflow-hidden"
-      aria-labelledby="process-heading"
-    >
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-cyan-400/3 blur-[120px] rounded-full" />
+    <div ref={ref} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{
+      position: 'relative', padding: '28px 26px', borderRadius: 20, cursor: 'default',
+      background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)',
+      border: hovered ? `1px solid ${accent}22` : '1px solid rgba(255,255,255,0.07)',
+      boxShadow: hovered ? '0 16px 50px rgba(0,0,0,0.25)' : 'none',
+      transform: visible ? (hovered ? 'translateY(-6px)' : 'translateY(0)') : 'translateY(22px)',
+      opacity: visible ? 1 : 0,
+      transition: `all 0.4s cubic-bezier(0.25,0.1,0.25,1) ${delay}s`,
+      overflow: 'hidden',
+    }}>
+      <div style={{ position: 'absolute', bottom: 0, left: 24, right: 24, height: 1, background: hovered ? `linear-gradient(90deg, transparent, ${accent}40, transparent)` : 'transparent', transition: 'background 0.3s' }} />
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div style={{ width: 48, height: 48, borderRadius: 14, background: `${accent}12`, border: `1px solid ${accent}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, color: accent, transform: hovered ? 'scale(1.1)' : 'scale(1)', transition: 'transform 0.25s ease' }}>{icon}</div>
+        <span style={{ fontSize: 42, fontWeight: 900, color: `${accent}14`, lineHeight: 1, letterSpacing: '-0.04em' }}>{num}</span>
       </div>
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: hovered ? '#a5f3fc' : '#f1f5f9', marginBottom: 10, letterSpacing: '-0.02em', transition: 'color 0.2s' }}>{title}</h3>
+      <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.7, margin: 0 }}>{desc}</p>
+    </div>
+  );
+}
 
-      <div className="relative max-w-7xl mx-auto">
-        <SectionHeader
-          eyebrow="How We Work"
-          title="Our Proven"
-          highlight="Process"
-          subtitle="Six clear steps from first conversation to long-term partnership — no surprises, no delays."
-        />
-
-        <div className="relative">
-          {/* Connecting line (desktop) */}
-          <div
-            className="hidden lg:block absolute top-10 left-0 right-0 h-px"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(34,211,238,0.15) 20%, rgba(34,211,238,0.15) 80%, transparent)' }}
-            aria-hidden="true"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {steps.map(({ number, icon: Icon, title, description, accent }, i) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                className="group relative glass-card rounded-2xl p-7 hover:border-white/15 transition-all duration-300"
-              >
-                {/* Step number */}
-                <div className="flex items-start justify-between mb-5">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: `${accent}12`, border: `1px solid ${accent}25` }}
-                  >
-                    <Icon className="w-5 h-5" style={{ color: accent }} aria-hidden="true" />
-                  </div>
-                  <span
-                    className="text-4xl font-black leading-none"
-                    style={{ color: `${accent}18` }}
-                    aria-hidden="true"
-                  >
-                    {number}
-                  </span>
-                </div>
-
-                <h3
-                  className="font-bold text-white mb-2.5 group-hover:text-cyan-300 transition-colors duration-200"
-                  id={`process-step-${number}`}
-                >
-                  {title}
-                </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{description}</p>
-
-                {/* Bottom accent */}
-                <div
-                  className="absolute bottom-0 left-6 right-6 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(90deg, transparent, ${accent}40, transparent)` }}
-                  aria-hidden="true"
-                />
-              </motion.div>
-            ))}
-          </div>
+export default function Process() {
+  const scrollToContact = () => {
+    const el = document.getElementById('contact');
+    if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+  };
+  return (
+    <section id="process" style={{ position: 'relative', padding: 'clamp(80px,10vw,140px) 24px', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 700, height: 400, background: 'radial-gradient(ellipse, rgba(34,211,238,0.025) 0%, transparent 70%)', filter: 'blur(60px)', borderRadius: '50%', pointerEvents: 'none' }} />
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <SectionHeader eyebrow="How We Work" title="Our Proven" highlight="Process" subtitle="Six clear steps from first conversation to long-term partnership — no surprises, no delays." />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
+          {steps.map((s, i) => <ProcessCard key={s.title} {...s} delay={i * 0.08} />)}
         </div>
-
-        {/* CTA row */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-14"
-        >
-          <p className="text-slate-500 text-sm mb-5">
-            From discovery call to live product — typically <span className="text-cyan-400 font-semibold">2–6 weeks</span> depending on scope.
+        <div style={{ textAlign: 'center', marginTop: 52 }}>
+          <p style={{ fontSize: 14, color: '#475569', marginBottom: 20 }}>
+            From discovery call to live product — typically <span style={{ color: '#22d3ee', fontWeight: 600 }}>2–6 weeks</span> depending on scope.
           </p>
-          <button
-            onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3 rounded-xl text-sm font-semibold glass border border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400/60 transition-all duration-200"
-          >
+          <button onClick={scrollToContact} style={{
+            padding: '12px 28px', borderRadius: 100,
+            background: 'rgba(34,211,238,0.07)', border: '1px solid rgba(34,211,238,0.25)',
+            color: '#22d3ee', cursor: 'pointer', fontSize: 14, fontWeight: 600, fontFamily: 'inherit', transition: 'all 0.2s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.13)'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.45)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(34,211,238,0.07)'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'; }}>
             Start the Process →
           </button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

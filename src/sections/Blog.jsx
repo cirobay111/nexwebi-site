@@ -3,17 +3,11 @@ import SectionHeader from '../components/SectionHeader';
 import ArticleModal from '../components/ArticleModal';
 import { useLanguage } from '../context/LanguageContext';
 
-const articles = [
-  { cat: 'Strategy', time: '4 min read', title: 'Why Your Website Is Costing You Customers', excerpt: 'Most business websites lose 70% of visitors in under 3 seconds. We break down the 5 most common mistakes and how to fix each one fast.' },
-  { cat: 'Business', time: '5 min read', title: 'The Real Cost of a Cheap Website', excerpt: 'A $300 template site feels like a win until it ranks on page 6, converts at 0.3%, and breaks every time you need to update it.' },
-  { cat: 'Technical', time: '6 min read', title: "How We Cut a Client's Load Time by 80%", excerpt: 'A Marrakech car rental platform was loading in 11 seconds. We rebuilt the image pipeline, added a CDN. Result: 1.9s load, 3x more bookings.' },
-];
-
 const catColors = { Strategy: '#22d3ee', Business: '#818cf8', Technical: '#34d399' };
 
-function BlogCard({ cat, time, title, excerpt, onRead, readLabel }) {
+function BlogCard({ cat, catKey, time, title, excerpt, onRead, readLabel }) {
   const [hovered, setHovered] = useState(false);
-  const color = catColors[cat] || '#22d3ee';
+  const color = catColors[catKey] || catColors[cat] || '#22d3ee';
   return (
     <div onClick={() => onRead && onRead({ cat, time, title })} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{
       position: 'relative', borderRadius: 20, padding: '28px 26px', cursor: 'pointer',
@@ -47,7 +41,7 @@ export default function Blog() {
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={b.eyebrow} title={b.title} highlight={b.highlight} subtitle={b.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-          {articles.map(a => <BlogCard key={a.title} {...a} onRead={setActiveArticle} readLabel={b.readArticle} />)}
+          {b.articles.map(a => <BlogCard key={a.title} cat={b.categories[a.catKey] || a.catKey} catKey={a.catKey} time={`${a.time} ${b.timeUnit}`} title={a.title} excerpt={a.excerpt} onRead={setActiveArticle} readLabel={b.readArticle} />)}
         </div>
       </div>
       {activeArticle && <ArticleModal article={activeArticle} onClose={() => setActiveArticle(null)} />}

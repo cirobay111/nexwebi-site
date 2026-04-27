@@ -2,29 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const projects = [
-  {
-    title: 'Luxury Real Estate Platform',
-    subtitle: 'Real Estate · Marrakech',
-    description: 'A luxury real estate platform for Marrakech — featuring property listings with interactive map, advanced filters, bilingual support (FR/AR), and an admin panel for managing properties.',
-    tags: ['Bilingual FR/AR', 'Interactive Map', 'Admin Panel', 'Advanced Filters'],
-    accent: '#22d3ee',
-    metrics: [{ value: '2', label: 'Languages' }, { value: '100%', label: 'Custom Design' }, { value: '< 7d', label: 'Delivery' }],
-    tech: ['React', 'Node.js', 'PostgreSQL', 'Mapbox'],
-    category: 'Web Platform',
-    screenshots: ['/portfolio/re-hero.png', '/portfolio/re-properties.png', '/portfolio/fah-hero.png'],
-  },
-  {
-    title: 'Premium Car Rental Platform',
-    subtitle: 'Car Rental · Marrakech',
-    description: 'A premium car rental platform for Marrakech — featuring a curated fleet of luxury vehicles, real-time availability, instant booking system, and 24/7 customer support.',
-    tags: ['Instant Booking', 'Fleet Management', '24/7 Support', 'Real-time Availability'],
-    accent: '#818cf8',
-    metrics: [{ value: '3×', label: 'More Bookings' }, { value: '1.9s', label: 'Load Time' }, { value: '80%', label: 'Faster' }],
-    tech: ['Next.js', 'Stripe', 'PostgreSQL', 'Vercel'],
-    category: 'E-commerce',
-    screenshots: ['/portfolio/atlas-hero.png', '/portfolio/atlas-cars.png', '/portfolio/atlas-features.png'],
-  },
+const projectVisuals = [
+  { accent: '#22d3ee', tech: ['React', 'Node.js', 'PostgreSQL', 'Mapbox'], screenshots: ['/portfolio/re-hero.png', '/portfolio/re-properties.png', '/portfolio/fah-hero.png'] },
+  { accent: '#818cf8', tech: ['Next.js', 'Stripe', 'PostgreSQL', 'Vercel'], screenshots: ['/portfolio/atlas-hero.png', '/portfolio/atlas-cars.png', '/portfolio/atlas-features.png'] },
 ];
 
 function ScreenshotSlider({ screenshots, accent, hovered }) {
@@ -68,7 +48,7 @@ function ScreenshotSlider({ screenshots, accent, hovered }) {
   );
 }
 
-function ProjectCard({ project, reverse, delay }) {
+function ProjectCard({ project, reverse, delay, builtWithLabel }) {
   const [hovered, setHovered] = useState(false);
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -120,7 +100,7 @@ function ProjectCard({ project, reverse, delay }) {
           ))}
         </div>
         <div>
-          <div style={{ fontSize: 10.5, color: '#334155', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Built with</div>
+          <div style={{ fontSize: 10.5, color: '#334155', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>{builtWithLabel}</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {tech.map(t => <span key={t} style={{ padding: '3px 10px', borderRadius: 8, background: `${accent}0C`, border: `1px solid ${accent}20`, fontSize: 11.5, color: accent, fontWeight: 600 }}>{t}</span>)}
           </div>
@@ -144,7 +124,7 @@ export default function Portfolio() {
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={p.eyebrow} title={p.title} highlight={p.highlight} subtitle={p.sub} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          {projects.map((proj, i) => <ProjectCard key={proj.title} project={proj} reverse={i % 2 !== 0} delay={i * 0.1} />)}
+          {p.projects.map((proj, i) => <ProjectCard key={proj.title} project={{ ...proj, ...projectVisuals[i] }} reverse={i % 2 !== 0} delay={i * 0.1} builtWithLabel={p.builtWith} />)}
         </div>
         <div style={{ textAlign: 'center', marginTop: 56 }}>
           <p style={{ fontSize: 15, color: '#475569', marginBottom: 20 }}>{p.prompt}</p>

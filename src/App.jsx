@@ -1,6 +1,5 @@
 import './index.css';
 import { useState } from 'react';
-import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import ImpactBar from './components/ImpactBar';
 import WhatsAppButton from './components/WhatsAppButton';
@@ -23,7 +22,6 @@ export default function App() {
   const [legalModal, setLegalModal] = useState(null);
 
   return (
-    <LanguageProvider>
     <div style={{ minHeight: '100vh', background: '#020817', color: '#e2e8f0' }}>
       <a
         href="#main-content"
@@ -39,10 +37,10 @@ export default function App() {
       <main id="main-content">
         <Hero />
         <ImpactBar />
-        <Portfolio />
-        <Process />
         <Services />
+        <Portfolio />
         <WhyUs />
+        <Process />
         <Testimonials />
         <Pricing />
         <Blog />
@@ -55,6 +53,5 @@ export default function App() {
       <WhatsAppButton />
       {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
     </div>
-    </LanguageProvider>
   );
 }

@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const steps = [
-  { num: '01', title: 'Discovery Call', desc: 'We start by understanding your goals, audience, and technical requirements. Free 30-minute consultation to scope your project.', accent: '#22d3ee', icon: '◎' },
-  { num: '02', title: 'Design & Architecture', desc: 'Our designers craft pixel-perfect wireframes and UI prototypes. Our architects design a scalable, secure system blueprint.', accent: '#818cf8', icon: '◫' },
-  { num: '03', title: 'Development Sprints', desc: 'Agile 1-week sprints with daily updates. You see progress in real time and can give feedback at every milestone.', accent: '#34d399', icon: '⟳' },
-  { num: '04', title: 'QA & Security Testing', desc: 'Automated tests, cross-browser checks, performance audits, and OWASP security review before anything ships.', accent: '#f59e0b', icon: '◈' },
-  { num: '05', title: 'Launch & Deploy', desc: 'CI/CD pipeline, production deployment, DNS setup, SSL certificates, and monitoring dashboards — all handled.', accent: '#fb7185', icon: '↑' },
-  { num: '06', title: 'Support & Growth', desc: "Post-launch support, analytics review, and iterative improvements. We build long-term partnerships, not one-off projects.", accent: '#a78bfa', icon: '♦' },
+const stepVisuals = [
+  { num: '01', accent: '#22d3ee', icon: '◎' },
+  { num: '02', accent: '#818cf8', icon: '◫' },
+  { num: '03', accent: '#34d399', icon: '⟳' },
+  { num: '04', accent: '#f59e0b', icon: '◈' },
+  { num: '05', accent: '#fb7185', icon: '↑' },
+  { num: '06', accent: '#a78bfa', icon: '♦' },
 ];
 
 function ProcessCard({ num, title, desc, accent, icon, delay }) {
@@ -57,7 +57,7 @@ export default function Process() {
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={p.eyebrow} title={p.title} highlight={p.highlight} subtitle={p.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
-          {steps.map((s, i) => <ProcessCard key={s.title} {...s} delay={i * 0.08} />)}
+          {p.steps.map((step, i) => <ProcessCard key={step.title} {...stepVisuals[i]} title={step.title} desc={step.desc} delay={i * 0.08} />)}
         </div>
         <div style={{ textAlign: 'center', marginTop: 52 }}>
           <p style={{ fontSize: 14, color: '#475569', marginBottom: 20 }}>

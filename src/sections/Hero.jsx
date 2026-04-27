@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const statValues = ['50+', '98%', '5×', '24/7'];
-
 export default function Hero() {
   const { t } = useLanguage();
   const h = t.hero;
@@ -107,7 +105,7 @@ export default function Hero() {
 
         {/* Stats */}
         <div style={{ ...anim(0.4), display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, maxWidth: 680, marginLeft: 'auto', marginRight: 'auto' }} className="nw-stats-grid">
-          {statValues.map((value, i) => (
+          {h.statValues.map((value, i) => (
             <div key={i} style={{
               padding: '20px 16px', borderRadius: 18,
               background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(20px)',

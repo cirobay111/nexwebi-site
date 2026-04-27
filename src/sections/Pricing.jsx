@@ -2,28 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const plans = [
-  {
-    name: 'Starter', price: '399', period: 'one-time',
-    tagline: 'A clean, professional landing page that converts',
-    accent: '#64748b', recommended: false, cta: 'Get My Landing Page',
-    features: ['1 professional landing page','Mobile-first responsive design','Basic SEO setup','Contact form integration','Speed & performance optimization','Free 30-min discovery call','5-day delivery','7-day post-launch support'],
-  },
-  {
-    name: 'Growth', price: '999', period: 'one-time',
-    tagline: 'A complete website built to grow your business',
-    accent: '#22d3ee', recommended: true, cta: 'Grow My Business',
-    features: ['Up to 4 custom pages','Premium UI/UX design','Mobile & tablet optimization','Advanced SEO + Google Analytics','Contact & quote forms','Social media integration','Free 30-min discovery call','10-day delivery','30-day post-launch support'],
-  },
-  {
-    name: 'Scale', price: '2,500', priceNote: '+', period: 'starting from',
-    tagline: 'A custom-built platform engineered to scale',
-    accent: '#818cf8', recommended: false, cta: 'Build My Platform',
-    features: ['Unlimited pages & custom features','SaaS or custom platform build','User authentication & admin dashboard','Third-party API integrations','Payment processing (Stripe etc.)','Automation workflows','E-commerce functionality','Free 30-min discovery call','14-day delivery','60-day priority support'],
-  },
+const planVisuals = [
+  { accent: '#64748b', recommended: false },
+  { accent: '#22d3ee', recommended: true },
+  { accent: '#818cf8', recommended: false },
 ];
 
-function PlanCard({ plan, delay, onCta }) {
+function PlanCard({ plan, delay, onCta, periods, currency, bestValueLabel }) {
   const [hovered, setHovered] = useState(false);
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -33,7 +18,8 @@ function PlanCard({ plan, delay, onCta }) {
     return () => obs.disconnect();
   }, []);
 
-  const { name, price, priceNote, period, tagline, accent, recommended, cta, features } = plan;
+  const { name, price, priceNote, period, tagline, accent, recommended, cta, features, freeMarker } = plan;
+  const periodLabel = periods[period] || period;
   return (
     <div ref={ref} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} style={{
       position: 'relative', borderRadius: 24, padding: '32px 28px',
@@ -49,16 +35,16 @@ function PlanCard({ plan, delay, onCta }) {
       {!recommended && <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, borderRadius: '24px 24px 0 0', background: `linear-gradient(90deg, transparent, ${accent}50, transparent)` }} />}
       {recommended && (
         <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', padding: '5px 16px', borderRadius: 100, background: accent, color: '#020817', fontSize: 11, fontWeight: 800, letterSpacing: '0.05em', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 5 }}>
-          ⚡ Best Value
+          ⚡ {bestValueLabel}
         </div>
       )}
       <div style={{ marginBottom: 24 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: accent, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{name}</span>
         <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, marginTop: 12, marginBottom: 8, marginLeft: 0, marginRight: 0, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 13, color: '#475569', marginBottom: 6 }}>$</span>
+          <span style={{ fontSize: 13, color: '#475569', marginBottom: 6 }}>{currency}</span>
           <span style={{ fontSize: 52, fontWeight: 900, color: '#f8fafc', letterSpacing: '-0.04em', lineHeight: 1 }}>{price}</span>
           {priceNote && <span style={{ fontSize: 15, fontWeight: 700, color: accent, marginBottom: 6 }}>{priceNote}</span>}
-          <span style={{ fontSize: 13, color: '#475569', marginBottom: 6 }}>/ {period}</span>
+          <span style={{ fontSize: 13, color: '#475569', marginBottom: 6 }}>/ {periodLabel}</span>
         </div>
         <p style={{ fontSize: 13.5, color: '#64748b', marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, lineHeight: 1.5 }}>{tagline}</p>
       </div>
@@ -69,7 +55,7 @@ function PlanCard({ plan, delay, onCta }) {
             <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: '50%', marginTop: 1, background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span style={{ fontSize: 9, color: accent, fontWeight: 900 }}>✓</span>
             </div>
-            <span style={{ fontSize: 13.5, color: feat.startsWith('Free') ? '#22d3ee' : '#cbd5e1', lineHeight: 1.4, fontWeight: feat.startsWith('Free') ? 600 : 400 }}>{feat}</span>
+            <span style={{ fontSize: 13.5, color: feat.toLowerCase().includes(freeMarker.toLowerCase()) ? '#22d3ee' : '#cbd5e1', lineHeight: 1.4, fontWeight: feat.toLowerCase().includes(freeMarker.toLowerCase()) ? 600 : 400 }}>{feat}</span>
           </li>
         ))}
       </ul>
@@ -119,7 +105,7 @@ export default function Pricing() {
           ))}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, alignItems: 'start' }}>
-          {plans.map((plan, i) => <PlanCard key={plan.name} plan={plan} delay={i * 0.1} onCta={scrollToContact} />)}
+          {p.plans.map((plan, i) => <PlanCard key={plan.name} plan={{ ...plan, ...planVisuals[i] }} delay={i * 0.1} onCta={scrollToContact} periods={p.periods} currency={p.currency} bestValueLabel={p.bestValue} />)}
         </div>
         <div style={{ textAlign: 'center', marginTop: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', borderRadius: 100, background: 'rgba(52,211,153,0.07)', border: '1px solid rgba(52,211,153,0.18)', fontSize: 12.5, color: '#34d399' }}>

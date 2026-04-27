@@ -18,8 +18,8 @@ export default function Footer({ onLegal }) {
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto', padding: 'clamp(48px,6vw,80px) 24px 0' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 40, marginBottom: 56 }} className="nw-footer-grid">
           <div>
-            <button onClick={() => scrollTo('hero')} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: 20 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 16 }}>◈</div>
+            <button onClick={() => scrollTo('hero')} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: 20 }}>
+              <div style={{ width: 32, height: 32, borderRadius: 9, background: 'linear-gradient(135deg, rgba(34,211,238,0.18), rgba(34,211,238,0.04))', border: '1px solid rgba(34,211,238,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 16, fontWeight: 800, color: '#22d3ee', letterSpacing: '-0.04em', lineHeight: 1, fontFamily: 'inherit', boxShadow: '0 0 14px rgba(34,211,238,0.18), inset 0 0 8px rgba(34,211,238,0.08)' }}>N</div>
               <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em' }}>
                 <span style={{ background: 'linear-gradient(135deg,#22d3ee,#67e8f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Nex</span>
                 <span style={{ color: '#f8fafc' }}>Webi</span>
@@ -27,32 +27,35 @@ export default function Footer({ onLegal }) {
             </button>
             <p style={{ fontSize: 13.5, color: '#475569', lineHeight: 1.7, maxWidth: 280, marginTop: 0, marginLeft: 0, marginRight: 0, marginBottom: 24 }}>{f.desc}</p>
             <div style={{ display: 'flex', gap: 10 }}>
-              {[['IG','https://www.instagram.com/nexwebi/'],['in','#'],['YT','#']].map(([label, href]) => (
-                <a key={label} href={href} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#475569', textDecoration: 'none', transition: 'all 0.2s' }}
+              {f.socials.map(({ abbr, href }) => (
+                <a key={abbr} href={href} style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#475569', textDecoration: 'none', transition: 'all 0.2s' }}
                   onMouseEnter={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.25)'; }}
                   onMouseLeave={e => { e.currentTarget.style.color = '#475569'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}>
-                  {label}
+                  {abbr}
                 </a>
               ))}
             </div>
           </div>
 
-          {groupKeys.map(group => (
-            <div key={group}>
-              <h3 style={{ fontSize: 10.5, fontWeight: 700, color: '#334155', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 20, marginTop: 0 }}>{group}</h3>
-              <ul style={{ listStyle: 'none', padding: 0, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {f.groups[group].map(([label, href]) => (
-                  <li key={label}>
-                    <button onClick={() => { if (['privacy','terms','cookie'].includes(href)) { onLegal && onLegal(href); } else { scrollTo(href); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 13.5, color: '#475569', fontFamily: 'inherit', transition: 'color 0.2s', textAlign: 'left' }}
-                      onMouseEnter={e => e.currentTarget.style.color = '#22d3ee'}
-                      onMouseLeave={e => e.currentTarget.style.color = '#475569'}>
-                      {label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {groupKeys.map(groupKey => {
+            const group = f.groups[groupKey];
+            return (
+              <div key={groupKey}>
+                <h3 style={{ fontSize: 10.5, fontWeight: 700, color: '#334155', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 20, marginTop: 0 }}>{group.label}</h3>
+                <ul style={{ listStyle: 'none', padding: 0, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {group.items.map(([label, href]) => (
+                    <li key={label}>
+                      <button onClick={() => { if (['privacy','terms','cookie'].includes(href)) { onLegal && onLegal(href); } else { scrollTo(href); } }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 13.5, color: '#475569', fontFamily: 'inherit', transition: 'color 0.2s', textAlign: 'left' }}
+                        onMouseEnter={e => e.currentTarget.style.color = '#22d3ee'}
+                        onMouseLeave={e => e.currentTarget.style.color = '#475569'}>
+                        {label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
 
         <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '24px 0', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>

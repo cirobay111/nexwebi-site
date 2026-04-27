@@ -1,10 +1,9 @@
 import { useLanguage } from '../context/LanguageContext';
 
-const values = ['$2M+', '50+', '7', '< 14 days'];
-
 export default function ImpactBar() {
   const { t } = useLanguage();
   const labels = t.impactBar.stats;
+  const values = t.impactBar.values;
 
   return (
     <div style={{

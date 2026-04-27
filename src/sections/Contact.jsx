@@ -69,8 +69,8 @@ export default function Contact() {
             <div style={{ padding: '20px 22px', borderRadius: 18, background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
               <div style={{ fontSize: 10.5, color: '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }}>{c.socialLabel}</div>
               <div style={{ display: 'flex', gap: 10 }}>
-                {[['Instagram', 'IG', 'https://www.instagram.com/nexwebi/'], ['LinkedIn', 'in', '#'], ['YouTube', 'YT', '#']].map(([label, abbr, href]) => (
-                  <a key={label} href={href} aria-label={label} style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#64748b', textDecoration: 'none', transition: 'all 0.2s' }}
+                {c.socials.map(({ name, abbr, href }) => (
+                  <a key={name} href={href} aria-label={name} style={{ width: 38, height: 38, borderRadius: 10, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 700, color: '#64748b', textDecoration: 'none', transition: 'all 0.2s' }}
                     onMouseEnter={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.3)'; e.currentTarget.style.background = 'rgba(34,211,238,0.08)'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}>
                     {abbr}
@@ -91,7 +91,7 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} noValidate>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+                <div className="nw-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
                   <div>
                     <label style={labelStyle}>{c.labels.name} <span style={{ color: '#fb7185' }}>*</span></label>
                     <input value={form.name} onChange={e => { setForm(f => ({ ...f, name: e.target.value })); setErrors(ev => ({ ...ev, name: '' })); }} placeholder={c.placeholders.name} style={inputStyle('name')}
@@ -120,7 +120,7 @@ export default function Contact() {
                     onBlur={e => { e.target.style.borderColor = errors.message ? 'rgba(251,113,133,0.5)' : 'rgba(255,255,255,0.1)'; e.target.style.background = 'rgba(255,255,255,0.04)'; }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
                     {errors.message ? <span style={{ fontSize: 11.5, color: '#fb7185' }}>{errors.message}</span> : <span />}
-                    <span style={{ fontSize: 11, color: '#334155' }}>{form.message.length}/2000</span>
+                    <span style={{ fontSize: 11, color: '#334155' }}>{form.message.length}/{c.counterMax}</span>
                   </div>
                 </div>
                 <button type="submit" disabled={status === 'loading'} style={{
@@ -135,7 +135,7 @@ export default function Contact() {
                 onMouseEnter={e => { if (status !== 'loading') { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 0 36px rgba(34,211,238,0.55)'; }}}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 24px rgba(34,211,238,0.4)'; }}>
                   {status === 'loading' ? (
-                    <><span style={{ width: 16, height: 16, border: '2px solid rgba(2,8,23,0.3)', borderTopColor: '#020817', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> {c.submit}...</>
+                    <><span style={{ width: 16, height: 16, border: '2px solid rgba(2,8,23,0.3)', borderTopColor: '#020817', borderRadius: '50%', animation: 'spin 0.8s linear infinite', display: 'inline-block' }} /> {c.sending}...</>
                   ) : <><span>{c.submit}</span><span>→</span></>}
                 </button>
                 <p style={{ textAlign: 'center', fontSize: 11.5, color: '#334155', marginTop: 14, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{c.privacy}</p>

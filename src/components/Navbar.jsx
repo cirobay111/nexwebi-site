@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
+const LANG_LABELS = { en: { flag: '🇬🇧', code: 'EN' }, fr: { flag: '🇫🇷', code: 'FR' }, ar: { flag: '🇸🇦', code: 'AR' } };
+
 export default function Navbar() {
-  const { lang, t, toggleLang } = useLanguage();
+  const { lang, t, cycleLang } = useLanguage();
   const navLinks = t.nav.links;
+  const langInfo = LANG_LABELS[lang] || LANG_LABELS.en;
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -50,13 +53,16 @@ export default function Navbar() {
         transition: 'all 0.4s cubic-bezier(0.25,0.1,0.25,1)',
       }}>
         {/* Logo */}
-        <button onClick={() => scrollTo('hero')} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '8px 8px', flexShrink: 0 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.35)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-              <path d="M3 10 L10 3 L17 10 L10 17 Z" stroke="#22d3ee" strokeWidth="1.5" fill="rgba(34,211,238,0.15)"/>
-              <path d="M10 6 L14 10 L10 14 L6 10 Z" fill="#22d3ee" opacity="0.6"/>
-            </svg>
-          </div>
+        <button onClick={() => scrollTo('hero')} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', padding: '8px 8px', flexShrink: 0 }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 9,
+            background: 'linear-gradient(135deg, rgba(34,211,238,0.18), rgba(34,211,238,0.04))',
+            border: '1px solid rgba(34,211,238,0.4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            boxShadow: '0 0 14px rgba(34,211,238,0.18), inset 0 0 8px rgba(34,211,238,0.08)',
+            fontSize: 16, fontWeight: 800, color: '#22d3ee', letterSpacing: '-0.04em', lineHeight: 1,
+            fontFamily: 'inherit',
+          }}>N</div>
           <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1 }}>
             <span style={{ background: 'linear-gradient(135deg,#22d3ee,#67e8f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Nex</span>
             <span style={{ color: '#f8fafc' }}>Webi</span>
@@ -64,7 +70,7 @@ export default function Navbar() {
         </button>
 
         {/* Desktop nav */}
-        <ul className="nw-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 2, listStyle: 'none', marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, padding: 0 }}>
+        <ul className="nw-desktop-nav" style={{ alignItems: 'center', gap: 2, listStyle: 'none', marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0, padding: 0 }}>
           {navLinks.map(({ label, href }) => {
             const isActive = activeSection === href;
             return (
@@ -86,9 +92,9 @@ export default function Navbar() {
         </ul>
 
         {/* Desktop right: lang toggle + CTA */}
-        <div className="nw-desktop-nav" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="nw-desktop-nav" style={{ alignItems: 'center', gap: 8 }}>
           {/* Language toggle */}
-          <button onClick={toggleLang} title="Switch language" style={{
+          <button onClick={cycleLang} title={t.nav.langTitle} style={{
             padding: '6px 12px', borderRadius: 100,
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(255,255,255,0.1)',
@@ -99,8 +105,8 @@ export default function Navbar() {
           }}
           onMouseEnter={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.3)'; e.currentTarget.style.background = 'rgba(34,211,238,0.06)'; }}
           onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}>
-            <span style={{ fontSize: 13 }}>{lang === 'en' ? '🇬🇧' : '🇫🇷'}</span>
-            <span>{lang === 'en' ? 'EN' : 'FR'}</span>
+            <span style={{ fontSize: 13 }}>{langInfo.flag}</span>
+            <span>{langInfo.code}</span>
           </button>
 
           {/* CTA */}
@@ -120,15 +126,15 @@ export default function Navbar() {
         </div>
 
         {/* Mobile right: lang toggle + hamburger */}
-        <div className="nw-mobile-nav" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <button onClick={toggleLang} style={{
+        <div className="nw-mobile-nav" style={{ alignItems: 'center', gap: 8 }}>
+          <button onClick={cycleLang} title={t.nav.langTitle} style={{
             background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 8, padding: '5px 9px', cursor: 'pointer',
             fontSize: 11, fontWeight: 700, color: '#64748b', fontFamily: 'inherit',
             display: 'flex', alignItems: 'center', gap: 4,
           }}>
-            <span>{lang === 'en' ? '🇬🇧' : '🇫🇷'}</span>
-            <span>{lang === 'en' ? 'EN' : 'FR'}</span>
+            <span>{langInfo.flag}</span>
+            <span>{langInfo.code}</span>
           </button>
           <button onClick={() => setMobileOpen(v => !v)} style={{
             background: 'none', border: '1px solid rgba(255,255,255,0.1)',

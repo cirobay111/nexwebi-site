@@ -2,16 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const services = [
-  { title: 'Web Design & Development', description: 'Pixel-perfect, responsive websites engineered for performance. From landing pages to complex web apps — built with modern stacks.', tag: 'Most Requested', color: '#22d3ee', icon: '◈' },
-  { title: 'Automation Systems', description: 'Eliminate repetitive tasks with intelligent automation pipelines. Integrate APIs, automate workflows, and scale operations effortlessly.', tag: null, color: '#818cf8', icon: '⟳' },
-  { title: 'SaaS Development', description: 'Full-stack SaaS platforms with robust authentication, billing, multi-tenancy, and analytics — built to acquire and retain users.', tag: null, color: '#34d399', icon: '◫' },
-  { title: 'E-commerce Solutions', description: 'High-converting online stores with seamless checkout, inventory management, and custom integrations for your business model.', tag: null, color: '#f59e0b', icon: '◻' },
-  { title: 'Performance Optimization', description: 'Boost Core Web Vitals, improve SEO rankings, and eliminate performance bottlenecks. Real results measured in conversions.', tag: null, color: '#fb7185', icon: '◬' },
-  { title: 'AI Integration', description: 'Embed large language models, computer vision, and intelligent agents directly into your products — from chatbots to predictive analytics.', tag: 'New', color: '#a78bfa', icon: '✦' },
+const visuals = [
+  { color: '#22d3ee', icon: '◈', tagKey: 'tagMostRequested' },
+  { color: '#818cf8', icon: '⟳', tagKey: null },
+  { color: '#34d399', icon: '◫', tagKey: null },
+  { color: '#f59e0b', icon: '◻', tagKey: null },
+  { color: '#fb7185', icon: '◬', tagKey: null },
+  { color: '#a78bfa', icon: '✦', tagKey: 'tagNew' },
 ];
 
-function ServiceCard({ title, description, tag, color, icon, delay }) {
+function ServiceCard({ title, description, tag, color, icon, delay, learnMoreLabel }) {
   const [hovered, setHovered] = useState(false);
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -46,7 +46,7 @@ function ServiceCard({ title, description, tag, color, icon, delay }) {
       <h3 style={{ fontSize: 17, fontWeight: 700, color: hovered ? '#a5f3fc' : '#f1f5f9', marginBottom: 10, letterSpacing: '-0.02em', lineHeight: 1.3, transition: 'color 0.2s' }}>{title}</h3>
       <p style={{ fontSize: 14, color: '#64748b', lineHeight: 1.7, marginTop: 0, marginBottom: 0, marginLeft: 0, marginRight: 0 }}>{description}</p>
       <div style={{ marginTop: 20, fontSize: 12.5, fontWeight: 600, color, display: 'flex', alignItems: 'center', gap: 4, opacity: hovered ? 1 : 0, transform: hovered ? 'translateY(0)' : 'translateY(4px)', transition: 'all 0.2s ease' }}>
-        <span>Learn more</span>
+        <span>{learnMoreLabel}</span>
         <span style={{ transform: hovered ? 'translateX(3px)' : 'translateX(0)', transition: 'transform 0.2s', display: 'inline-block' }}>→</span>
       </div>
     </div>
@@ -64,7 +64,10 @@ export default function Services() {
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={s.eyebrow} title={s.title} highlight={s.highlight} subtitle={s.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
-          {services.map((svc, i) => <ServiceCard key={svc.title} {...svc} delay={i * 0.07} />)}
+          {s.items.map((svc, i) => {
+            const v = visuals[i] || visuals[0];
+            return <ServiceCard key={svc.title} title={svc.title} description={svc.description} tag={v.tagKey ? s[v.tagKey] : null} color={v.color} icon={v.icon} delay={i * 0.07} learnMoreLabel={s.learnMore} />;
+          })}
         </div>
       </div>
     </section>

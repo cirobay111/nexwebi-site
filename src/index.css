@@ -173,11 +173,22 @@
   .nw-contact-grid { grid-template-columns: 1fr !important; }
   .nw-footer-grid { grid-template-columns: 1fr 1fr !important; }
   .nw-project-card { grid-template-columns: 1fr !important; }
+  /* Tighter section paddings on mobile */
+  section { padding-left: 16px !important; padding-right: 16px !important; }
+  /* Hero headline scales down further */
+  #hero h1 span { font-size: clamp(38px, 11vw, 60px) !important; }
 }
 
 @media (max-width: 480px) {
   .nw-footer-grid { grid-template-columns: 1fr !important; }
+  .nw-stats-grid { gap: 8px !important; }
+  /* Forms shouldn't side-by-side on tiny screens */
+  .nw-form-grid { grid-template-columns: 1fr !important; }
 }
+
+/* RTL adjustments for Arabic */
+html[dir="rtl"] body { font-family: 'Inter', 'Tajawal', system-ui, sans-serif; }
+html[dir="rtl"] .nw-flip { transform: scaleX(-1); }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 5px; }

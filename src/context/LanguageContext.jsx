@@ -1,4 +1,17 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+const LANG_KEY = 'nexwebi.lang';
+const SUPPORTED = ['en', 'fr', 'ar'];
+
+const detectInitial = () => {
+  if (typeof window === 'undefined') return 'en';
+  const stored = localStorage.getItem(LANG_KEY);
+  if (stored && SUPPORTED.includes(stored)) return stored;
+  const nav = (navigator.language || 'en').toLowerCase();
+  if (nav.startsWith('fr')) return 'fr';
+  if (nav.startsWith('ar')) return 'ar';
+  return 'en';
+};
 
 const translations = {
   en: {
@@ -7,11 +20,12 @@ const translations = {
         { label: 'Services', href: 'services' },
         { label: 'Portfolio', href: 'portfolio' },
         { label: 'Why Us', href: 'why-us' },
-        { label: 'Insights', href: 'blog' },
         { label: 'Pricing', href: 'pricing' },
+        { label: 'Insights', href: 'blog' },
         { label: 'Contact', href: 'contact' },
       ],
       cta: 'Get Started',
+      langTitle: 'Switch language',
     },
     hero: {
       badge: 'Next Generation Web Agency',
@@ -23,13 +37,32 @@ const translations = {
       cta2: 'View Our Work',
       trust: '5.0 rating · Trusted by 50+ businesses · USA & worldwide',
       stats: ['Projects Delivered', 'Client Satisfaction', 'Faster Delivery', 'Support'],
+      statValues: ['50+', '98%', '5×', '24/7'],
     },
     impactBar: {
+      values: ['$2M+', '50+', '7', '< 14 days'],
       stats: [
         'Revenue generated for clients',
         'Projects shipped',
         'Countries served',
         'Average delivery time',
+      ],
+    },
+    services: {
+      eyebrow: 'What We Build',
+      title: 'Services That',
+      highlight: 'Drive Results',
+      sub: 'From idea to production — we deliver end-to-end digital solutions that combine cutting-edge technology with exceptional user experience.',
+      learnMore: 'Learn more',
+      tagMostRequested: 'Most Requested',
+      tagNew: 'New',
+      items: [
+        { title: 'Web Design & Development', description: 'Pixel-perfect, responsive websites engineered for performance. From landing pages to complex web apps — built with modern stacks.' },
+        { title: 'Automation Systems', description: 'Eliminate repetitive tasks with intelligent automation pipelines. Integrate APIs, automate workflows, and scale operations effortlessly.' },
+        { title: 'SaaS Development', description: 'Full-stack SaaS platforms with robust authentication, billing, multi-tenancy, and analytics — built to acquire and retain users.' },
+        { title: 'E-commerce Solutions', description: 'High-converting online stores with seamless checkout, inventory management, and custom integrations for your business model.' },
+        { title: 'Performance Optimization', description: 'Boost Core Web Vitals, improve SEO rankings, and eliminate performance bottlenecks. Real results measured in conversions.' },
+        { title: 'AI Integration', description: 'Embed large language models, computer vision, and intelligent agents directly into your products — from chatbots to predictive analytics.' },
       ],
     },
     portfolio: {
@@ -39,6 +72,40 @@ const translations = {
       sub: 'Every project we ship is production-ready, fully custom, and built to perform.',
       prompt: 'Want to see your project here?',
       cta: 'Start Your Project →',
+      builtWith: 'Built with',
+      projects: [
+        {
+          title: 'Luxury Real Estate Platform',
+          subtitle: 'Real Estate · Marrakech',
+          description: 'A luxury real estate platform for Marrakech — featuring property listings with interactive map, advanced filters, bilingual support (FR/AR), and an admin panel for managing properties.',
+          tags: ['Bilingual FR/AR', 'Interactive Map', 'Admin Panel', 'Advanced Filters'],
+          metrics: [{ value: '2', label: 'Languages' }, { value: '100%', label: 'Custom Design' }, { value: '< 7d', label: 'Delivery' }],
+          category: 'Web Platform',
+        },
+        {
+          title: 'Premium Car Rental Platform',
+          subtitle: 'Car Rental · Marrakech',
+          description: 'A premium car rental platform for Marrakech — featuring a curated fleet of luxury vehicles, real-time availability, instant booking system, and 24/7 customer support.',
+          tags: ['Instant Booking', 'Fleet Management', '24/7 Support', 'Real-time Availability'],
+          metrics: [{ value: '3×', label: 'More Bookings' }, { value: '1.9s', label: 'Load Time' }, { value: '80%', label: 'Faster' }],
+          category: 'E-commerce',
+        },
+      ],
+    },
+    whyUs: {
+      eyebrow: 'Why NexWebi',
+      title: 'Built Different,',
+      highlight: 'Built Better',
+      sub: "We don't just build websites — we engineer digital experiences that perform, scale, and convert.",
+      techLabel: 'Technologies We Master',
+      items: [
+        { title: 'Fast Delivery', desc: 'Agile sprints with transparent milestones. We deliver MVPs in weeks, not months — no delays, no excuses.' },
+        { title: 'Modern Tech Stack', desc: 'React, Next.js, Node.js, Python, PostgreSQL, AWS — battle-tested technologies for production-grade software.' },
+        { title: 'Scalable Architecture', desc: 'Systems designed to handle 10x growth without rewrites. Microservices, CDN, and cloud-native from the start.' },
+        { title: 'Automation Expertise', desc: 'Deep knowledge of workflow automation, API orchestration, and intelligent business process management.' },
+        { title: 'Security First', desc: 'OWASP compliance, secure coding practices, and data protection built in from day one — not bolted on after.' },
+        { title: 'Long-Term Partnership', desc: "We don't disappear after launch. Dedicated support, proactive monitoring, and ongoing improvements." },
+      ],
     },
     process: {
       eyebrow: 'How We Work',
@@ -49,19 +116,14 @@ const translations = {
       noteSpan: '2–6 weeks',
       noteEnd: 'depending on scope.',
       cta: 'Start the Process →',
-    },
-    services: {
-      eyebrow: 'What We Build',
-      title: 'Services That',
-      highlight: 'Drive Results',
-      sub: 'From idea to production — we deliver end-to-end digital solutions that combine cutting-edge technology with exceptional user experience.',
-    },
-    whyUs: {
-      eyebrow: 'Why NexWebi',
-      title: 'Built Different,',
-      highlight: 'Built Better',
-      sub: "We don't just build websites — we engineer digital experiences that perform, scale, and convert.",
-      techLabel: 'Technologies We Master',
+      steps: [
+        { title: 'Discovery Call', desc: 'We start by understanding your goals, audience, and technical requirements. Free 30-minute consultation to scope your project.' },
+        { title: 'Design & Architecture', desc: 'Our designers craft pixel-perfect wireframes and UI prototypes. Our architects design a scalable, secure system blueprint.' },
+        { title: 'Development Sprints', desc: 'Agile 1-week sprints with daily updates. You see progress in real time and can give feedback at every milestone.' },
+        { title: 'QA & Security Testing', desc: 'Automated tests, cross-browser checks, performance audits, and OWASP security review before anything ships.' },
+        { title: 'Launch & Deploy', desc: 'CI/CD pipeline, production deployment, DNS setup, SSL certificates, and monitoring dashboards — all handled.' },
+        { title: 'Support & Growth', desc: 'Post-launch support, analytics review, and iterative improvements. We build long-term partnerships, not one-off projects.' },
+      ],
     },
     testimonials: {
       eyebrow: 'Client Stories',
@@ -69,6 +131,14 @@ const translations = {
       highlight: 'Clients Say',
       sub: 'Real feedback from businesses that trusted us to build their digital products.',
       featuredBadge: '✓ Launched 40% under budget',
+      statsLabels: ['Average Rating', 'Projects Delivered', 'Satisfaction Rate', 'Missed Deadlines'],
+      items: [
+        { name: 'Sarah Mitchell', role: 'CEO · CloudVenture Inc.', feedback: 'NexWebi transformed our vision into a world-class SaaS platform. Their technical depth, attention to detail, and speed of execution are genuinely remarkable. We launched 40% under budget.' },
+        { name: 'James Okafor', role: 'CTO · Logix Automation', feedback: 'The automation systems they built eliminated 70% of our manual work overnight. The team understood our business logic deeply and delivered something that feels tailor-made.' },
+        { name: 'Elena Marchetti', role: 'Founder · LuxRetail Group', feedback: "Our e-commerce revenue increased 3x in the first quarter after launch. NexWebi didn't just build a store — they engineered a conversion machine." },
+        { name: 'David Park', role: 'Head of Product · Nexus Digital', feedback: 'Working with NexWebi felt like having a senior engineering team embedded in our company. Fast communication, zero compromises on quality.' },
+        { name: 'Amara Diallo', role: 'Operations Director · Scale AI Labs', feedback: 'The AI integration they built for our platform is genuinely cutting-edge. They navigated complex ML infrastructure as if it were second nature.' },
+      ],
     },
     pricing: {
       eyebrow: 'Transparent Pricing',
@@ -80,6 +150,32 @@ const translations = {
       customNote: 'Need something custom?',
       customLink: "Let's talk",
       customEnd: '— we build to any scope and budget.',
+      bestValue: 'Best Value',
+      currency: '$',
+      periods: { oneTime: 'one-time', startingFrom: 'starting from' },
+      plans: [
+        {
+          name: 'Starter', price: '399', period: 'oneTime',
+          tagline: 'A clean, professional landing page that converts',
+          cta: 'Get My Landing Page',
+          features: ['1 professional landing page', 'Mobile-first responsive design', 'Basic SEO setup', 'Contact form integration', 'Speed & performance optimization', 'Free 30-min discovery call', '5-day delivery', '7-day post-launch support'],
+          freeMarker: 'Free',
+        },
+        {
+          name: 'Growth', price: '999', period: 'oneTime',
+          tagline: 'A complete website built to grow your business',
+          cta: 'Grow My Business',
+          features: ['Up to 4 custom pages', 'Premium UI/UX design', 'Mobile & tablet optimization', 'Advanced SEO + Google Analytics', 'Contact & quote forms', 'Social media integration', 'Free 30-min discovery call', '10-day delivery', '30-day post-launch support'],
+          freeMarker: 'Free',
+        },
+        {
+          name: 'Scale', price: '2,500', priceNote: '+', period: 'startingFrom',
+          tagline: 'A custom-built platform engineered to scale',
+          cta: 'Build My Platform',
+          features: ['Unlimited pages & custom features', 'SaaS or custom platform build', 'User authentication & admin dashboard', 'Third-party API integrations', 'Payment processing (Stripe etc.)', 'Automation workflows', 'E-commerce functionality', 'Free 30-min discovery call', '14-day delivery', '60-day priority support'],
+          freeMarker: 'Free',
+        },
+      ],
     },
     blog: {
       eyebrow: 'Insights & Expertise',
@@ -87,6 +183,13 @@ const translations = {
       highlight: 'What Works',
       sub: 'Practical knowledge from building real products — no fluff, no filler.',
       readArticle: 'Read Article',
+      timeUnit: 'min read',
+      categories: { Strategy: 'Strategy', Business: 'Business', Technical: 'Technical' },
+      articles: [
+        { catKey: 'Strategy', time: 4, title: 'Why Your Website Is Costing You Customers', excerpt: 'Most business websites lose 70% of visitors in under 3 seconds. We break down the 5 most common mistakes and how to fix each one fast.' },
+        { catKey: 'Business', time: 5, title: 'The Real Cost of a Cheap Website', excerpt: 'A $300 template site feels like a win until it ranks on page 6, converts at 0.3%, and breaks every time you need to update it.' },
+        { catKey: 'Technical', time: 6, title: "How We Cut a Client's Load Time by 80%", excerpt: 'A Marrakech car rental platform was loading in 11 seconds. We rebuilt the image pipeline, added a CDN. Result: 1.9s load, 3x more bookings.' },
+      ],
     },
     faq: {
       eyebrow: 'FAQ',
@@ -98,6 +201,16 @@ const translations = {
       cta: 'Ask Us Directly',
       responseLabel: 'Average Response Time',
       responseValue: 'Under 2 hours',
+      items: [
+        { q: 'How long does it take to build a website?', a: 'It depends on the scope. A landing page or simple brochure site: 3–7 days. A full web app or SaaS platform: 3–8 weeks. We give you a precise timeline after the discovery call with weekly milestones.' },
+        { q: 'Do I own the source code after the project?', a: 'Yes — 100%. You get full ownership of all source code, assets, and intellectual property once the final payment is processed. No lock-ins, no ongoing licensing fees.' },
+        { q: 'What technologies do you use?', a: 'Our core stack is React / Next.js for frontend, Node.js / Python for backend, PostgreSQL / MongoDB for databases, and AWS / GCP for infrastructure. We recommend the best fit for your specific use case.' },
+        { q: 'Can you work with an existing codebase?', a: "Absolutely. We regularly audit, refactor, and extend existing projects. We'll review your codebase first and give you an honest assessment of what needs to change and why." },
+        { q: 'Do you sign NDAs?', a: "Yes. We're happy to sign a mutual NDA before any discussions. Your business ideas and project details are always kept strictly confidential." },
+        { q: "What's included in post-launch support?", a: 'All plans include a minimum 30-day post-launch window covering bug fixes, deployment issues, and minor adjustments. Ongoing retainers are available for continuous development and monitoring.' },
+        { q: 'How do payments work?', a: 'We typically split payments: 50% upfront to start, 50% upon delivery. For larger projects we use milestone-based billing so you only pay as value is delivered.' },
+        { q: 'Do you build mobile apps too?', a: 'We specialize in web-based products. For mobile, we build React Native or Progressive Web Apps (PWAs) that work beautifully on all devices. Native iOS/Android is available through our partner network.' },
+      ],
     },
     cta: {
       badge: "Let's Build Together",
@@ -121,6 +234,11 @@ const translations = {
       hoursValue: 'Mon–Fri · 9AM–6PM',
       hoursNote: 'GMT+1 · Emergency support 24/7',
       socialLabel: 'Follow Us',
+      socials: [
+        { name: 'Instagram', abbr: 'IG', href: 'https://www.instagram.com/nexwebi/' },
+        { name: 'LinkedIn', abbr: 'in', href: '#' },
+        { name: 'YouTube', abbr: 'YT', href: '#' },
+      ],
       labels: { name: 'Full Name', email: 'Email', subject: 'Subject', message: 'Message' },
       placeholders: {
         name: 'Your full name',
@@ -129,10 +247,12 @@ const translations = {
         message: 'Tell us about your project, goals, timeline...',
       },
       submit: 'Send Message',
+      sending: 'Sending',
       privacy: 'By submitting, you agree to our Privacy Policy. We never share your data.',
       successTitle: 'Message Sent!',
       successSub: "We'll get back to you within 24 hours.",
       sendAnother: 'Send Another',
+      counterMax: 2000,
       errors: {
         name: 'Name must be at least 2 characters',
         email: 'Please enter a valid email',
@@ -142,25 +262,30 @@ const translations = {
     footer: {
       desc: 'Building next-generation digital products — from modern websites to intelligent automation and scalable SaaS.',
       groups: {
-        Services: [
+        Services: { label: 'Services', items: [
           ['Web Development', 'services'],
           ['Automation', 'services'],
           ['SaaS Platforms', 'services'],
           ['E-commerce', 'services'],
           ['AI Integration', 'services'],
-        ],
-        Company: [
+        ]},
+        Company: { label: 'Company', items: [
           ['Portfolio', 'portfolio'],
           ['Why NexWebi', 'why-us'],
           ['Insights', 'blog'],
           ['Pricing', 'pricing'],
-        ],
-        Legal: [
+        ]},
+        Legal: { label: 'Legal', items: [
           ['Privacy Policy', 'privacy'],
           ['Terms of Service', 'terms'],
           ['Cookie Policy', 'cookie'],
-        ],
+        ]},
       },
+      socials: [
+        { abbr: 'IG', href: 'https://www.instagram.com/nexwebi/' },
+        { abbr: 'in', href: '#' },
+        { abbr: 'YT', href: '#' },
+      ],
       copyright: 'All rights reserved.',
       builtBy: 'Built with',
       byNexWebi: 'by NexWebi',
@@ -174,12 +299,13 @@ const translations = {
       links: [
         { label: 'Services', href: 'services' },
         { label: 'Portfolio', href: 'portfolio' },
-        { label: 'Pourquoi Nous', href: 'why-us' },
-        { label: 'Conseils', href: 'blog' },
+        { label: 'Pourquoi nous', href: 'why-us' },
         { label: 'Tarifs', href: 'pricing' },
+        { label: 'Conseils', href: 'blog' },
         { label: 'Contact', href: 'contact' },
       ],
       cta: 'Commencer',
+      langTitle: 'Changer de langue',
     },
     hero: {
       badge: 'Agence Web Nouvelle Génération',
@@ -191,13 +317,27 @@ const translations = {
       cta2: 'Voir nos réalisations',
       trust: '5.0 de note · Approuvé par 50+ entreprises · USA & monde entier',
       stats: ['Projets livrés', 'Satisfaction client', 'Livraison plus rapide', 'Support'],
+      statValues: ['50+', '98%', '5×', '24/7'],
     },
     impactBar: {
-      stats: [
-        'Revenus générés pour nos clients',
-        'Projets livrés',
-        'Pays couverts',
-        'Délai de livraison moyen',
+      values: ['2M$+', '50+', '7', '< 14 jours'],
+      stats: ['Revenus générés pour nos clients', 'Projets livrés', 'Pays couverts', 'Délai de livraison moyen'],
+    },
+    services: {
+      eyebrow: 'Ce Que Nous Créons',
+      title: 'Services qui',
+      highlight: 'Génèrent des Résultats',
+      sub: "De l'idée à la production — nous livrons des solutions digitales complètes alliant technologies de pointe et expérience utilisateur exceptionnelle.",
+      learnMore: 'En savoir plus',
+      tagMostRequested: 'Plus demandé',
+      tagNew: 'Nouveau',
+      items: [
+        { title: 'Conception & Développement Web', description: 'Sites web responsives au pixel près, conçus pour la performance. Des landing pages aux applications complexes — bâtis sur des stacks modernes.' },
+        { title: "Systèmes d'automatisation", description: "Éliminez les tâches répétitives grâce à des pipelines d'automatisation intelligents. Intégrez des APIs, automatisez des flux et passez à l'échelle." },
+        { title: 'Développement SaaS', description: 'Plateformes SaaS full-stack avec authentification robuste, facturation, multi-tenant et analytique — pensées pour acquérir et fidéliser.' },
+        { title: 'Solutions E-commerce', description: 'Boutiques en ligne à fort taux de conversion avec checkout fluide, gestion de stock et intégrations sur mesure adaptées à votre business.' },
+        { title: 'Optimisation des performances', description: 'Boostez les Core Web Vitals, améliorez le SEO et éliminez les goulots de performance. Des résultats mesurables en conversions.' },
+        { title: "Intégration d'IA", description: 'Intégrez des LLM, vision par ordinateur et agents intelligents directement dans vos produits — du chatbot à la prédiction analytique.' },
       ],
     },
     portfolio: {
@@ -207,6 +347,40 @@ const translations = {
       sub: 'Chaque projet que nous livrons est prêt pour la production, entièrement personnalisé et conçu pour performer.',
       prompt: 'Vous voulez voir votre projet ici ?',
       cta: 'Démarrer votre projet →',
+      builtWith: 'Construit avec',
+      projects: [
+        {
+          title: 'Plateforme Immobilière de Luxe',
+          subtitle: 'Immobilier · Marrakech',
+          description: 'Plateforme immobilière de luxe pour Marrakech — annonces avec carte interactive, filtres avancés, support bilingue (FR/AR), et panneau admin pour gérer les biens.',
+          tags: ['Bilingue FR/AR', 'Carte interactive', 'Panneau admin', 'Filtres avancés'],
+          metrics: [{ value: '2', label: 'Langues' }, { value: '100%', label: 'Design custom' }, { value: '< 7j', label: 'Livraison' }],
+          category: 'Plateforme web',
+        },
+        {
+          title: 'Plateforme Premium de Location de Voitures',
+          subtitle: 'Location de voitures · Marrakech',
+          description: 'Plateforme premium de location à Marrakech — flotte de véhicules de luxe, disponibilité en temps réel, réservation instantanée et support client 24/7.',
+          tags: ['Réservation instantanée', 'Gestion de flotte', 'Support 24/7', 'Disponibilité temps réel'],
+          metrics: [{ value: '3×', label: 'Plus de réservations' }, { value: '1.9s', label: 'Temps de chargement' }, { value: '80%', label: 'Plus rapide' }],
+          category: 'E-commerce',
+        },
+      ],
+    },
+    whyUs: {
+      eyebrow: 'Pourquoi NexWebi',
+      title: 'Construit autrement,',
+      highlight: 'Construit mieux',
+      sub: "Nous ne faisons pas que créer des sites web — nous concevons des expériences digitales qui performent, évoluent et convertissent.",
+      techLabel: 'Technologies que nous maîtrisons',
+      items: [
+        { title: 'Livraison rapide', desc: 'Sprints agiles avec jalons transparents. Nous livrons des MVP en semaines, pas en mois — sans retard, sans excuse.' },
+        { title: 'Stack moderne', desc: 'React, Next.js, Node.js, Python, PostgreSQL, AWS — des technologies éprouvées pour du logiciel de production.' },
+        { title: 'Architecture évolutive', desc: 'Systèmes pensés pour absorber une croissance 10×. Microservices, CDN et cloud-native dès le départ.' },
+        { title: "Expertise en automatisation", desc: "Connaissance approfondie de l'automatisation des workflows, de l'orchestration d'API et de la gestion intelligente des processus." },
+        { title: "Sécurité d'abord", desc: 'Conformité OWASP, pratiques de codage sécurisées et protection des données dès le premier jour — pas après coup.' },
+        { title: 'Partenariat long terme', desc: 'Nous ne disparaissons pas après le lancement. Support dédié, monitoring proactif et améliorations continues.' },
+      ],
     },
     process: {
       eyebrow: 'Comment Nous Travaillons',
@@ -217,19 +391,14 @@ const translations = {
       noteSpan: '2–6 semaines',
       noteEnd: 'selon la portée du projet.',
       cta: 'Démarrer le processus →',
-    },
-    services: {
-      eyebrow: 'Ce Que Nous Créons',
-      title: 'Services qui',
-      highlight: 'Génèrent des Résultats',
-      sub: "De l'idée à la production — nous livrons des solutions digitales complètes alliant technologies de pointe et expérience utilisateur exceptionnelle.",
-    },
-    whyUs: {
-      eyebrow: 'Pourquoi NexWebi',
-      title: 'Différemment construit,',
-      highlight: 'Mieux construit',
-      sub: "Nous ne faisons pas que créer des sites web — nous concevons des expériences digitales qui performent, évoluent et convertissent.",
-      techLabel: 'Technologies que nous maîtrisons',
+      steps: [
+        { title: 'Appel découverte', desc: 'Nous commençons par comprendre vos objectifs, votre audience et vos exigences techniques. Consultation gratuite de 30 minutes.' },
+        { title: 'Design & architecture', desc: 'Nos designers créent des wireframes au pixel près et des prototypes UI. Nos architectes conçoivent un système évolutif et sécurisé.' },
+        { title: 'Sprints de développement', desc: 'Sprints agiles d\'une semaine avec mises à jour quotidiennes. Vous voyez le progrès en temps réel et donnez votre retour à chaque jalon.' },
+        { title: 'QA & sécurité', desc: 'Tests automatisés, vérifications cross-browser, audits de performance et revue de sécurité OWASP avant toute livraison.' },
+        { title: 'Lancement & déploiement', desc: 'Pipeline CI/CD, déploiement en production, configuration DNS, certificats SSL et tableaux de bord de monitoring — tout est géré.' },
+        { title: 'Support & croissance', desc: "Support post-lancement, analyse des données et améliorations itératives. Nous bâtissons des partenariats durables, pas des projets ponctuels." },
+      ],
     },
     testimonials: {
       eyebrow: 'Témoignages Clients',
@@ -237,6 +406,14 @@ const translations = {
       highlight: 'Clients',
       sub: "Retours réels d'entreprises qui nous ont fait confiance pour créer leurs produits digitaux.",
       featuredBadge: '✓ Livré 40% sous le budget',
+      statsLabels: ['Note moyenne', 'Projets livrés', 'Taux de satisfaction', 'Délais manqués'],
+      items: [
+        { name: 'Sarah Mitchell', role: 'PDG · CloudVenture Inc.', feedback: "NexWebi a transformé notre vision en une plateforme SaaS de classe mondiale. Leur profondeur technique, leur souci du détail et leur rapidité d'exécution sont remarquables. Nous avons lancé 40% sous budget." },
+        { name: 'James Okafor', role: 'CTO · Logix Automation', feedback: "Les systèmes d'automatisation qu'ils ont construits ont éliminé 70% de notre travail manuel du jour au lendemain. L'équipe a saisi notre logique métier en profondeur." },
+        { name: 'Elena Marchetti', role: 'Fondatrice · LuxRetail Group', feedback: "Notre revenu e-commerce a triplé au premier trimestre après le lancement. NexWebi n'a pas juste construit une boutique — ils ont conçu une machine à conversions." },
+        { name: 'David Park', role: 'Head of Product · Nexus Digital', feedback: "Travailler avec NexWebi, c'est comme avoir une équipe d'ingénierie senior intégrée. Communication rapide, zéro compromis sur la qualité." },
+        { name: 'Amara Diallo', role: 'Directrice des opérations · Scale AI Labs', feedback: "L'intégration IA qu'ils ont bâtie pour notre plateforme est vraiment à la pointe. Ils ont géré une infrastructure ML complexe avec une aisance naturelle." },
+      ],
     },
     pricing: {
       eyebrow: 'Tarification Transparente',
@@ -248,6 +425,32 @@ const translations = {
       customNote: "Besoin d'une solution sur mesure ?",
       customLink: 'Parlons-en',
       customEnd: '— nous construisons selon votre scope et budget.',
+      bestValue: 'Meilleur choix',
+      currency: '$',
+      periods: { oneTime: 'paiement unique', startingFrom: 'à partir de' },
+      plans: [
+        {
+          name: 'Starter', price: '399', period: 'oneTime',
+          tagline: 'Une landing page propre et professionnelle qui convertit',
+          cta: 'Obtenir ma landing page',
+          features: ['1 landing page professionnelle', 'Design responsive mobile-first', 'Configuration SEO de base', 'Intégration de formulaire de contact', 'Optimisation vitesse & performance', 'Appel découverte gratuit de 30 min', 'Livraison en 5 jours', '7 jours de support post-lancement'],
+          freeMarker: 'gratuit',
+        },
+        {
+          name: 'Growth', price: '999', period: 'oneTime',
+          tagline: 'Un site complet pour faire grandir votre entreprise',
+          cta: 'Faire grandir mon business',
+          features: ["Jusqu'à 4 pages personnalisées", 'Design UI/UX premium', 'Optimisation mobile & tablette', 'SEO avancé + Google Analytics', 'Formulaires de contact & devis', 'Intégration réseaux sociaux', 'Appel découverte gratuit de 30 min', 'Livraison en 10 jours', '30 jours de support post-lancement'],
+          freeMarker: 'gratuit',
+        },
+        {
+          name: 'Scale', price: '2,500', priceNote: '+', period: 'startingFrom',
+          tagline: 'Une plateforme sur mesure conçue pour passer à l\'échelle',
+          cta: 'Construire ma plateforme',
+          features: ['Pages illimitées & fonctionnalités custom', 'Construction SaaS ou plateforme sur mesure', 'Authentification & dashboard admin', "Intégrations d'API tierces", 'Traitement des paiements (Stripe etc.)', "Workflows d'automatisation", 'Fonctionnalités e-commerce', 'Appel découverte gratuit de 30 min', 'Livraison en 14 jours', '60 jours de support prioritaire'],
+          freeMarker: 'gratuit',
+        },
+      ],
     },
     blog: {
       eyebrow: 'Insights & Expertise',
@@ -255,6 +458,13 @@ const translations = {
       highlight: 'Ce Qui Fonctionne',
       sub: 'Connaissances pratiques issues de la création de vrais produits — sans blabla, sans remplissage.',
       readArticle: "Lire l'article",
+      timeUnit: 'min de lecture',
+      categories: { Strategy: 'Stratégie', Business: 'Business', Technical: 'Technique' },
+      articles: [
+        { catKey: 'Strategy', time: 4, title: 'Pourquoi votre site vous fait perdre des clients', excerpt: '70% des visiteurs quittent un site en moins de 3 secondes. Nous décortiquons les 5 erreurs les plus fréquentes et comment les corriger vite.' },
+        { catKey: 'Business', time: 5, title: "Le vrai coût d'un site bon marché", excerpt: 'Un site template à 300$ semble une bonne affaire — jusqu\'à ce qu\'il finisse en page 6, convertisse à 0.3% et casse à chaque mise à jour.' },
+        { catKey: 'Technical', time: 6, title: 'Comment nous avons réduit le temps de chargement de 80%', excerpt: 'Une plateforme de location à Marrakech chargeait en 11 secondes. Nous avons refait le pipeline image, ajouté un CDN. Résultat : 1.9s, 3× plus de réservations.' },
+      ],
     },
     faq: {
       eyebrow: 'FAQ',
@@ -266,6 +476,16 @@ const translations = {
       cta: 'Nous contacter directement',
       responseLabel: 'Temps de réponse moyen',
       responseValue: 'Moins de 2 heures',
+      items: [
+        { q: 'Combien de temps faut-il pour construire un site ?', a: 'Cela dépend de la portée. Une landing page ou site vitrine simple : 3–7 jours. Une application complète ou une plateforme SaaS : 3–8 semaines. Nous vous donnons un calendrier précis après l\'appel découverte avec des jalons hebdomadaires.' },
+        { q: "Suis-je propriétaire du code source ?", a: "Oui — à 100%. Vous obtenez la propriété complète du code source, des assets et de la propriété intellectuelle dès le paiement final. Aucun verrouillage, aucun frais de licence." },
+        { q: 'Quelles technologies utilisez-vous ?', a: 'Notre stack principal est React / Next.js en frontend, Node.js / Python en backend, PostgreSQL / MongoDB en base de données, et AWS / GCP pour l\'infrastructure. Nous recommandons la meilleure option selon votre cas.' },
+        { q: 'Pouvez-vous travailler sur un code existant ?', a: 'Absolument. Nous auditons, refactorisons et étendons régulièrement des projets existants. Nous examinons votre code en premier et donnons une évaluation honnête.' },
+        { q: 'Signez-vous des NDA ?', a: 'Oui. Nous signons volontiers un NDA mutuel avant toute discussion. Vos idées et détails de projet restent strictement confidentiels.' },
+        { q: "Qu'est-ce qui est inclus dans le support post-lancement ?", a: "Tous les plans incluent un minimum de 30 jours après le lancement couvrant les corrections de bugs, problèmes de déploiement et ajustements mineurs. Des contrats de maintenance sont disponibles." },
+        { q: 'Comment fonctionnent les paiements ?', a: 'Nous fractionnons généralement les paiements : 50% au démarrage, 50% à la livraison. Pour de plus gros projets, nous facturons par jalons.' },
+        { q: 'Construisez-vous des applications mobiles ?', a: 'Nous nous spécialisons dans les produits web. Pour le mobile, nous construisons React Native ou des Progressive Web Apps (PWA) qui fonctionnent magnifiquement sur tous appareils.' },
+      ],
     },
     cta: {
       badge: 'Construisons ensemble',
@@ -289,6 +509,11 @@ const translations = {
       hoursValue: 'Lun–Ven · 9h–18h',
       hoursNote: "GMT+1 · Support d'urgence 24/7",
       socialLabel: 'Suivez-nous',
+      socials: [
+        { name: 'Instagram', abbr: 'IG', href: 'https://www.instagram.com/nexwebi/' },
+        { name: 'LinkedIn', abbr: 'in', href: '#' },
+        { name: 'YouTube', abbr: 'YT', href: '#' },
+      ],
       labels: { name: 'Nom complet', email: 'Email', subject: 'Sujet', message: 'Message' },
       placeholders: {
         name: 'Votre nom complet',
@@ -297,10 +522,12 @@ const translations = {
         message: 'Parlez-nous de votre projet, vos objectifs, votre calendrier...',
       },
       submit: 'Envoyer le message',
+      sending: 'Envoi',
       privacy: 'En soumettant, vous acceptez notre Politique de confidentialité. Nous ne partageons jamais vos données.',
       successTitle: 'Message envoyé !',
       successSub: 'Nous vous répondrons dans les 24 heures.',
       sendAnother: 'Envoyer un autre',
+      counterMax: 2000,
       errors: {
         name: 'Le nom doit contenir au moins 2 caractères',
         email: 'Veuillez saisir un email valide',
@@ -310,25 +537,30 @@ const translations = {
     footer: {
       desc: "Création de produits digitaux de nouvelle génération — des sites web modernes à l'automatisation intelligente et aux SaaS évolutifs.",
       groups: {
-        Services: [
-          ['Développement Web', 'services'],
+        Services: { label: 'Services', items: [
+          ['Développement web', 'services'],
           ['Automatisation', 'services'],
           ['Plateformes SaaS', 'services'],
           ['E-commerce', 'services'],
           ['Intégration IA', 'services'],
-        ],
-        Company: [
+        ]},
+        Company: { label: 'Entreprise', items: [
           ['Portfolio', 'portfolio'],
           ['Pourquoi NexWebi', 'why-us'],
           ['Conseils', 'blog'],
           ['Tarifs', 'pricing'],
-        ],
-        Legal: [
+        ]},
+        Legal: { label: 'Mentions légales', items: [
           ['Politique de confidentialité', 'privacy'],
           ["Conditions d'utilisation", 'terms'],
           ['Politique des cookies', 'cookie'],
-        ],
+        ]},
       },
+      socials: [
+        { abbr: 'IG', href: 'https://www.instagram.com/nexwebi/' },
+        { abbr: 'in', href: '#' },
+        { abbr: 'YT', href: '#' },
+      ],
       copyright: 'Tous droits réservés.',
       builtBy: 'Créé avec',
       byNexWebi: 'par NexWebi',
@@ -336,16 +568,307 @@ const translations = {
       termsOfService: "Conditions d'utilisation",
     },
   },
+
+  ar: {
+    nav: {
+      links: [
+        { label: 'الخدمات', href: 'services' },
+        { label: 'أعمالنا', href: 'portfolio' },
+        { label: 'لماذا نحن', href: 'why-us' },
+        { label: 'الأسعار', href: 'pricing' },
+        { label: 'مقالات', href: 'blog' },
+        { label: 'تواصل', href: 'contact' },
+      ],
+      cta: 'ابدأ الآن',
+      langTitle: 'تغيير اللغة',
+    },
+    hero: {
+      badge: 'وكالة ويب من الجيل القادم',
+      line1: 'نحن نبني',
+      line2: 'منتجات رقمية',
+      line3: 'تنمو معك',
+      sub: 'NexWebi تصمم مواقع ويب حديثة، أنظمة أتمتة ذكية، ومنصات SaaS قابلة للتوسع — مهندسة للأداء، مبنية للنمو.',
+      cta1: 'ابدأ مشروعك',
+      cta2: 'شاهد أعمالنا',
+      trust: 'تقييم 5.0 · موثوق من 50+ شركة · حول العالم',
+      stats: ['مشاريع منجزة', 'رضا العملاء', 'تسليم أسرع', 'دعم'],
+      statValues: ['+50', '%98', '×5', '24/7'],
+    },
+    impactBar: {
+      values: ['+2M$', '+50', '7', '< 14 يوم'],
+      stats: ['إيرادات حققناها لعملائنا', 'مشاريع مُسلَّمة', 'دول مخدومة', 'متوسط مدة التسليم'],
+    },
+    services: {
+      eyebrow: 'ما الذي نبنيه',
+      title: 'خدمات تحقق',
+      highlight: 'النتائج',
+      sub: 'من الفكرة إلى الإنتاج — نقدّم حلولاً رقمية متكاملة تجمع بين أحدث التقنيات وتجربة مستخدم استثنائية.',
+      learnMore: 'اعرف المزيد',
+      tagMostRequested: 'الأكثر طلباً',
+      tagNew: 'جديد',
+      items: [
+        { title: 'تصميم وتطوير الويب', description: 'مواقع متجاوبة بدقة عالية ومُحسَّنة للأداء. من صفحات الهبوط إلى التطبيقات المعقدة — مبنية بأحدث التقنيات.' },
+        { title: 'أنظمة الأتمتة', description: 'تخلَّص من المهام المتكررة عبر مسارات أتمتة ذكية. ربط APIs، أتمتة العمليات، والتوسّع بسهولة.' },
+        { title: 'تطوير SaaS', description: 'منصات SaaS متكاملة مع مصادقة قوية، فوترة، تعدد المستأجرين، وتحليلات — مصممة لاكتساب العملاء والاحتفاظ بهم.' },
+        { title: 'حلول التجارة الإلكترونية', description: 'متاجر إلكترونية عالية التحويل مع دفع سلس، إدارة مخزون، وتكامل مخصص لنموذج عملك.' },
+        { title: 'تحسين الأداء', description: 'حسِّن مؤشرات Core Web Vitals، ارفع تصنيف SEO، واقضِ على عوائق الأداء. نتائج حقيقية تُقاس بالتحويلات.' },
+        { title: 'دمج الذكاء الاصطناعي', description: 'دمج نماذج لغوية كبيرة، رؤية حاسوبية ووكلاء أذكياء مباشرة في منتجاتك — من الدردشة إلى التحليلات التنبؤية.' },
+      ],
+    },
+    portfolio: {
+      eyebrow: 'أعمالنا',
+      title: 'مشاريع حقيقية،',
+      highlight: 'نتائج حقيقية',
+      sub: 'كل مشروع نطلقه جاهز للإنتاج، مخصص بالكامل، ومبني للأداء.',
+      prompt: 'تريد رؤية مشروعك هنا؟',
+      cta: 'ابدأ مشروعك ←',
+      builtWith: 'مبني بـ',
+      projects: [
+        {
+          title: 'منصة عقارية فاخرة',
+          subtitle: 'عقارات · مراكش',
+          description: 'منصة عقارية فاخرة لمراكش — قوائم عقارات بخريطة تفاعلية، فلاتر متقدمة، دعم ثنائي اللغة (FR/AR)، ولوحة إدارة لإدارة العقارات.',
+          tags: ['ثنائي اللغة FR/AR', 'خريطة تفاعلية', 'لوحة إدارة', 'فلاتر متقدمة'],
+          metrics: [{ value: '2', label: 'لغات' }, { value: '%100', label: 'تصميم مخصص' }, { value: '< 7ي', label: 'تسليم' }],
+          category: 'منصة ويب',
+        },
+        {
+          title: 'منصة تأجير سيارات فاخرة',
+          subtitle: 'تأجير سيارات · مراكش',
+          description: 'منصة تأجير سيارات فاخرة لمراكش — أسطول مختار من السيارات الفاخرة، توافر فوري، نظام حجز سريع، ودعم على مدار الساعة.',
+          tags: ['حجز فوري', 'إدارة الأسطول', 'دعم 24/7', 'توافر لحظي'],
+          metrics: [{ value: '×3', label: 'حجوزات أكثر' }, { value: '1.9s', label: 'زمن التحميل' }, { value: '%80', label: 'أسرع' }],
+          category: 'تجارة إلكترونية',
+        },
+      ],
+    },
+    whyUs: {
+      eyebrow: 'لماذا NexWebi',
+      title: 'مبني بشكل مختلف،',
+      highlight: 'مبني بشكل أفضل',
+      sub: 'نحن لا نبني مجرد مواقع — نهندس تجارب رقمية تؤدي وتنمو وتحوِّل.',
+      techLabel: 'التقنيات التي نتقنها',
+      items: [
+        { title: 'تسليم سريع', desc: 'سبرنتات Agile بمعالم شفافة. نسلِّم MVP خلال أسابيع، لا أشهر — بدون تأخير، بدون أعذار.' },
+        { title: 'أحدث التقنيات', desc: 'React, Next.js, Node.js, Python, PostgreSQL, AWS — تقنيات مجرَّبة لبرمجيات الإنتاج.' },
+        { title: 'بنية قابلة للتوسع', desc: 'أنظمة مصممة لاحتمال نمو 10× بدون إعادة بناء. خدمات مصغرة، CDN، وسحابة منذ البداية.' },
+        { title: 'خبرة في الأتمتة', desc: 'معرفة عميقة بأتمتة العمليات، تنسيق APIs، وإدارة العمليات الذكية.' },
+        { title: 'الأمن أولاً', desc: 'التزام OWASP، ممارسات تطوير آمنة، وحماية البيانات منذ اليوم الأول — لا كإضافة لاحقة.' },
+        { title: 'شراكة طويلة المدى', desc: 'لن نختفي بعد الإطلاق. دعم مخصص، مراقبة استباقية، وتحسينات مستمرة.' },
+      ],
+    },
+    process: {
+      eyebrow: 'كيف نعمل',
+      title: 'عمليتنا',
+      highlight: 'المُجرَّبة',
+      sub: 'ست خطوات واضحة من المحادثة الأولى إلى الشراكة طويلة المدى — بدون مفاجآت أو تأخير.',
+      note: 'من مكالمة الاكتشاف إلى الإطلاق — عادةً',
+      noteSpan: '2–6 أسابيع',
+      noteEnd: 'حسب نطاق المشروع.',
+      cta: 'ابدأ العملية ←',
+      steps: [
+        { title: 'مكالمة الاكتشاف', desc: 'نبدأ بفهم أهدافك وجمهورك ومتطلباتك التقنية. استشارة مجانية لمدة 30 دقيقة لتحديد نطاق مشروعك.' },
+        { title: 'التصميم والهندسة', desc: 'مصممونا يصنعون wireframes ونماذج UI بدقة عالية. مهندسونا يصممون مخططاً قابلاً للتوسع وآمناً.' },
+        { title: 'سبرنتات التطوير', desc: 'سبرنتات أسبوعية مرنة مع تحديثات يومية. ترى التقدم في الوقت الفعلي وتقدّم ملاحظاتك في كل معلم.' },
+        { title: 'اختبار QA والأمن', desc: 'اختبارات آلية، فحوصات متعددة المتصفحات، تدقيق أداء، ومراجعة أمنية وفق OWASP قبل أي إطلاق.' },
+        { title: 'الإطلاق والنشر', desc: 'خط CI/CD، نشر للإنتاج، إعداد DNS، شهادات SSL، ولوحات مراقبة — كل شيء جاهز.' },
+        { title: 'الدعم والنمو', desc: 'دعم بعد الإطلاق، مراجعة التحليلات، وتحسينات تدريجية. نبني شراكات طويلة الأمد لا مشاريع لمرة واحدة.' },
+      ],
+    },
+    testimonials: {
+      eyebrow: 'قصص العملاء',
+      title: 'ماذا يقول',
+      highlight: 'عملاؤنا',
+      sub: 'تعليقات حقيقية من شركات وثقت بنا لبناء منتجاتها الرقمية.',
+      featuredBadge: '✓ أُطلق بأقل من الميزانية بـ 40%',
+      statsLabels: ['متوسط التقييم', 'مشاريع منجزة', 'معدل الرضا', 'مواعيد فائتة'],
+      items: [
+        { name: 'Sarah Mitchell', role: 'الرئيس التنفيذي · CloudVenture Inc.', feedback: 'NexWebi حوّلت رؤيتنا إلى منصة SaaS عالمية المستوى. عمقهم التقني، اهتمامهم بالتفاصيل، وسرعة التنفيذ مذهلة. أطلقنا بأقل من الميزانية بـ 40%.' },
+        { name: 'James Okafor', role: 'CTO · Logix Automation', feedback: 'أنظمة الأتمتة التي بنوها قضت على 70% من العمل اليدوي بين عشية وضحاها. الفريق فهم منطق العمل بعمق وسلَّم منتجاً يبدو مفصَّلاً.' },
+        { name: 'Elena Marchetti', role: 'مؤسِّسة · LuxRetail Group', feedback: 'إيرادات التجارة الإلكترونية تضاعفت 3 مرات في الربع الأول بعد الإطلاق. NexWebi لم يبنوا مجرد متجر — هندسوا آلة تحويل.' },
+        { name: 'David Park', role: 'رئيس المنتج · Nexus Digital', feedback: 'العمل مع NexWebi يشبه وجود فريق هندسة كبار مدمج في شركتك. تواصل سريع، وصفر تنازلات في الجودة.' },
+        { name: 'Amara Diallo', role: 'مديرة العمليات · Scale AI Labs', feedback: 'دمج الذكاء الاصطناعي الذي بنوه لمنصتنا متطور جداً. تعاملوا مع بنية ML المعقدة وكأنها طبيعتهم.' },
+      ],
+    },
+    pricing: {
+      eyebrow: 'تسعير شفاف',
+      title: 'خطط بسيطة،',
+      highlight: 'نتائج جادة',
+      sub: 'لا رسوم مخفية. لا مفاجآت. كل خطة تُقدِّم قيمة تجارية حقيقية — لا مجرد موقع جميل.',
+      guarantees: ['🔒 ضمان الرضا', '📋 ملكية الكود المصدري', '🤝 NDA متاح', '📞 مكالمة اكتشاف مجانية'],
+      badge: '✓ كل الخطط تشمل ملكية الكود · NDA متاح · مدير مشروع مخصص',
+      customNote: 'تحتاج حلاً مخصصاً؟',
+      customLink: 'لنتحدث',
+      customEnd: '— نبني حسب أي نطاق وميزانية.',
+      bestValue: 'أفضل قيمة',
+      currency: '$',
+      periods: { oneTime: 'دفعة واحدة', startingFrom: 'يبدأ من' },
+      plans: [
+        {
+          name: 'Starter', price: '399', period: 'oneTime',
+          tagline: 'صفحة هبوط احترافية ونظيفة تُحقِّق التحويل',
+          cta: 'احصل على صفحتي',
+          features: ['صفحة هبوط احترافية واحدة', 'تصميم متجاوب يبدأ بالموبايل', 'إعداد SEO أساسي', 'دمج نموذج تواصل', 'تحسين السرعة والأداء', 'مكالمة اكتشاف مجانية 30 دقيقة', 'تسليم خلال 5 أيام', 'دعم 7 أيام بعد الإطلاق'],
+          freeMarker: 'مجاني',
+        },
+        {
+          name: 'Growth', price: '999', period: 'oneTime',
+          tagline: 'موقع متكامل مبني لتنمية أعمالك',
+          cta: 'دع عملي ينمو',
+          features: ['حتى 4 صفحات مخصصة', 'تصميم UI/UX متميز', 'تحسين موبايل وتابلت', 'SEO متقدم + Google Analytics', 'نماذج تواصل وعروض', 'تكامل وسائل التواصل', 'مكالمة اكتشاف مجانية 30 دقيقة', 'تسليم خلال 10 أيام', 'دعم 30 يوماً بعد الإطلاق'],
+          freeMarker: 'مجاني',
+        },
+        {
+          name: 'Scale', price: '2,500', priceNote: '+', period: 'startingFrom',
+          tagline: 'منصة مبنية خصيصاً لتتوسع',
+          cta: 'ابنِ منصتي',
+          features: ['صفحات وميزات مخصصة لا محدودة', 'بناء SaaS أو منصة مخصصة', 'مصادقة المستخدم ولوحة إدارة', 'تكامل APIs خارجية', 'معالجة المدفوعات (Stripe وغيرها)', 'مسارات أتمتة', 'وظائف التجارة الإلكترونية', 'مكالمة اكتشاف مجانية 30 دقيقة', 'تسليم خلال 14 يوماً', 'دعم بأولوية لمدة 60 يوماً'],
+          freeMarker: 'مجاني',
+        },
+      ],
+    },
+    blog: {
+      eyebrow: 'رؤى وخبرة',
+      title: 'نعرف',
+      highlight: 'ما يعمل',
+      sub: 'معرفة عملية من بناء منتجات حقيقية — بلا حشو ولا كلام فارغ.',
+      readArticle: 'اقرأ المقال',
+      timeUnit: 'دقيقة قراءة',
+      categories: { Strategy: 'استراتيجية', Business: 'أعمال', Technical: 'تقني' },
+      articles: [
+        { catKey: 'Strategy', time: 4, title: 'لماذا موقعك يُكلِّفك العملاء', excerpt: 'معظم مواقع الأعمال تخسر 70% من الزوار في أقل من 3 ثوانٍ. نحلِّل أكثر 5 أخطاء شيوعاً وكيفية إصلاحها بسرعة.' },
+        { catKey: 'Business', time: 5, title: 'التكلفة الحقيقية للموقع الرخيص', excerpt: 'موقع قالب بـ 300$ يبدو صفقة — حتى يصل للصفحة 6، ويُحوِّل بنسبة 0.3%، ويتعطّل عند كل تحديث.' },
+        { catKey: 'Technical', time: 6, title: 'كيف خفّضنا زمن التحميل لأحد العملاء بنسبة 80%', excerpt: 'منصة تأجير سيارات في مراكش كانت تُحمَّل في 11 ثانية. أعدنا بناء خط الصور وأضفنا CDN. النتيجة: 1.9 ثانية، حجوزات أكثر 3 مرات.' },
+      ],
+    },
+    faq: {
+      eyebrow: 'أسئلة شائعة',
+      title: 'أسئلة',
+      highlight: 'متكررة',
+      sub: 'كل ما تحتاج معرفته قبل بدء مشروع معنا.',
+      stillQ: 'لا زلت لديك أسئلة؟',
+      stillA: 'لم تجد ما تبحث عنه؟ أرسل لنا رسالة وسنرد خلال ساعات قليلة.',
+      cta: 'تواصل مباشرة',
+      responseLabel: 'متوسط زمن الاستجابة',
+      responseValue: 'أقل من ساعتين',
+      items: [
+        { q: 'كم يستغرق بناء موقع؟', a: 'يعتمد على النطاق. صفحة هبوط أو موقع تعريفي بسيط: 3–7 أيام. تطبيق ويب كامل أو منصة SaaS: 3–8 أسابيع. نُعطيك جدولاً دقيقاً بعد مكالمة الاكتشاف.' },
+        { q: 'هل أملك الكود المصدري بعد المشروع؟', a: 'نعم — 100%. تحصل على ملكية كاملة للكود والأصول والملكية الفكرية بعد الدفعة الأخيرة. لا قيود ولا رسوم ترخيص مستمرة.' },
+        { q: 'ما التقنيات التي تستخدمونها؟', a: 'الستاك الأساسي: React / Next.js للواجهة، Node.js / Python للخلفية، PostgreSQL / MongoDB لقواعد البيانات، AWS / GCP للبنية التحتية. نوصي بالأنسب لحالتك.' },
+        { q: 'هل يمكنكم العمل على كود موجود؟', a: 'بالتأكيد. نقوم بانتظام بمراجعة وإعادة هيكلة وتوسيع المشاريع القائمة. نراجع الكود أولاً ونعطي تقييماً صادقاً.' },
+        { q: 'هل توقّعون اتفاقيات سرية NDA؟', a: 'نعم. يسعدنا توقيع NDA متبادلة قبل أي نقاش. أفكار مشروعك وتفاصيله سرية تماماً.' },
+        { q: 'ماذا يشمل الدعم بعد الإطلاق؟', a: 'كل الخطط تشمل 30 يوماً على الأقل بعد الإطلاق لإصلاح الأخطاء ومشاكل النشر والتعديلات الصغيرة. عقود صيانة مستمرة متاحة.' },
+        { q: 'كيف تعمل الدفعات؟', a: 'عادة نقسّم الدفعات: 50% عند البدء، 50% عند التسليم. للمشاريع الكبيرة نعتمد فوترة بالمعالم.' },
+        { q: 'هل تبنون تطبيقات موبايل؟', a: 'تخصصنا منتجات ويب. للموبايل نبني React Native أو Progressive Web Apps (PWA) تعمل بشكل ممتاز على كل الأجهزة.' },
+      ],
+    },
+    cta: {
+      badge: 'لنبني معاً',
+      h2a: 'هل أنت مستعد لبناء',
+      h2b: 'منتجك الرقمي القادم؟',
+      sub: 'سواء كان لديك مشروع مكتمل التحديد أو مجرد فكرة — سنحوِّلها إلى منتج يحبه مستخدموك.',
+      urgency: '⚡ نقبل حالياً مشاريع جديدة — أماكن محدودة',
+      cta1: 'ابدأ مشروعك ←',
+      cta2: 'شاهد الأسعار',
+      note: 'لا التزام · استشارة مجانية · رد خلال 24 ساعة',
+    },
+    contact: {
+      eyebrow: 'تواصل معنا',
+      title: 'ابدأ',
+      highlight: 'مشروعك اليوم',
+      sub: 'أخبرنا عن مشروعك وسنرد خلال 24 ساعة.',
+      available: 'نحن متاحون الآن',
+      availableSub: 'متوسط الرد: أقل من ساعتين',
+      emailLabel: 'البريد',
+      hoursLabel: 'الساعات',
+      hoursValue: 'إثنين–جمعة · 9 صباحاً–6 مساءً',
+      hoursNote: 'GMT+1 · دعم طوارئ 24/7',
+      socialLabel: 'تابعنا',
+      socials: [
+        { name: 'Instagram', abbr: 'IG', href: 'https://www.instagram.com/nexwebi/' },
+        { name: 'LinkedIn', abbr: 'in', href: '#' },
+        { name: 'YouTube', abbr: 'YT', href: '#' },
+      ],
+      labels: { name: 'الاسم الكامل', email: 'البريد', subject: 'الموضوع', message: 'الرسالة' },
+      placeholders: {
+        name: 'اسمك الكامل',
+        email: 'your@email.com',
+        subject: 'أرغب ببناء منصة SaaS...',
+        message: 'حدّثنا عن مشروعك وأهدافك وجدولك الزمني...',
+      },
+      submit: 'أرسل الرسالة',
+      sending: 'جارٍ الإرسال',
+      privacy: 'بإرسالك توافق على سياسة الخصوصية. لا نشارك بياناتك أبداً.',
+      successTitle: 'تم الإرسال!',
+      successSub: 'سنرد عليك خلال 24 ساعة.',
+      sendAnother: 'إرسال أخرى',
+      counterMax: 2000,
+      errors: {
+        name: 'يجب أن يكون الاسم على الأقل حرفين',
+        email: 'يرجى إدخال بريد صالح',
+        message: 'يجب أن تكون الرسالة 20 حرفاً على الأقل',
+      },
+    },
+    footer: {
+      desc: 'نبني منتجات رقمية من الجيل القادم — من المواقع الحديثة إلى الأتمتة الذكية ومنصات SaaS القابلة للتوسع.',
+      groups: {
+        Services: { label: 'الخدمات', items: [
+          ['تطوير الويب', 'services'],
+          ['الأتمتة', 'services'],
+          ['منصات SaaS', 'services'],
+          ['تجارة إلكترونية', 'services'],
+          ['دمج الذكاء الاصطناعي', 'services'],
+        ]},
+        Company: { label: 'الشركة', items: [
+          ['أعمالنا', 'portfolio'],
+          ['لماذا NexWebi', 'why-us'],
+          ['مقالات', 'blog'],
+          ['الأسعار', 'pricing'],
+        ]},
+        Legal: { label: 'قانوني', items: [
+          ['سياسة الخصوصية', 'privacy'],
+          ['شروط الخدمة', 'terms'],
+          ['سياسة الكوكيز', 'cookie'],
+        ]},
+      },
+      socials: [
+        { abbr: 'IG', href: 'https://www.instagram.com/nexwebi/' },
+        { abbr: 'in', href: '#' },
+        { abbr: 'YT', href: '#' },
+      ],
+      copyright: 'كل الحقوق محفوظة.',
+      builtBy: 'صُنع بـ',
+      byNexWebi: 'بواسطة NexWebi',
+      privacyPolicy: 'سياسة الخصوصية',
+      termsOfService: 'شروط الخدمة',
+    },
+  },
 };
 
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState('en');
-  const t = translations[lang];
-  const toggleLang = () => setLang(l => (l === 'en' ? 'fr' : 'en'));
+  const [lang, setLang] = useState(detectInitial);
+  const t = translations[lang] || translations.en;
+  const isRtl = lang === 'ar';
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    }
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(LANG_KEY, lang);
+    }
+  }, [lang, isRtl]);
+
+  const cycleLang = () => {
+    const i = SUPPORTED.indexOf(lang);
+    setLang(SUPPORTED[(i + 1) % SUPPORTED.length]);
+  };
+
   return (
-    <LanguageContext.Provider value={{ lang, t, toggleLang }}>
+    <LanguageContext.Provider value={{ lang, t, isRtl, setLang, cycleLang, toggleLang: cycleLang, supported: SUPPORTED }}>
       {children}
     </LanguageContext.Provider>
   );

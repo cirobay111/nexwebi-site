@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const items = [
-  { title: 'Fast Delivery', desc: 'Agile sprints with transparent milestones. We deliver MVPs in weeks, not months — no delays, no excuses.', color: '#22d3ee', icon: '🚀' },
-  { title: 'Modern Tech Stack', desc: 'React, Next.js, Node.js, Python, PostgreSQL, AWS — battle-tested technologies for production-grade software.', color: '#818cf8', icon: '⚡' },
-  { title: 'Scalable Architecture', desc: 'Systems designed to handle 10x growth without rewrites. Microservices, CDN, and cloud-native from the start.', color: '#34d399', icon: '↑' },
-  { title: 'Automation Expertise', desc: 'Deep knowledge of workflow automation, API orchestration, and intelligent business process management.', color: '#f59e0b', icon: '⟳' },
-  { title: 'Security First', desc: 'OWASP compliance, secure coding practices, and data protection built in from day one — not bolted on after.', color: '#fb7185', icon: '◈' },
-  { title: 'Long-Term Partnership', desc: "We don't disappear after launch. Dedicated support, proactive monitoring, and ongoing improvements.", color: '#a78bfa', icon: '♦' },
+const itemVisuals = [
+  { color: '#22d3ee', icon: '🚀' },
+  { color: '#818cf8', icon: '⚡' },
+  { color: '#34d399', icon: '↑' },
+  { color: '#f59e0b', icon: '⟳' },
+  { color: '#fb7185', icon: '◈' },
+  { color: '#a78bfa', icon: '♦' },
 ];
 
 const techs = ['React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'PostgreSQL', 'Redis', 'Docker', 'AWS', 'Tailwind', 'OpenAI', 'Stripe', 'GraphQL', 'Vercel', 'MongoDB', 'Framer'];
@@ -56,7 +56,7 @@ export default function WhyUs() {
       <div style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto' }}>
         <SectionHeader eyebrow={w.eyebrow} title={w.title} highlight={w.highlight} subtitle={w.sub} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, marginBottom: 56, maxWidth: 1100, marginLeft: 'auto', marginRight: 'auto' }}>
-          {items.map((item, i) => <WhyCard key={item.title} {...item} delay={i * 0.06} />)}
+          {w.items.map((item, i) => <WhyCard key={item.title} title={item.title} desc={item.desc} {...itemVisuals[i]} delay={i * 0.06} />)}
         </div>
 
         {/* Tech marquee */}

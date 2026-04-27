@@ -2,16 +2,6 @@ import { useState } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const faqs = [
-  { q: 'How long does it take to build a website?', a: 'It depends on the scope. A landing page or simple brochure site: 3–7 days. A full web app or SaaS platform: 3–8 weeks. We give you a precise timeline after the discovery call with weekly milestones.' },
-  { q: 'Do I own the source code after the project?', a: 'Yes — 100%. You get full ownership of all source code, assets, and intellectual property once the final payment is processed. No lock-ins, no ongoing licensing fees.' },
-  { q: 'What technologies do you use?', a: 'Our core stack is React / Next.js for frontend, Node.js / Python for backend, PostgreSQL / MongoDB for databases, and AWS / GCP for infrastructure. We recommend the best fit for your specific use case.' },
-  { q: 'Can you work with an existing codebase?', a: "Absolutely. We regularly audit, refactor, and extend existing projects. We'll review your codebase first and give you an honest assessment of what needs to change and why." },
-  { q: 'Do you sign NDAs?', a: "Yes. We're happy to sign a mutual NDA before any discussions. Your business ideas and project details are always kept strictly confidential." },
-  { q: "What's included in post-launch support?", a: 'All plans include a minimum 30-day post-launch window covering bug fixes, deployment issues, and minor adjustments. Ongoing retainers are available for continuous development and monitoring.' },
-  { q: 'How do payments work?', a: 'We typically split payments: 50% upfront to start, 50% upon delivery. For larger projects we use milestone-based billing so you only pay as value is delivered.' },
-  { q: 'Do you build mobile apps too?', a: 'We specialize in web-based products. For mobile, we build React Native or Progressive Web Apps (PWAs) that work beautifully on all devices. Native iOS/Android is available through our partner network.' },
-];
 
 function FAQItem({ q, a, last }) {
   const [open, setOpen] = useState(false);
@@ -77,7 +67,7 @@ export default function FAQ() {
             </div>
           </div>
           <div style={{ borderRadius: 22, overflow: 'hidden', background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', padding: '8px 32px' }}>
-            {faqs.map((item, i) => <FAQItem key={item.q} {...item} last={i === faqs.length - 1} />)}
+            {f.items.map((item, i) => <FAQItem key={item.q} {...item} last={i === f.items.length - 1} />)}
           </div>
         </div>
       </div>

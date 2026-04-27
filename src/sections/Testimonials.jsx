@@ -2,20 +2,15 @@ import { useState } from 'react';
 import SectionHeader from '../components/SectionHeader';
 import { useLanguage } from '../context/LanguageContext';
 
-const testimonials = [
-  { name: 'Sarah Mitchell', role: 'CEO · CloudVenture Inc.', feedback: 'NexWebi transformed our vision into a world-class SaaS platform. Their technical depth, attention to detail, and speed of execution are genuinely remarkable. We launched 40% under budget.', rating: 5, avatar: 'SM', accent: '#22d3ee', featured: true },
-  { name: 'James Okafor', role: 'CTO · Logix Automation', feedback: 'The automation systems they built eliminated 70% of our manual work overnight. The team understood our business logic deeply and delivered something that feels tailor-made.', rating: 5, avatar: 'JO', accent: '#818cf8' },
-  { name: 'Elena Marchetti', role: 'Founder · LuxRetail Group', feedback: "Our e-commerce revenue increased 3x in the first quarter after launch. NexWebi didn't just build a store — they engineered a conversion machine.", rating: 5, avatar: 'EM', accent: '#34d399' },
-  { name: 'David Park', role: 'Head of Product · Nexus Digital', feedback: 'Working with NexWebi felt like having a senior engineering team embedded in our company. Fast communication, zero compromises on quality.', rating: 5, avatar: 'DP', accent: '#f59e0b' },
-  { name: 'Amara Diallo', role: 'Operations Director · Scale AI Labs', feedback: 'The AI integration they built for our platform is genuinely cutting-edge. They navigated complex ML infrastructure as if it were second nature.', rating: 5, avatar: 'AD', accent: '#fb7185' },
+const visualMeta = [
+  { avatar: 'SM', accent: '#22d3ee', featured: true },
+  { avatar: 'JO', accent: '#818cf8' },
+  { avatar: 'EM', accent: '#34d399' },
+  { avatar: 'DP', accent: '#f59e0b' },
+  { avatar: 'AD', accent: '#fb7185' },
 ];
 
-const statsData = [
-  { value: '5.0', labelKey: 'Average Rating' },
-  { value: '50+', labelKey: 'Projects Delivered' },
-  { value: '98%', labelKey: 'Satisfaction Rate' },
-  { value: '0', labelKey: 'Missed Deadlines' },
-];
+const statValues = ['5.0', '50+', '98%', '0'];
 
 function TestimonialCard({ t }) {
   const [hovered, setHovered] = useState(false);
@@ -49,8 +44,9 @@ function TestimonialCard({ t }) {
 export default function Testimonials() {
   const { t } = useLanguage();
   const tr = t.testimonials;
-  const featured = testimonials.find(t => t.featured);
-  const rest = testimonials.filter(t => !t.featured);
+  const items = tr.items.map((it, i) => ({ ...it, ...visualMeta[i] }));
+  const featured = items.find(t => t.featured);
+  const rest = items.filter(t => !t.featured);
 
   return (
     <section id="testimonials" style={{ position: 'relative', padding: 'clamp(64px,7vw,96px) 24px', overflow: 'hidden' }}>
@@ -61,10 +57,10 @@ export default function Testimonials() {
         {/* Stats row — fixed: separated margin/maxWidth */}
         <div style={{ maxWidth: 680, marginLeft: 'auto', marginRight: 'auto', marginBottom: 52 }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }} className="nw-stats-grid">
-            {statsData.map(({ value, labelKey }) => (
-              <div key={labelKey} style={{ padding: '18px 16px', borderRadius: 16, textAlign: 'center', background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+            {statValues.map((value, i) => (
+              <div key={i} style={{ padding: '18px 16px', borderRadius: 16, textAlign: 'center', background: 'rgba(15,23,42,0.5)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
                 <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: '-0.04em', background: 'linear-gradient(135deg,#22d3ee,#67e8f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: 4 }}>{value}</div>
-                <div style={{ fontSize: 10.5, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{labelKey}</div>
+                <div style={{ fontSize: 10.5, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{tr.statsLabels[i]}</div>
               </div>
             ))}
           </div>

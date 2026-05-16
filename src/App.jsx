@@ -35,6 +35,7 @@ export default function App() {
       <Navbar />
 
       <main id="main-content">
+        <Hero />
         <ImpactBar />
         <Services />
         <Portfolio />
